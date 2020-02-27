@@ -1,24 +1,24 @@
 package ru.otus.spring.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
-public class QuestionsService {
+public class InterrogationService {
     private int missedAnswers = 0;
 
-    public void askQuestions(Scanner scanner, HashMap<String, String> inquirer) {
-      //  String name = introduceYorself(scanner);
-        inquirer.forEach((q, a) -> {
-            System.out.println(q.trim());
-
+    public void askQuestions(Scanner scanner, HashMap<String, List<String>> interrogation) {
+        String name = introduceYorself(scanner);
+        interrogation.forEach((q, a) -> {
+            System.out.println(q);
             String answer = scanner.nextLine();
-            /*if(!answer.equals(a)) {
+            if(!a.contains(answer.toLowerCase())) {
                missedAnswers++;
-               answer = "Вы пропустили вопрос!";
+               answer = "Вы не ответили на вопрос правильно!";
                System.out.println(answer);
-            }*/
+            }
         });
-      //  questionsResult(name, missedAnswers);
+        questionsResult(name, missedAnswers);
     }
 
     private String introduceYorself(Scanner scanner) {
@@ -33,7 +33,7 @@ public class QuestionsService {
 
     private void questionsResult(String name, int missedAnswers) {
         if(missedAnswers > 0) {
-            System.out.println(name + " вы пропустили " + missedAnswers + " вопросов");
+            System.out.println(name + " вы пропустили или не ответили правильно на " + missedAnswers + " вопросов");
         } else {
             System.out.println("Поздравляем, " + name + "! Вы ответили на все вопросы!");
         }

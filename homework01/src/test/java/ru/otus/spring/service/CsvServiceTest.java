@@ -1,31 +1,29 @@
 package ru.otus.spring.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Класс CsvService")
 public class CsvServiceTest {
 
-
-   /* @ParameterizedTest(name = "Чтение csv-файла")
-    @CsvFileSource(resources = "/homework01/src/test/resources/csv/questionsTest.csv", numLinesToSkip = 1)
+    @DisplayName("Умение корректно считывать вопросы и ответы из csv-файла")
+    @Test
     public void generateListFromCsv() {
-        String csvFile = "homework01/src/test/resources/csv/questionsTest.csv";
+        String csvFile = "src/test/resources/csv/questionsTest.csv";
         CsvService csvService = new CsvService(csvFile);
-        List<String> questionsList = csvService.csvRead();
+        HashMap<String, List<String>> interrogation = csvService.csvFileRead();
 
-        List<String> list = new ArrayList<>();
-        list.add("Сколько вам лет?");
-        list.add("Какого вы пола?");
+        ArrayList<String> answers = new ArrayList<>();
+        answers.add("да");
+        answers.add("нет");
 
-        assertEquals(questionsList.get(0), list.get(0));
-        assertEquals(questionsList.get(1), list.get(1));
-    }*/
+        assertTrue(interrogation.containsKey("Работаете ли вы программистом?"));
+        assertTrue(interrogation.containsValue(answers));
+    }
 }
