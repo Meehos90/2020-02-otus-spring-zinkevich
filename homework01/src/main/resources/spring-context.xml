@@ -4,10 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="interrogation" class="ru.otus.spring.service.InterrogationService"></bean>
+    <bean id="interrogationService" class="ru.otus.spring.service.InterrogationService"></bean>
 
-    <bean id="csvReader" class="ru.otus.spring.service.CsvService">
-        <constructor-arg name="csvFile" value="homework01/src/main/resources/csv/questions.csv"/>
+    <bean id="QuestionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
+        <constructor-arg name="csvFile" value="csv/questions.csv"/>
     </bean>
+
+    <bean id="interrogation" class="ru.otus.spring.model.Interrogation"></bean>
 
 </beans>
