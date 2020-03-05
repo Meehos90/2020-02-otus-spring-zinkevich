@@ -4,17 +4,20 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <util:constant id="OUT" static-field="java.lang.System.out" />
-    <util:constant id="IN" static-field="java.lang.System.in" />
-
-    <bean id="consoleSurveyService" class="ru.otus.spring.service.ConsoleSurveyService">
+    <bean id="surveyService" class="ru.otus.spring.service.impl.ConsoleSurveyService">
     </bean>
 
-    <bean id="consoleTestingService" class="ru.otus.spring.service.ConsoleTestingService"></bean>
+    <bean id="testingService" class="ru.otus.spring.service.impl.ConsoleTestingService">
+        <constructor-arg ref="surveyService"/>
+    </bean>
 
-    <bean id="QuestionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
+    <bean id="questionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
         <constructor-arg name="csvFile" value="csv/questions.csv"/>
     </bean>
 
-    <bean id="survey" class="ru.otus.spring.model.Survey"></bean>
+    <bean id="application" class="ru.otus.spring.Application">
+        <constructor-arg ref="testingService"/>
+        <constructor-arg ref="questionsDao"/>
+    </bean>
+
 </beans>
