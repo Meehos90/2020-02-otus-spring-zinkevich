@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="interrogationService" class="ru.otus.spring.service.InterrogationService"></bean>
+    <util:constant id="OUT" static-field="java.lang.System.out" />
+    <util:constant id="IN" static-field="java.lang.System.in" />
+
+    <bean id="consoleSurveyService" class="ru.otus.spring.service.ConsoleSurveyService">
+    </bean>
+
+    <bean id="consoleTestingService" class="ru.otus.spring.service.ConsoleTestingService"></bean>
 
     <bean id="QuestionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
         <constructor-arg name="csvFile" value="csv/questions.csv"/>
     </bean>
 
-    <bean id="interrogation" class="ru.otus.spring.model.Interrogation"></bean>
-
+    <bean id="survey" class="ru.otus.spring.model.Survey"></bean>
 </beans>

@@ -11,19 +11,19 @@ import com.opencsv.bean.CsvToBeanBuilder;
 
 import lombok.AllArgsConstructor;
 import ru.otus.spring.exception.QuestionsLoadingException;
-import ru.otus.spring.model.Interrogation;
+import ru.otus.spring.model.Survey;
 
 @AllArgsConstructor
 public class CsvQuestionsDao implements QuestionsDao {
     private final String csvFile;
 
     @Override
-    public List<Interrogation> csvFileRead() {
+    public List<Survey> csvFileRead() {
         try {
         InputStreamReader isReader = new InputStreamReader(
                 Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(csvFile)), UTF_8);
         CsvToBean csvToBean =
-                new CsvToBeanBuilder(isReader).withType(Interrogation.class).withIgnoreLeadingWhiteSpace(true).build();
+                new CsvToBeanBuilder(isReader).withType(Survey.class).withIgnoreLeadingWhiteSpace(true).build();
 
             return csvToBean.parse();
 

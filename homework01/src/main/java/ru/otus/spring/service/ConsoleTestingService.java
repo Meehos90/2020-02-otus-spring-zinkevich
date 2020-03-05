@@ -1,22 +1,24 @@
 package ru.otus.spring.service;
 
-import ru.otus.spring.model.Interrogation;
+import ru.otus.spring.model.Survey;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class InterrogationService {
+public class ConsoleTestingService {
     private int missedAnswers = 0;
     private final static String DELIMETER = "/";
 
-    public void askQuestions(Scanner scanner, List<Interrogation> interrogation) {
-        String name = introduceYorself(scanner);
-        for (Interrogation inter : interrogation) {
-            System.out.println(inter.getQuestion());
-            String realAnswer = scanner.nextLine().toLowerCase();
-            if (inter.getAnswer().contains(DELIMETER)) {
-                List<String> answers = Arrays.asList(inter.getAnswer().trim().split(DELIMETER));
+    ConsoleSurveyService consoleSurveyService = new ConsoleSurveyService();
+
+    public void askQuestions(List<Survey> surveys) {
+        //String name = introduceYorself(scanner);
+        for (Survey survey : surveys) {
+            System.out.println(survey.getQuestion());
+            String realAnswer = consoleSurveyService.getAnswer().toLowerCase();
+            if (survey.getAnswer().contains(DELIMETER)) {
+                List<String> answers = Arrays.asList(survey.getAnswer().trim().split(DELIMETER));
                 if (!answers.contains(realAnswer)) {
                     wrongAnswer();
                 }
@@ -24,7 +26,7 @@ public class InterrogationService {
                 wrongAnswer();
             }
         }
-        questionsResult(name, missedAnswers);
+       // questionsResult(name, missedAnswers);
     }
 
     private void wrongAnswer() {
