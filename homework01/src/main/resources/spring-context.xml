@@ -9,10 +9,15 @@
 
     <bean id="testingService" class="ru.otus.spring.service.impl.ConsoleTestingService">
         <constructor-arg ref="surveyService"/>
+        <constructor-arg ref="userDataDao"/>
     </bean>
 
     <bean id="questionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
         <constructor-arg name="csvFile" value="csv/questions.csv"/>
+    </bean>
+
+    <bean id="userDataDao" class="ru.otus.spring.dao.ConsoleUserDataDao">
+        <constructor-arg ref="surveyService"/>
     </bean>
 
     <bean id="application" class="ru.otus.spring.Application">
