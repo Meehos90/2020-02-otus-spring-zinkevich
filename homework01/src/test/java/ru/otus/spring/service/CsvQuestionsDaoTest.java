@@ -1,13 +1,14 @@
 package ru.otus.spring.service;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import ru.otus.spring.dao.CsvQuestionsDao;
-import ru.otus.spring.model.Interrogation;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import ru.otus.spring.dao.CsvQuestionsDao;
+import ru.otus.spring.model.Interrogation;
 
 @DisplayName("Класс CsvService")
 public class CsvQuestionsDaoTest {
