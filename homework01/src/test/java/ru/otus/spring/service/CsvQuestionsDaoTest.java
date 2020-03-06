@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ru.otus.spring.dao.CsvQuestionsDao;
 import ru.otus.spring.model.Survey;
 
-@DisplayName("Класс CsvService")
+@DisplayName("Класс CsvQuestionsDao")
 public class CsvQuestionsDaoTest {
 
     @DisplayName("Умение корректно считывать вопросы и ответы из csv-файла")
