@@ -10,7 +10,7 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import lombok.AllArgsConstructor;
-import ru.otus.spring.exception.QuestionsLoadingException;
+import ru.otus.spring.exception.SurveysLoadingException;
 import ru.otus.spring.model.Survey;
 
 @AllArgsConstructor
@@ -20,17 +20,14 @@ public class CsvQuestionsDao implements QuestionsDao {
     @Override
     public List<Survey> csvFileRead() {
         try {
-        InputStreamReader isReader = new InputStreamReader(
-                Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(csvFile)), UTF_8);
-        CsvToBean csvToBean =
-                new CsvToBeanBuilder(isReader).withType(Survey.class).withIgnoreLeadingWhiteSpace(true).build();
-
+            InputStreamReader isReader = new InputStreamReader(
+                    Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(csvFile)), UTF_8);
+            CsvToBean csvToBean =
+                    new CsvToBeanBuilder(isReader).withType(Survey.class).withIgnoreLeadingWhiteSpace(true).build();
             return csvToBean.parse();
-
         } catch (Exception e) {
-            throw new QuestionsLoadingException(e.getMessage());
+            throw new SurveysLoadingException(e.getMessage());
         }
-
     }
 
 }

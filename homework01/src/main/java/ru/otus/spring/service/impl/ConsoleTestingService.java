@@ -5,6 +5,7 @@ import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import ru.otus.spring.dao.ConsoleUserDataDao;
+import ru.otus.spring.dao.CsvQuestionsDao;
 import ru.otus.spring.model.Survey;
 import ru.otus.spring.service.TestingService;
 
@@ -13,23 +14,29 @@ public class ConsoleTestingService implements TestingService {
     private int missedAnswers = 0;
     private static final String DELIMETER = "/";
     private final ConsoleSurveyService consoleSurveyService;
+    private final CsvQuestionsDao csvQuestionsDao;
     private final ConsoleUserDataDao userDataDao;
 
-    public void startTesting(List<Survey> surveys) {
+    public void startTesting() {
+        List<Survey> surveys = csvQuestionsDao.csvFileRead();
         String name = userDataDao.introduceYorself();
         for (Survey survey : surveys) {
             consoleSurveyService.showMessage(survey.getQuestion());
             String realAnswer = consoleSurveyService.getMessage().toLowerCase();
-            if (survey.getAnswer().contains(DELIMETER)) {
-                List<String> answers = Arrays.asList(survey.getAnswer().trim().split(DELIMETER));
-                if (!answers.contains(realAnswer)) {
-                    wrongAnswer();
-                }
-            } else {
-                wrongAnswer();
-            }
+            answersAnalysis(survey, realAnswer);
         }
         questionsResult(name, missedAnswers);
+    }
+
+    public void answersAnalysis(Survey survey, String realAnswer) {
+        if (survey.getAnswer().contains(DELIMETER)) {
+            List<String> answers = Arrays.asList(survey.getAnswer().trim().split(DELIMETER));
+            if (!answers.contains(realAnswer)) {
+                wrongAnswer();
+            }
+        } else {
+            wrongAnswer();
+        }
     }
 
     private void wrongAnswer() {
