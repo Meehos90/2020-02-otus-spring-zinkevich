@@ -28,13 +28,13 @@ public class ConsoleTestingService implements TestingService {
         questionsResult(name, missedAnswers);
     }
 
-    public void answersAnalysis(Survey survey, String realAnswer) {
+    private void answersAnalysis(Survey survey, String realAnswer) {
         if (survey.getAnswer().contains(DELIMETER)) {
             List<String> answers = Arrays.asList(survey.getAnswer().trim().split(DELIMETER));
             if (!answers.contains(realAnswer)) {
                 wrongAnswer();
             }
-        } else {
+        } else if (!survey.getAnswer().contains(realAnswer)) {
             wrongAnswer();
         }
     }
@@ -46,7 +46,8 @@ public class ConsoleTestingService implements TestingService {
 
     private void questionsResult(String name, int missedAnswers) {
         if (missedAnswers > 0) {
-            consoleSurveyService.showMessage(name + " вы пропустили или не ответили правильно на " + missedAnswers + " вопросов");
+            consoleSurveyService.showMessage(
+                    name + " вы пропустили или не ответили правильно на " + missedAnswers + " вопросов");
         } else {
             consoleSurveyService.showMessage("Поздравляем, " + name + "! Вы ответили на все вопросы!");
         }
