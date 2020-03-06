@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 import lombok.Data;
 
 @Data
-public class Interrogation {
+public class Survey {
     @CsvBindByName(column = "Вопросы")
     private String question;
     @CsvBindByName(column = "Ответы")

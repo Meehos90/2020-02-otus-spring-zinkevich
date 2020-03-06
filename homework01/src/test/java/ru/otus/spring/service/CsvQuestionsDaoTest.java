@@ -1,26 +1,27 @@
 package ru.otus.spring.service;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import ru.otus.spring.dao.CsvQuestionsDao;
-import ru.otus.spring.model.Interrogation;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
-@DisplayName("Класс CsvService")
+import ru.otus.spring.dao.CsvQuestionsDao;
+import ru.otus.spring.model.Survey;
+
+@DisplayName("Класс CsvQuestionsDao")
 public class CsvQuestionsDaoTest {
 
     @DisplayName("Умение корректно считывать вопросы и ответы из csv-файла")
     @Test
     public void generateListFromCsv() {
         CsvQuestionsDao csvQuestionsDao = new CsvQuestionsDao("csv/questionsTest.csv");
-        List<Interrogation> interrogationList = csvQuestionsDao.csvFileRead();
+        List<Survey> surveyList = csvQuestionsDao.csvFileRead();
 
-        for(Interrogation interrogation : interrogationList) {
-            assertTrue(interrogation.getQuestion().contains("Работаете ли вы программистом?"));
-            assertTrue(interrogation.getAnswer().contains("да/нет"));
+        for(Survey survey : surveyList) {
+            assertTrue(survey.getQuestion().contains("Работаете ли вы программистом?"));
+            assertTrue(survey.getAnswer().contains("да/нет"));
         }
 
     }

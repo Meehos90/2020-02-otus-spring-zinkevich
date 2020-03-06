@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/util https://www.springframework.org/schema/util/spring-util.xsd">
 
-    <bean id="interrogationService" class="ru.otus.spring.service.InterrogationService"></bean>
+    <bean id="surveyService" class="ru.otus.spring.service.impl.ConsoleSurveyService">
+    </bean>
 
-    <bean id="QuestionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
+    <bean id="testingService" class="ru.otus.spring.service.impl.ConsoleTestingService">
+        <constructor-arg ref="surveyService"/>
+        <constructor-arg ref="userDataDao"/>
+        <constructor-arg ref="questionsDao"/>
+    </bean>
+
+    <bean id="questionsDao" class="ru.otus.spring.dao.CsvQuestionsDao">
         <constructor-arg name="csvFile" value="csv/questions.csv"/>
     </bean>
 
-    <bean id="interrogation" class="ru.otus.spring.model.Interrogation"></bean>
+    <bean id="userDataDao" class="ru.otus.spring.dao.ConsoleUserDataDao">
+        <constructor-arg ref="surveyService"/>
+    </bean>
 
 </beans>
