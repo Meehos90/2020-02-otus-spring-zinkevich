@@ -13,6 +13,7 @@
 
     <modules>
         <module>homework01</module>
+        <module>homework-02</module>
     </modules>
 
 </project>
