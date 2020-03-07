@@ -1,9 +1,8 @@
 package ru.otus.spring.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.ConsoleUserDataDao;
-import ru.otus.spring.dao.CsvQuestionsDao;
 import ru.otus.spring.dao.QuestionsDao;
 import ru.otus.spring.dao.UserDataDao;
 import ru.otus.spring.model.Survey;
@@ -16,7 +15,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ConsoleTestingService implements TestingService {
-    private int missedAnswers = 0;
+
+    @Value("${missed.answers}")
+    private int missedAnswers;
+
     private static final String DELIMETER = "/";
     private final SurveyService consoleSurveyService;
     private final QuestionsDao csvQuestionsDao;
@@ -45,7 +47,7 @@ public class ConsoleTestingService implements TestingService {
     }
 
     private void wrongAnswer() {
-        missedAnswers++;
+        ++missedAnswers;
         consoleSurveyService.showMessage("Вы не ответили на вопрос правильно!");
     }
 

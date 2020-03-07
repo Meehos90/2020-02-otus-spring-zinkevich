@@ -3,6 +3,9 @@ package ru.otus.spring.dao;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.exception.SurveysLoadingException;
 import ru.otus.spring.model.Survey;
@@ -16,7 +19,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 @Repository
 @RequiredArgsConstructor
 public class CsvQuestionsDao implements QuestionsDao {
-    private final String csvFile;
+
+    @Value("${csv.file}")
+    private String csvFile;
 
     @Override
     public List<Survey> csvFileRead() {
@@ -30,5 +35,4 @@ public class CsvQuestionsDao implements QuestionsDao {
             throw new SurveysLoadingException(e.getMessage());
         }
     }
-
 }
