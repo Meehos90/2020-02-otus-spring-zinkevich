@@ -2,6 +2,7 @@ package ru.otus.spring;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import ru.otus.spring.service.TestingService;
 
@@ -20,6 +21,12 @@ public class Main {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.setBasename("/i18n/bundle/messages");
         ms.setDefaultEncoding("UTF-8");
+        ms.setFallbackToSystemLocale(false);
         return ms;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }

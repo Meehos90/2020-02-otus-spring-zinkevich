@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionsDao;
 import ru.otus.spring.dao.UserDataDao;
 import ru.otus.spring.model.Survey;
+import ru.otus.spring.service.LocalizationService;
 import ru.otus.spring.service.SurveyService;
 import ru.otus.spring.service.TestingService;
 
@@ -19,12 +20,20 @@ public class ConsoleTestingService implements TestingService {
     @Value("${missed.answers}")
     private int missedAnswers;
 
+    @Value("${choose.language}")
+    private String language;
+
+    @Value("${unchoosen.language}")
+    private String unchoosenLang;
+
     private static final String DELIMETER = "/";
     private final SurveyService consoleSurveyService;
+    private final LocalizationService localizationService;
     private final QuestionsDao csvQuestionsDao;
     private final UserDataDao userDataDao;
 
     public void startTesting() {
+        chooseLanguage();
         List<Survey> surveys = csvQuestionsDao.csvFileRead();
         String name = userDataDao.introduceYorself();
         for (Survey survey : surveys) {
@@ -33,6 +42,15 @@ public class ConsoleTestingService implements TestingService {
             answersAnalysis(survey, realAnswer);
         }
         questionsResult(name, missedAnswers);
+    }
+
+    private void chooseLanguage() {
+        consoleSurveyService.showMessage(language);
+        String lang = consoleSurveyService.getMessage().toLowerCase();
+        localizationService.choosenLang(lang);
+        if(!lang.contains("english") && !lang.contains("russian")) {
+            consoleSurveyService.showMessage(unchoosenLang);
+        }
     }
 
     private void answersAnalysis(Survey survey, String realAnswer) {
