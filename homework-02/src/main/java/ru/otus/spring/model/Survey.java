@@ -1,12 +1,12 @@
 package ru.otus.spring.model;
 
-import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvBindByPosition;
 import lombok.Data;
 
 @Data
 public class Survey {
-    @CsvBindByName(column = "Вопросы")
+    @CsvBindByPosition(position = 0)
     private String question;
-    @CsvBindByName(column = "Ответы")
+    @CsvBindByPosition(position = 1)
     private String answer;
 }

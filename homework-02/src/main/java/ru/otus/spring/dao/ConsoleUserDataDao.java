@@ -9,13 +9,13 @@ import ru.otus.spring.service.SurveyService;
 @RequiredArgsConstructor
 public class ConsoleUserDataDao implements UserDataDao{
     private final SurveyService consoleSurveyService;
-    private final LocalizationService inService;
+    private final LocalizationService localizationService;
 
     public String introduceYorself() {
-        consoleSurveyService.showMessage(inService.greeting());
+        consoleSurveyService.showMessage(localizationService.greeting());
         String name = consoleSurveyService.getMessage();
         if (name.isEmpty()) {
-            consoleSurveyService.showMessage(inService.notFullName());
+            consoleSurveyService.showMessage(localizationService.notFullName());
             return introduceYorself();
         }
         return name;

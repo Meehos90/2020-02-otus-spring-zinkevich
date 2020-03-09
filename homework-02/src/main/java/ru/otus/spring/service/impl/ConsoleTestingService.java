@@ -3,7 +3,7 @@ package ru.otus.spring.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.QuestionsDao;
+import ru.otus.spring.dao.LocaleQuestionsDao;
 import ru.otus.spring.dao.UserDataDao;
 import ru.otus.spring.model.Survey;
 import ru.otus.spring.service.LocalizationService;
@@ -21,7 +21,7 @@ public class ConsoleTestingService implements TestingService {
     private int missedAnswers;
 
     @Value("${choose.language}")
-    private String language;
+    private String chooseLanguage;
 
     @Value("${unchoosen.language}")
     private String unchoosenLang;
@@ -29,12 +29,12 @@ public class ConsoleTestingService implements TestingService {
     private static final String DELIMETER = "/";
     private final SurveyService consoleSurveyService;
     private final LocalizationService localizationService;
-    private final QuestionsDao csvQuestionsDao;
     private final UserDataDao userDataDao;
+    private final LocaleQuestionsDao questionsDao;
 
     public void startTesting() {
         chooseLanguage();
-        List<Survey> surveys = csvQuestionsDao.csvFileRead();
+        List<Survey> surveys = questionsDao.chooseQuestionsDao().csvFileRead();
         String name = userDataDao.introduceYorself();
         for (Survey survey : surveys) {
             consoleSurveyService.showMessage(survey.getQuestion());
@@ -45,10 +45,10 @@ public class ConsoleTestingService implements TestingService {
     }
 
     private void chooseLanguage() {
-        consoleSurveyService.showMessage(language);
+        consoleSurveyService.showMessage(chooseLanguage);
         String lang = consoleSurveyService.getMessage().toLowerCase();
         localizationService.choosenLang(lang);
-        if(!lang.contains("english") && !lang.contains("russian")) {
+        if (!lang.contains("english") && !lang.contains("russian")) {
             consoleSurveyService.showMessage(unchoosenLang);
         }
     }
@@ -66,15 +66,14 @@ public class ConsoleTestingService implements TestingService {
 
     private void wrongAnswer() {
         ++missedAnswers;
-        consoleSurveyService.showMessage("Вы не ответили на вопрос правильно!");
+        consoleSurveyService.showMessage(localizationService.wrongAnswers());
     }
 
     private void questionsResult(String name, int missedAnswers) {
         if (missedAnswers > 0) {
-            consoleSurveyService.showMessage(
-                    name + " вы пропустили или не ответили правильно на " + missedAnswers + " вопросов");
+            consoleSurveyService.showMessage(localizationService.incorrectAnswers(name, missedAnswers));
         } else {
-            consoleSurveyService.showMessage("Поздравляем, " + name + "! Вы ответили на все вопросы!");
+            consoleSurveyService.showMessage(localizationService.correctAnswers(name));
         }
     }
 }

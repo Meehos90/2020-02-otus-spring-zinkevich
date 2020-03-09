@@ -6,6 +6,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import ru.otus.spring.service.TestingService;
 
+@EnableAspectJAutoProxy
 @Configuration
 @PropertySource("classpath:application.properties")
 @ComponentScan
