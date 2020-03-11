@@ -1,6 +1,6 @@
 package ru.otus.spring.service;
 
-public interface SurveyService {
+public interface IOService {
     void showMessage(String message);
     String getMessage();
 }

@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.LocaleQuestionsDao;
-import ru.otus.spring.dao.UserDataDao;
+import ru.otus.spring.service.UserService;
 import ru.otus.spring.model.Survey;
 import ru.otus.spring.service.LocalizationService;
-import ru.otus.spring.service.SurveyService;
+import ru.otus.spring.service.IOService;
 import ru.otus.spring.service.TestingService;
 
 import java.util.Arrays;
@@ -27,29 +27,29 @@ public class ConsoleTestingService implements TestingService {
     private String unchoosenLang;
 
     private static final String DELIMETER = "/";
-    private final SurveyService consoleSurveyService;
+    private final IOService consoleIOService;
     private final LocalizationService localizationService;
-    private final UserDataDao userDataDao;
+    private final UserService userService;
     private final LocaleQuestionsDao questionsDao;
 
     public void startTesting() {
         chooseLanguage();
         List<Survey> surveys = questionsDao.chooseQuestionsDao().csvFileRead();
-        String name = userDataDao.introduceYorself();
+        String name = userService.getUserInfo();
         for (Survey survey : surveys) {
-            consoleSurveyService.showMessage(survey.getQuestion());
-            String realAnswer = consoleSurveyService.getMessage().toLowerCase();
+            consoleIOService.showMessage(survey.getQuestion());
+            String realAnswer = consoleIOService.getMessage().toLowerCase();
             answersAnalysis(survey, realAnswer);
         }
         questionsResult(name, missedAnswers);
     }
 
     private void chooseLanguage() {
-        consoleSurveyService.showMessage(chooseLanguage);
-        String lang = consoleSurveyService.getMessage().toLowerCase();
+        consoleIOService.showMessage(chooseLanguage);
+        String lang = consoleIOService.getMessage().toLowerCase();
         localizationService.choosenLang(lang);
         if (!lang.contains("english") && !lang.contains("russian")) {
-            consoleSurveyService.showMessage(unchoosenLang);
+            consoleIOService.showMessage(unchoosenLang);
         }
     }
 
@@ -66,14 +66,14 @@ public class ConsoleTestingService implements TestingService {
 
     private void wrongAnswer() {
         ++missedAnswers;
-        consoleSurveyService.showMessage(localizationService.wrongAnswers());
+        consoleIOService.showMessage(localizationService.wrongAnswers());
     }
 
     private void questionsResult(String name, int missedAnswers) {
         if (missedAnswers > 0) {
-            consoleSurveyService.showMessage(localizationService.incorrectAnswers(name, missedAnswers));
+            consoleIOService.showMessage(localizationService.incorrectAnswers(name, missedAnswers));
         } else {
-            consoleSurveyService.showMessage(localizationService.correctAnswers(name));
+            consoleIOService.showMessage(localizationService.correctAnswers(name));
         }
     }
 }

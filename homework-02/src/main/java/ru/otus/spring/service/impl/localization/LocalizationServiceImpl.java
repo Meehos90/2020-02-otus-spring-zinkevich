@@ -36,7 +36,7 @@ public class LocalizationServiceImpl implements LocalizationService {
     }
 
     @Override
-    public String notFullName() { return messageSource.getMessage("message.empty.full.name", null, languageLocale); }
+    public String getNotFullNameMessage() { return messageSource.getMessage("message.empty.full.name", null, languageLocale); }
 
     @Override
     public String wrongAnswers() { return messageSource.getMessage("message.wrong.answer", null, languageLocale); }

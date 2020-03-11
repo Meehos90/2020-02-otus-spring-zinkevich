@@ -1,12 +1,12 @@
 package ru.otus.spring.service.impl;
 
 import org.springframework.stereotype.Service;
-import ru.otus.spring.service.SurveyService;
+import ru.otus.spring.service.IOService;
 
 import java.util.Scanner;
 
 @Service
-public class ConsoleSurveyService implements SurveyService {
+public class ConsoleIOService implements IOService {
     Scanner scanner = new Scanner(System.in);
 
     @Override
