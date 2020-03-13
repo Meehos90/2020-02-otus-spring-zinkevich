@@ -15,7 +15,7 @@ import ru.otus.spring.service.impl.localization.LocalizationServiceImpl;
 
 @PropertySource("classpath:application.properties")
 @Configuration
-public class DaoConfig {
+public class AppConfig {
 
     @Bean
     public LocalizationServiceImpl localizationService(@Value("${locale}") Locale locale,
