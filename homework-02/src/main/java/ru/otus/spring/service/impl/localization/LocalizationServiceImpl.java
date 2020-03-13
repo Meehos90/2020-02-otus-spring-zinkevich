@@ -1,54 +1,40 @@
 package ru.otus.spring.service.impl.localization;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import ru.otus.spring.dao.CsvQuestionsDao;
+import ru.otus.spring.dao.QuestionsDao;
 import ru.otus.spring.service.LocalizationService;
 
-import java.util.Locale;
-
-@Service
 public class LocalizationServiceImpl implements LocalizationService {
 
-    @Autowired
-    private MessageSource messageSource;
+    private final Locale locale;
+    private final Map<String, String> languages;
 
-    private Locale languageLocale = Locale.ENGLISH;
 
-    public static String language = "english";
+    public LocalizationServiceImpl(Locale locale, Map<String, String> languages) {
+        this.locale = locale;
+        this.languages = languages;
+    }
 
-    public void choosenLang(String lang) {
-        switch (lang) {
-            case "english":
-                break;
-            case "russian":
-                languageLocale = Locale.forLanguageTag("ru-RU");
-                language = "russian";
-                break;
-            default:
-                break;
+    @Override
+    public Locale getLanguageLocale() {
+        if(locale != null) {
+            return locale;
         }
+        return Locale.ENGLISH;
     }
 
     @Override
-    public String greeting() {
-       return messageSource.getMessage("message.greeting", null, languageLocale);
+    public QuestionsDao getCsvFile() {
+        for (Entry<String, String> entry : languages.entrySet()) {
+            String k = entry.getKey();
+            if (locale != null && locale.toString().equals(k)) {
+                return new CsvQuestionsDao("csv/questions_" + k + ".csv");
+            }
+        }
+        return new CsvQuestionsDao("csv/questions_en_US.csv");
     }
-
-    @Override
-    public String getNotFullNameMessage() { return messageSource.getMessage("message.empty.full.name", null, languageLocale); }
-
-    @Override
-    public String wrongAnswers() { return messageSource.getMessage("message.wrong.answer", null, languageLocale); }
-
-    @Override
-    public String incorrectAnswers(String name, int missedAnswers) {
-        return messageSource.getMessage("message.incorrect.answers", new String[] {name, String.valueOf(missedAnswers)}, languageLocale);
-    }
-
-    @Override
-    public String correctAnswers(String name) {
-        return messageSource.getMessage("message.correct.answers", new String[] {name}, languageLocale);
-    }
-
 }

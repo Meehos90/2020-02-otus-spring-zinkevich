@@ -1,40 +1,44 @@
 package ru.otus.spring.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.LocaleQuestionsDao;
-import ru.otus.spring.service.UserService;
-import ru.otus.spring.model.Survey;
-import ru.otus.spring.service.LocalizationService;
-import ru.otus.spring.service.IOService;
-import ru.otus.spring.service.TestingService;
-
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import ru.otus.spring.dao.QuestionsDao;
+import ru.otus.spring.model.Survey;
+import ru.otus.spring.service.IOService;
+import ru.otus.spring.service.LocalizationService;
+import ru.otus.spring.service.MessageService;
+import ru.otus.spring.service.TestingService;
+import ru.otus.spring.service.UserService;
+
 @Service
-@RequiredArgsConstructor
 public class ConsoleTestingService implements TestingService {
-
-    @Value("${missed.answers}")
-    private int missedAnswers;
-
-    @Value("${choose.language}")
-    private String chooseLanguage;
-
-    @Value("${unchoosen.language}")
-    private String unchoosenLang;
 
     private static final String DELIMETER = "/";
     private final IOService consoleIOService;
     private final LocalizationService localizationService;
     private final UserService userService;
-    private final LocaleQuestionsDao questionsDao;
+    private final MessageService messageService;
+
+    @Value("${missed.answers}")
+    private int missedAnswers;
+
+    public ConsoleTestingService(IOService consoleIOService,
+                                 LocalizationService localizationService,
+                                 UserService userService,
+                                 MessageService messageService) {
+        this.consoleIOService = consoleIOService;
+        this.localizationService = localizationService;
+        this.userService = userService;
+        this.messageService = messageService;
+    }
 
     public void startTesting() {
-        chooseLanguage();
-        List<Survey> surveys = questionsDao.chooseQuestionsDao().csvFileRead();
+        QuestionsDao questionsDao = localizationService.getCsvFile();
+        List<Survey> surveys = questionsDao.csvFileRead();
         String name = userService.getUserInfo();
         for (Survey survey : surveys) {
             consoleIOService.showMessage(survey.getQuestion());
@@ -42,15 +46,6 @@ public class ConsoleTestingService implements TestingService {
             answersAnalysis(survey, realAnswer);
         }
         questionsResult(name, missedAnswers);
-    }
-
-    private void chooseLanguage() {
-        consoleIOService.showMessage(chooseLanguage);
-        String lang = consoleIOService.getMessage().toLowerCase();
-        localizationService.choosenLang(lang);
-        if (!lang.contains("english") && !lang.contains("russian")) {
-            consoleIOService.showMessage(unchoosenLang);
-        }
     }
 
     private void answersAnalysis(Survey survey, String realAnswer) {
@@ -65,15 +60,15 @@ public class ConsoleTestingService implements TestingService {
     }
 
     private void wrongAnswer() {
-        ++missedAnswers;
-        consoleIOService.showMessage(localizationService.wrongAnswers());
+        missedAnswers++;
+        consoleIOService.showMessage(messageService.getLocaleMessage("message.wrong.answer", null));
     }
 
     private void questionsResult(String name, int missedAnswers) {
         if (missedAnswers > 0) {
-            consoleIOService.showMessage(localizationService.incorrectAnswers(name, missedAnswers));
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.incorrect.answers", new Object[] {name, missedAnswers}));
         } else {
-            consoleIOService.showMessage(localizationService.correctAnswers(name));
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.correct.answers", new Object[] {name}));
         }
     }
 }

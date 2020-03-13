@@ -1,10 +1,10 @@
 package ru.otus.spring.service;
 
+import java.util.Locale;
+
+import ru.otus.spring.dao.QuestionsDao;
+
 public interface LocalizationService {
-    void choosenLang(String lang);
-    String greeting();
-    String getNotFullNameMessage();
-    String wrongAnswers();
-    String incorrectAnswers(String name, int missedAnswers);
-    String correctAnswers(String name);
+    Locale getLanguageLocale();
+    QuestionsDao getCsvFile();
 }

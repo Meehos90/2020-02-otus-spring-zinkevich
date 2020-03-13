@@ -1,21 +1,25 @@
 package ru.otus.spring.dao;
 
-import com.opencsv.bean.CsvToBean;
-import com.opencsv.bean.CsvToBeanBuilder;
-import ru.otus.spring.exception.SurveysLoadingException;
-import ru.otus.spring.model.Survey;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
 
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+
+import ru.otus.spring.exception.SurveysLoadingException;
+import ru.otus.spring.model.Survey;
+
+@Repository
 public class CsvQuestionsDao implements QuestionsDao {
+    private String csvFile;
 
-    private final String csvFile;
-
-    public CsvQuestionsDao(String csvFile) {
+    public CsvQuestionsDao(@Value("${csv.file}") String csvFile) {
         this.csvFile = csvFile;
     }
 

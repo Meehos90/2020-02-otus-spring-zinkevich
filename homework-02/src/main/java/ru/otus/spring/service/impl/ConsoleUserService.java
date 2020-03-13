@@ -1,22 +1,23 @@
 package ru.otus.spring.service.impl;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.service.LocalizationService;
+
+import lombok.RequiredArgsConstructor;
 import ru.otus.spring.service.IOService;
+import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.UserService;
 
 @Repository
 @RequiredArgsConstructor
 public class ConsoleUserService implements UserService {
     private final IOService consoleIOService;
-    private final LocalizationService localizationService;
+    private final MessageService messageService;
 
     public String getUserInfo() {
-        consoleIOService.showMessage(localizationService.greeting());
+        consoleIOService.showMessage(messageService.getLocaleMessage("message.greeting", null));
         String name = consoleIOService.getMessage();
         if (name.isEmpty()) {
-            consoleIOService.showMessage(localizationService.getNotFullNameMessage());
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.empty.full.name", null));
             return getUserInfo();
         }
         return name;
