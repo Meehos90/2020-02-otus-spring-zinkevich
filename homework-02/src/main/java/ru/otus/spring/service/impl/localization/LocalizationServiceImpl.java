@@ -26,8 +26,10 @@ public class LocalizationServiceImpl implements LocalizationService {
     @Override
     public Locale getLanguageLocale() {
         if(locale != null) {
+            log.info("return current locale '{}'", locale);
             return locale;
         }
+        log.info("return default locale '{}'", Locale.ENGLISH);
         return Locale.ENGLISH;
     }
 
