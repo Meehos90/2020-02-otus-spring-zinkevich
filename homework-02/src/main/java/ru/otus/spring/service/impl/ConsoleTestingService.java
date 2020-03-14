@@ -3,10 +3,12 @@ package ru.otus.spring.service.impl;
 import java.util.Arrays;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import ru.otus.spring.dao.QuestionsDao;
+import ru.otus.spring.logging.Logger;
 import ru.otus.spring.model.Survey;
 import ru.otus.spring.service.IOService;
 import ru.otus.spring.service.LocalizationService;
@@ -14,6 +16,7 @@ import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.TestingService;
 import ru.otus.spring.service.UserService;
 
+@Slf4j
 @Service
 public class ConsoleTestingService implements TestingService {
 
@@ -36,6 +39,7 @@ public class ConsoleTestingService implements TestingService {
         this.messageService = messageService;
     }
 
+    @Logger
     public void startTesting() {
         QuestionsDao questionsDao = localizationService.getCsvFile();
         List<Survey> surveys = questionsDao.csvFileRead();

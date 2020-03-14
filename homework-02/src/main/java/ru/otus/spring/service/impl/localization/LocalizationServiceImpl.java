@@ -4,10 +4,13 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.otus.spring.dao.CsvQuestionsDao;
 import ru.otus.spring.dao.QuestionsDao;
+import ru.otus.spring.logging.Logger;
 import ru.otus.spring.service.LocalizationService;
 
+@Slf4j
 public class LocalizationServiceImpl implements LocalizationService {
 
     private final Locale locale;
@@ -19,6 +22,7 @@ public class LocalizationServiceImpl implements LocalizationService {
         this.languages = languages;
     }
 
+    @Logger
     @Override
     public Locale getLanguageLocale() {
         if(locale != null) {
@@ -27,6 +31,7 @@ public class LocalizationServiceImpl implements LocalizationService {
         return Locale.ENGLISH;
     }
 
+    @Logger
     @Override
     public QuestionsDao getCsvFile() {
         for (Entry<String, String> entry : languages.entrySet()) {

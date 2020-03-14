@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Objects;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,10 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 
 import ru.otus.spring.exception.SurveysLoadingException;
+import ru.otus.spring.logging.Logger;
 import ru.otus.spring.model.Survey;
 
+@Slf4j
 @Repository
 public class CsvQuestionsDao implements QuestionsDao {
     private String csvFile;
@@ -23,6 +26,7 @@ public class CsvQuestionsDao implements QuestionsDao {
         this.csvFile = csvFile;
     }
 
+    @Logger
     @Override
     public List<Survey> csvFileRead() {
         try {
