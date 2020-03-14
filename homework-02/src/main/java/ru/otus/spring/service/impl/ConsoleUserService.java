@@ -1,16 +1,15 @@
 package ru.otus.spring.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Repository;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.otus.spring.logging.Logger;
 import ru.otus.spring.service.IOService;
 import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.UserService;
 
 @Slf4j
-@Repository
+@Service
 @RequiredArgsConstructor
 public class ConsoleUserService implements UserService {
     private final IOService consoleIOService;
