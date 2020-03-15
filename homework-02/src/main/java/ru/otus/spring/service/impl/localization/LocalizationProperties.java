@@ -15,13 +15,14 @@ public class LocalizationProperties {
 
     private final Locale locale;
     private final Map<String, String> languages;
+    private final String csvFileName;
 
-    @Value("${csv.file}")
-    private String csvFileName;
-
-    public LocalizationProperties(@Value("${locale}") Locale locale, @Value("#{${locale.lang.mapping}}") Map<String, String> languages) {
+    public LocalizationProperties(@Value("${locale}") Locale locale,
+                                  @Value("#{${locale.lang.mapping}}") Map<String, String> languages,
+                                  @Value("${csv.file}") String csvFileName) {
         this.locale = locale;
         this.languages = languages;
+        this.csvFileName = csvFileName;
     }
 
     @Logger
