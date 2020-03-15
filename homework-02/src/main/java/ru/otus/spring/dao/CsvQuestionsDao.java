@@ -22,13 +22,10 @@ import ru.otus.spring.service.impl.localization.LocalizationProperties;
 @Slf4j
 @Repository
 public class CsvQuestionsDao implements QuestionsDao {
-    private final String csvFile;
+    private final LocalizationProperties localProps;
 
-    @Autowired
-    private LocalizationProperties localProps;
-
-    public CsvQuestionsDao(@Value("${csv.file}") String csvFile) {
-        this.csvFile = csvFile;
+    public CsvQuestionsDao(LocalizationProperties localProps) {
+        this.localProps = localProps;
     }
 
     @Logger

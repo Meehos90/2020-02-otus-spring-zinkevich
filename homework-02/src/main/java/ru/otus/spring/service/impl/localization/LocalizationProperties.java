@@ -16,6 +16,9 @@ public class LocalizationProperties {
     private final Locale locale;
     private final Map<String, String> languages;
 
+    @Value("${csv.file}")
+    private String csvFileName;
+
     public LocalizationProperties(@Value("${locale}") Locale locale, @Value("#{${locale.lang.mapping}}") Map<String, String> languages) {
         this.locale = locale;
         this.languages = languages;
@@ -36,9 +39,9 @@ public class LocalizationProperties {
         for (Entry<String, String> entry : languages.entrySet()) {
             String k = entry.getKey();
             if (locale != null && locale.toString().equals(k)) {
-                return "csv/questions_" + k + ".csv";
+                return csvFileName.replace(".csv", "_" + k + ".csv");
             }
         }
-        return"csv/questions_en_US.csv";
+        return csvFileName.replace(".csv", "csv/questions_en_US.csv");
     }
 }
