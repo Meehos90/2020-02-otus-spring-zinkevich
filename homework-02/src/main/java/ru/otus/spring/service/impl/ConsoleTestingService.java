@@ -1,20 +1,14 @@
 package ru.otus.spring.service.impl;
 
-import java.util.Arrays;
-import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import ru.otus.spring.dao.QuestionsDao;
 import ru.otus.spring.logging.Logger;
 import ru.otus.spring.model.Survey;
-import ru.otus.spring.service.IOService;
-import ru.otus.spring.service.LocalizationService;
-import ru.otus.spring.service.MessageService;
-import ru.otus.spring.service.TestingService;
-import ru.otus.spring.service.UserService;
+import ru.otus.spring.service.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,9 +19,7 @@ public class ConsoleTestingService implements TestingService {
     private final LocalizationService localizationService;
     private final UserService userService;
     private final MessageService messageService;
-
-    @Value("${missed.answers}")
-    private int missedAnswers;
+    private int missedAnswers = 0;
 
     public ConsoleTestingService(IOService consoleIOService,
                                  LocalizationService localizationService,
