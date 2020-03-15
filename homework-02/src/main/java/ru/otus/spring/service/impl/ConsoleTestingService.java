@@ -16,24 +16,23 @@ public class ConsoleTestingService implements TestingService {
 
     private static final String DELIMETER = "/";
     private final IOService consoleIOService;
-    private final LocalizationService localizationService;
     private final UserService userService;
     private final MessageService messageService;
+    private final QuestionsDao questionsDao;
     private int missedAnswers = 0;
 
     public ConsoleTestingService(IOService consoleIOService,
-                                 LocalizationService localizationService,
                                  UserService userService,
-                                 MessageService messageService) {
+                                 MessageService messageService,
+                                 QuestionsDao questionsDao) {
         this.consoleIOService = consoleIOService;
-        this.localizationService = localizationService;
         this.userService = userService;
         this.messageService = messageService;
+        this.questionsDao = questionsDao;
     }
 
     @Logger
     public void startTesting() {
-        QuestionsDao questionsDao = localizationService.getCsvFile();
         List<Survey> surveys = questionsDao.csvFileRead();
         String name = userService.getUserInfo();
         for (Survey survey : surveys) {

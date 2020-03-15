@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -16,11 +17,15 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import ru.otus.spring.exception.SurveysLoadingException;
 import ru.otus.spring.logging.Logger;
 import ru.otus.spring.model.Survey;
+import ru.otus.spring.service.impl.localization.LocalizationProperties;
 
 @Slf4j
 @Repository
 public class CsvQuestionsDao implements QuestionsDao {
-    private String csvFile;
+    private final String csvFile;
+
+    @Autowired
+    private LocalizationProperties localProps;
 
     public CsvQuestionsDao(@Value("${csv.file}") String csvFile) {
         this.csvFile = csvFile;
@@ -29,10 +34,9 @@ public class CsvQuestionsDao implements QuestionsDao {
     @Logger
     @Override
     public List<Survey> csvFileRead() {
-        log.info("Trying read csvFile '{}'", csvFile);
         try {
             InputStreamReader isReader = new InputStreamReader(
-                    Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(csvFile)), UTF_8);
+                    Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(localProps.getCsvFile())), UTF_8);
             CsvToBean csvToBean =
                     new CsvToBeanBuilder(isReader).withType(Survey.class).withIgnoreLeadingWhiteSpace(true).withSkipLines(1).build();
             return csvToBean.parse();
