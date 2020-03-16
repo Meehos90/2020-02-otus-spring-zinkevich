@@ -43,6 +43,6 @@ public class LocalizationProperties {
                 return csvFileName.replace(".csv", "_" + k + ".csv");
             }
         }
-        return csvFileName.replace(".csv", "csv/questions_en_US.csv");
+        return csvFileName.replace(".csv", "_en_US.csv");
     }
 }

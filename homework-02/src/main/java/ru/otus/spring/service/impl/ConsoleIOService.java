@@ -7,7 +7,8 @@ import java.util.Scanner;
 
 @Service
 public class ConsoleIOService implements IOService {
-    Scanner scanner = new Scanner(System.in);
+
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public void showMessage(String message) {

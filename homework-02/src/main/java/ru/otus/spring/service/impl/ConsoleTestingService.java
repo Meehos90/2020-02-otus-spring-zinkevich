@@ -43,8 +43,8 @@ public class ConsoleTestingService implements TestingService {
         questionsResult(name, missedAnswers);
     }
 
+    @Logger
     private void answersAnalysis(Survey survey, String realAnswer) {
-        log.info("analisys answers");
         if (survey.getAnswer().contains(DELIMETER)) {
             List<String> answers = Arrays.asList(survey.getAnswer().trim().split(DELIMETER));
             if (!answers.contains(realAnswer)) {
@@ -55,12 +55,14 @@ public class ConsoleTestingService implements TestingService {
         }
     }
 
+    @Logger
     private void wrongAnswer() {
         log.info("wrong answers");
         missedAnswers++;
         consoleIOService.showMessage(messageService.getLocaleMessage("message.wrong.answer", null));
     }
 
+    @Logger
     private void questionsResult(String name, int missedAnswers) {
         log.info("questions result");
         if (missedAnswers > 0) {

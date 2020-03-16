@@ -17,5 +17,6 @@ public class Main {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
         TestingService testingService = context.getBean(TestingService.class);
         testingService.startTesting();
+        context.close();
     }
 }
