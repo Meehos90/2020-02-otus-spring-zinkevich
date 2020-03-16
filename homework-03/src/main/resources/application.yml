@@ -1,0 +1,10 @@
+ application:
+  locale:
+     ru_RU
+  csv.file:
+    csv/questions.csv
+  languages :
+    - ru_RU: Русский
+      en_US: English
+
+
