@@ -2,7 +2,6 @@ package ru.otus.spring.dao;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.config.LocalizationProperties;
 import ru.otus.spring.exception.SurveysLoadingException;
@@ -15,7 +14,6 @@ import java.util.Objects;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-@Slf4j
 @Repository
 public class CsvQuestionsDao implements QuestionsDao {
     private final LocalizationProperties localProps;
