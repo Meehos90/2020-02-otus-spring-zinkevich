@@ -69,9 +69,9 @@ public class ConsoleTestingService implements TestingService {
     private void questionsResult(String name, int missedAnswers) {
         log.info("questions result");
         if (missedAnswers > 0) {
-            consoleIOService.showMessage(messageService.getLocaleMessage("message.incorrect.answers", new Object[] {name, missedAnswers}));
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.incorrect.answers", name, missedAnswers));
         } else {
-            consoleIOService.showMessage(messageService.getLocaleMessage("message.correct.answers", new Object[] {name}));
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.correct.answers", name));
         }
     }
 }

@@ -4,8 +4,10 @@ localization:
   languages:
      ru_RU: Русский
      en_US: English
-
 spring:
+  output:
+    ansi:
+      enabled: always
   messages:
     basename: i18n.bundle.messages
     encoding: UTF-8

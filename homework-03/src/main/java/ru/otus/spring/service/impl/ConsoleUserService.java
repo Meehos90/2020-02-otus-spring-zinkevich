@@ -1,12 +1,14 @@
 package ru.otus.spring.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.logging.Logger;
 import ru.otus.spring.service.IOService;
 import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.UserService;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ConsoleUserService implements UserService {
@@ -19,9 +21,11 @@ public class ConsoleUserService implements UserService {
         consoleIOService.showMessage(messageService.getLocaleMessage("message.greeting", null));
         String name = consoleIOService.getMessage();
         if (name.isEmpty()) {
+            log.warn("Name is empty");
             consoleIOService.showMessage(messageService.getLocaleMessage("message.empty.full.name", null));
             return getUserInfo();
         }
+        log.info("User name is {}", name);
         return name;
     }
 }

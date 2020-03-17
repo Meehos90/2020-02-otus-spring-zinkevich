@@ -2,7 +2,7 @@ package ru.otus.spring.logging;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented

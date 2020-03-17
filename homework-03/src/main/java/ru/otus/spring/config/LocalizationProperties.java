@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 @Component
 @ConfigurationProperties("localization")
+@Slf4j
 @Data
 public class LocalizationProperties {
 
@@ -22,18 +23,21 @@ public class LocalizationProperties {
     @Logger
     public Locale getLanguageLocale() {
         if(locale != null) {
+            log.info("Locale is {}", locale);
             return locale;
         }
+        log.debug("Locale is empty, couse current locale = {} was called", Locale.ENGLISH);
         return Locale.ENGLISH;
     }
 
     @Logger
     public String getCsvFile() {
-        System.out.println(csvFileName);
         for (Entry<String, String> entry : languages.entrySet()) {
             String k = entry.getKey();
             if (locale != null && locale.toString().equals(k)) {
-                return csvFileName.replace(".csv", "_" + k + ".csv");
+                String currentCsvFileName = csvFileName.replace(".csv", "_" + k + ".csv");
+                log.info("Csv file is {}", currentCsvFileName);
+                return currentCsvFileName;
             }
         }
         return csvFileName.replace(".csv", "_en_US.csv");
