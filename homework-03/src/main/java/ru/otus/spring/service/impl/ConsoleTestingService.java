@@ -36,7 +36,7 @@ public class ConsoleTestingService implements TestingService {
 
     @Logger
     public void startTesting() {
-        List<Survey> surveys = questionsDao.csvFileRead();
+        List<Survey> surveys = questionsDao.getSurveyList();
         String name = userService.getUserInfo();
         for (Survey survey : surveys) {
             consoleIOService.showMessage(survey.getQuestion());
@@ -53,7 +53,7 @@ public class ConsoleTestingService implements TestingService {
             if (!answers.contains(realAnswer)) {
                 wrongAnswer();
             }
-        } else if (!survey.getAnswer().contains(realAnswer)) {
+        } else if (!survey.getAnswer().contains(realAnswer) || survey.getAnswer().equals("")) {
             wrongAnswer();
         }
     }

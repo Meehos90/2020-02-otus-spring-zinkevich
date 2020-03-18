@@ -5,5 +5,5 @@ import ru.otus.spring.model.Survey;
 import java.util.List;
 
 public interface QuestionsDao {
-    List<Survey> csvFileRead();
+    List<Survey> getSurveyList();
 }

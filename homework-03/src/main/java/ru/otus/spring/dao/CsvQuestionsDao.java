@@ -24,7 +24,7 @@ public class CsvQuestionsDao implements QuestionsDao {
 
     @Logger
     @Override
-    public List<Survey> csvFileRead() {
+    public List<Survey> getSurveyList() {
         try {
             InputStreamReader isReader = new InputStreamReader(
                     Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream(localProps.getCsvFile())), UTF_8);

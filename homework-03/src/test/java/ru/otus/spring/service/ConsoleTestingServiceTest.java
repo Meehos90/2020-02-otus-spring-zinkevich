@@ -1,6 +1,5 @@
 package ru.otus.spring.service;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +45,7 @@ class ConsoleTestingServiceTest {
         survey.setAnswer("yes/no");
         survey.setQuestion(QUESTION);
         surveyList.add(survey);
-        when(questionsDao.csvFileRead()).thenReturn(surveyList);
+        when(questionsDao.getSurveyList()).thenReturn(surveyList);
         when(userService.getUserInfo()).thenReturn(NAME);
     }
 
