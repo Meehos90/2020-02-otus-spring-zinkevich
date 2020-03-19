@@ -3,6 +3,11 @@ package ru.otus.spring.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,6 +19,7 @@ import ru.otus.spring.service.impl.ConsoleTestingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.*;
 
@@ -39,7 +45,7 @@ class ConsoleTestingServiceTest {
     @BeforeEach
     void setUp() {
         when(localProps.getLanguageLocale()).thenReturn(Locale.ENGLISH);
-        when(messageService.getLocaleMessage("message.wrong.answer", null)).thenReturn(WRONG_ANSWER);
+        when(messageService.getLocaleMessage("message.wrong.answer")).thenReturn(WRONG_ANSWER);
         List<Survey> surveyList = new ArrayList<>();
         Survey survey = new Survey();
         survey.setAnswer("yes/no");
@@ -49,25 +55,22 @@ class ConsoleTestingServiceTest {
         when(userService.getUserInfo()).thenReturn(NAME);
     }
 
-
-    @DisplayName("Вызов метода тестирования студентов: неправильный ответ")
-    @Test
-    public void startTestingNegative() {
-        startTesting(" ", 1);
-    }
-
-    @DisplayName("Вызов метода тестирования студентов: правильный ответ")
-    @Test
-    public void startTestingPositive() {
-        startTesting("yes", 0);
-    }
-
+    @DisplayName("Вызов метода тестирования студентов")
+    @ParameterizedTest(name = "Количество неправильных ответов: {1}")
+    @MethodSource({"checkAnswers"})
     void startTesting(String answer, int wrongAnswers) {
         when(consoleIOService.getMessage()).thenReturn(answer);
         testingService.startTesting();
         verify(consoleIOService, times(1)).showMessage(QUESTION);
         verify(consoleIOService, times(1)).getMessage();
         verify(consoleIOService, times(wrongAnswers)).showMessage(WRONG_ANSWER);
+    }
+
+    private static Stream<Arguments> checkAnswers() {
+        return Stream.of(
+                Arguments.of("", 1),
+                Arguments.of("yes", 0)
+        );
     }
 
 

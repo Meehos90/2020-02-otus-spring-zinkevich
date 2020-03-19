@@ -53,7 +53,7 @@ public class ConsoleTestingService implements TestingService {
             if (!answers.contains(realAnswer)) {
                 wrongAnswer();
             }
-        } else if (!survey.getAnswer().contains(realAnswer) || survey.getAnswer().equals("")) {
+        } else if (!survey.getAnswer().contains(realAnswer)) {
             wrongAnswer();
         }
     }
@@ -62,7 +62,7 @@ public class ConsoleTestingService implements TestingService {
     private void wrongAnswer() {
         log.info("wrong answers");
         missedAnswers++;
-        consoleIOService.showMessage(messageService.getLocaleMessage("message.wrong.answer", null));
+        consoleIOService.showMessage(messageService.getLocaleMessage("message.wrong.answer"));
     }
 
     @Logger
