@@ -18,11 +18,11 @@ public class ConsoleUserService implements UserService {
     @Logger
     @Override
     public String getUserInfo() {
-        consoleIOService.showMessage(messageService.getLocaleMessage("message.greeting", null));
+        consoleIOService.showMessage(messageService.getLocaleMessage("message.greeting"));
         String name = consoleIOService.getMessage();
         if (name.isEmpty()) {
             log.warn("Name is empty");
-            consoleIOService.showMessage(messageService.getLocaleMessage("message.empty.full.name", null));
+            consoleIOService.showMessage(messageService.getLocaleMessage("message.empty.full.name"));
             return getUserInfo();
         }
         log.info("User name is {}", name);
