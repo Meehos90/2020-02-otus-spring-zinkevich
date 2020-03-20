@@ -19,6 +19,7 @@ public class LocalizationProperties {
     private Locale locale;
     private Map<String, String> languages;
     private String csvFileName;
+    private final Locale defLocale = Locale.ENGLISH;
 
     @Logger
     public Locale getLanguageLocale() {
@@ -26,8 +27,8 @@ public class LocalizationProperties {
             log.info("Locale is {}", locale);
             return locale;
         }
-        log.debug("Locale is empty, couse current locale = {} was called", Locale.ENGLISH);
-        return Locale.ENGLISH;
+        log.info("Locale is empty, couse was called default locale = {}", defLocale);
+        return defLocale;
     }
 
     @Logger
