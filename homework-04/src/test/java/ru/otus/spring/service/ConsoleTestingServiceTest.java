@@ -23,9 +23,10 @@ import static org.mockito.Mockito.*;
 @DisplayName("Класс сервиса тестирования студентов")
 @SpringBootTest(classes = ConsoleTestingService.class)
 class ConsoleTestingServiceTest {
-    private final String QUESTION = "Do you work as a programmer?";
-    private final String WRONG_ANSWER = "You did not answer the question correctly!";
-    private final String NAME = "James Gosling";
+    private static final String QUESTION = "Do you work as a programmer?";
+    private static final String WRONG_ANSWER = "You did not answer the question correctly!";
+    private static final String NAME = "James Gosling";
+
     @MockBean
     private LocalizationProperties localProps;
     @MockBean
