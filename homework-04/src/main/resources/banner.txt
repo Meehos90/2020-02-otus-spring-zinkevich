@@ -1,0 +1,7 @@
+${Ansi.BRIGHT_CYAN} _____ _____ _   _ _____       ${Ansi.BRIGHT_RED} _   _ ________  ___ _____ _    _  ___________ _   __
+${Ansi.BRIGHT_CYAN}|  _  |_   _| | | /  ___|      ${Ansi.BRIGHT_RED}| | | |  _  |  \/  ||  ___| |  | ||  _  | ___ \ | / /
+${Ansi.BRIGHT_CYAN}| | | | | | | | | \ `--. ______${Ansi.BRIGHT_RED}| |_| | | | | .  . || |__ | |  | || | | | |_/ / |/ /
+${Ansi.BRIGHT_CYAN}| | | | | | | | | |`--. \______|${Ansi.BRIGHT_RED}  _  | | | | |\/| ||  __|| |/\| || | | |    /|    \
+${Ansi.BRIGHT_CYAN}\ \_/ / | | | |_| /\__/ /      ${Ansi.BRIGHT_RED}| | | \ \_/ / |  | || |___\  /\  /\ \_/ / |\ \| |\  \
+${Ansi.BRIGHT_CYAN} \___/  \_/  \___/\____/       ${Ansi.BRIGHT_RED}\_| |_/\___/\_|  |_/\____/ \/  \/  \___/\_| \_\_| \_/
+${AnsiBackground.BRIGHT_WHITE}
