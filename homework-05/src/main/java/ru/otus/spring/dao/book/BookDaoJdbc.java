@@ -26,6 +26,17 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
+    public void update(Book book) {
+        long id = book.getId();
+        String title = book.getTitle();
+        String author = book.getAuthor();
+        String genre = book.getGenre();
+        jdbc.getJdbcOperations().update("update books set title = ? where id = ?", title, id);
+        jdbc.getJdbcOperations().update("update books set author = ? where id = ?", author, id);
+        jdbc.getJdbcOperations().update("update books set genre = ? where id = ?", genre, id);
+    }
+
+    @Override
     public void delete(long id) {
         jdbc.update("delete from books where id = :id", Collections.singletonMap("id", id));
     }

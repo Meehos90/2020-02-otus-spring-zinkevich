@@ -21,11 +21,35 @@ public class ShellCommands {
     private final GenreDao genreDao;
     private final IOService messageService;
 
+    @ShellMethod(value = "Create book", key = {"insert", "insert book"})
+    public void insertBook() {
+        String title = getTitle();
+        bookDao.insert(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
+        messageService.showMessage("Успешно добавлена книга: " + title);
+    }
+
+    @ShellMethod(value = "Update book", key = {"update", "update book"})
+    public void updateBook() {
+        String title = getTitle();
+        Book book = bookDao.getByTitle(title);
+        bookDao.update(new Book(book.getId(), title, getAuthor(), getGenre()));
+        messageService.showMessage("Книга успешно изменена: " + title);
+    }
+
     @ShellMethod(value = "Search books by name", key = {"sbn", "book name"})
     public Book searchBookByName() {
         messageService.showMessage("Введите название книги:");
         String value = messageService.getMessage();
         return bookDao.getByTitle(value);
+    }
+
+    @ShellMethod(value = "Delete book by title", key = {"delete", "delete book"})
+    public void deleteBook() {
+        messageService.showMessage("Введите название книги, которую хотите удалить:");
+        String title = messageService.getMessage();
+        Book book = bookDao.getByTitle(title);
+        bookDao.delete(book.getId());
+        messageService.showMessage("Книга \"" + title + "\" успешно удалена.");
     }
 
     @ShellMethod(value = "Search books by author", key = {"sba", "book author"})
@@ -62,5 +86,20 @@ public class ShellCommands {
     @ShellMethod(value = "View all authors", key = {"authors"})
     public List<Author> getAllAuthors() {
         return authorDao.getAll();
+    }
+
+    private String getTitle() {
+        messageService.showMessage("Введите название книги");
+        return messageService.getMessage();
+    }
+
+    private String getAuthor() {
+        messageService.showMessage("Введите автора книги:");
+        return messageService.getMessage();
+    }
+
+    private String getGenre() {
+        messageService.showMessage("Введите жанр книги");
+        return messageService.getMessage();
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
+import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
 
 import java.util.List;
@@ -36,6 +37,15 @@ class BookDaoJdbcTest {
         Book expected = new Book(4L, TEST_BOOK_TITLE, TEST_AUTHOR_FULLNAME, TEST_GENRE_NAME);
         dao.insert(expected);
         Book actual = dao.getByTitle(expected.getTitle());
+        assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
+
+    @DisplayName("изменить книгу в БД")
+    @Test
+    void shouldUpdateBook() {
+        Book expected = new Book(TEST_ID, TEST_BOOK_TITLE, EXPECTED_AUTHOR_FULLNAME, EXPECTED_GENRE_NAME);
+        dao.update(expected);
+        Book actual = dao.getByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
