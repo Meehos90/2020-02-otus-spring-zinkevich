@@ -69,7 +69,7 @@ class AuthorDaoJdbcTest {
 
     @DisplayName("получить всех авторов из БД")
     @Test
-    void ShoudGetAllAuthors() {
+    void shoudGetAllAuthors() {
         List<Author> authors = dao.getAll();
         assertThat(authors.size()).isEqualTo(DEFAULT_COUNT);
     }

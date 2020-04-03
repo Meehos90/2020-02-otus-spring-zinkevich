@@ -69,7 +69,7 @@ class GenreDaoJdbcTest {
 
     @DisplayName("получить все жанры из БД")
     @Test
-    void ShoudGetAllGenres() {
+    void shoudGetAllGenres() {
         List<Genre> genres = dao.getAll();
         assertThat(genres.size()).isEqualTo(DEFAULT_COUNT);
     }
