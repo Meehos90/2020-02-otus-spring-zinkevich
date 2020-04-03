@@ -71,6 +71,23 @@ public class ShellCommands {
         return genreDao.getByName(value);
     }
 
+    @ShellMethod(value = "View all genres", key = {"genres"})
+    public List<Genre> getAllGenres() {
+        return genreDao.getAll();
+    }
+
+    @ShellMethod(value = "Search authors by fullname", key = {"saf", "author fullname"})
+    public Author getAuthorByName() {
+        messageService.showMessage("Введите полное имя автора");
+        String value = messageService.getMessage();
+        return authorDao.getByFullname(value);
+    }
+
+    @ShellMethod(value = "View all authors", key = {"authors"})
+    public List<Author> getAllAuthors() {
+        return authorDao.getAll();
+    }
+
     private String getTitle() {
         messageService.showMessage("Введите название книги");
         return messageService.getMessage();
@@ -88,17 +105,15 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getGenreName();
-        long id = genreDao.count() + 1L;
-        Genre genre = new Genre(id, name);
-        genreDao.insert(genre);
-        return genre;
+        List<Genre> genres = genreDao.getAll();
+        return genres.stream().filter(g -> g.getName().equals(name)).findFirst()
+                .orElse(new Genre(genreDao.count() + 1L, name));
     }
 
     private Author getAuthor() {
         String fullname = getAuthorFullName();
-        long id = authorDao.count() + 1L;
-        Author author = new Author(id, fullname);
-        authorDao.insert(author);
-        return author;
+        List<Author> authors = authorDao.getAll();
+        return authors.stream().filter(author -> author.getFullName().equals(fullname)).findFirst()
+                .orElse(new Author(authorDao.count() + 1L, fullname));
     }
 }

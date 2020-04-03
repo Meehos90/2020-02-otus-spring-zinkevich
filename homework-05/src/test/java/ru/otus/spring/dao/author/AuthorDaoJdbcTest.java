@@ -63,8 +63,8 @@ class AuthorDaoJdbcTest {
     @DisplayName("получить автора из БД по имени")
     @Test
     void shouldGetByFullnameAuthor() {
-        Author author = dao.getByFullname(TEST_AUTHOR_FULLNAME);
-        assertThat(author.getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
+        Author author = dao.getByFullname(EXPECTED_AUTHOR_FULLNAME);
+        assertThat(author.getFullName()).isEqualTo(EXPECTED_AUTHOR_FULLNAME);
     }
 
     @DisplayName("получить всех авторов из БД")

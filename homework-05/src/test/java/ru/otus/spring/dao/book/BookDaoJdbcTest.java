@@ -44,7 +44,7 @@ class BookDaoJdbcTest {
     void shouldUpdateBook() {
         Book expected = getBook(TEST_ID);
         dao.update(expected);
-        Book actual = dao.getByTitle("Оно");
+        Book actual = dao.getByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
