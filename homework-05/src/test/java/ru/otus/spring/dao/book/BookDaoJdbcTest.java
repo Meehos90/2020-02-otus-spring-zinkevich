@@ -33,7 +33,7 @@ class BookDaoJdbcTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shoudInsertBook() {
-        Book expected = getBook(4L);
+        Book expected = getBook(INSERT_ID);
         dao.insert(expected);
         Book actual = dao.getByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);
@@ -49,8 +49,8 @@ class BookDaoJdbcTest {
     }
 
     private Book getBook(long id) {
-        Author author = new Author(id, TEST_AUTHOR_FULLNAME);
-        Genre genre = new Genre(id, TEST_GENRE_NAME);
+        Author author = new Author(EXPECTED_ID, EXPECTED_AUTHOR_FULLNAME);
+        Genre genre = new Genre(EXPECTED_ID, EXPECTED_GENRE_NAME);
         return new Book(id, TEST_BOOK_TITLE, author, genre);
     }
 
@@ -72,8 +72,8 @@ class BookDaoJdbcTest {
     @DisplayName("получить книгу из БД по имени автора")
     @Test
     void getByAuthor() {
-        Book book = dao.getByAuthor(TEST_AUTHOR_FULLNAME);
-        assertThat(book.getAuthor().getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
+        Book book = dao.getByAuthor(EXPECTED_AUTHOR_FULLNAME);
+        assertThat(book.getAuthor().getFullName()).isEqualTo(EXPECTED_AUTHOR_FULLNAME);
     }
 
     @DisplayName("получить все книги из БД")

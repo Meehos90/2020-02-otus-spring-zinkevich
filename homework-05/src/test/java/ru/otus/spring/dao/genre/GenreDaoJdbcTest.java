@@ -39,7 +39,7 @@ class GenreDaoJdbcTest {
     @DisplayName("изменить жанр в БД")
     @Test
     void shouldUpdateGenre() {
-        Genre expected = new Genre(TEST_ID, TEST_GENRE_NAME);
+        Genre expected = new Genre(TEST_ID, EXPECTED_GENRE_NAME);
         dao.update(expected);
         Genre actual = dao.getById(TEST_ID);
         assertThat(actual).isEqualToComparingFieldByField(expected);
@@ -63,8 +63,8 @@ class GenreDaoJdbcTest {
     @DisplayName("получить жанр из БД по названию")
     @Test
     void shouldGetByNameGenre() {
-        Genre genre = dao.getByName(TEST_GENRE_NAME);
-        assertThat(genre.getName()).isEqualTo(TEST_GENRE_NAME);
+        Genre genre = dao.getByName(EXPECTED_GENRE_NAME);
+        assertThat(genre.getName()).isEqualTo(EXPECTED_GENRE_NAME);
     }
 
     @DisplayName("получить все жанры из БД")
