@@ -3,7 +3,6 @@ package ru.otus.spring.dao.book;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.model.Author;
@@ -34,24 +33,25 @@ class BookDaoJdbcTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shoudInsertBook() {
-        Author author = new Author(4L, "Ствен Кинг");
-        Genre genre = new Genre(4L, "Ужасы");
-        Book expected = new Book(4L, "Оно", author, genre);
+        Book expected = getBook(4L);
         dao.insert(expected);
-        Book actual = dao.getByTitle("Оно");
-        System.out.println(actual);
-        //assertThat(actual).isEqualToComparingFieldByField(expected);
+        Book actual = dao.getByTitle(TEST_BOOK_TITLE);
+        assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
     @DisplayName("изменить книгу в БД")
     @Test
     void shouldUpdateBook() {
-        Author author = new Author(3L, "Стивен Кинг");
-        Genre genre = new Genre(3L, "Ужасы");
-        Book expected = new Book(3L, "Оно", author, genre);
+        Book expected = getBook(TEST_ID);
         dao.update(expected);
         Book actual = dao.getByTitle("Оно");
         assertThat(actual).isEqualToComparingFieldByField(expected);
+    }
+
+    private Book getBook(long id) {
+        Author author = new Author(id, TEST_AUTHOR_FULLNAME);
+        Genre genre = new Genre(id, TEST_GENRE_NAME);
+        return new Book(id, TEST_BOOK_TITLE, author, genre);
     }
 
     @DisplayName("удалить книгу из БД")

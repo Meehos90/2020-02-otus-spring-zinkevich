@@ -4,7 +4,7 @@ public interface Constants {
     int DEFAULT_COUNT = 3;
     int EXPECTED_COUNT = 2;
     long TEST_ID = 3L;
-    String TEST_AUTHOR_FULLNAME = "Говард Филлипс Лавкрафт";
+    String TEST_AUTHOR_FULLNAME = "Стивен Эдвин Кинг";
     String TEST_BOOK_TITLE = "Оно";
     String TEST_GENRE_NAME = "Ужасы";
 
