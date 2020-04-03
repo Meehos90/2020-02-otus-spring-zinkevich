@@ -78,7 +78,7 @@ class BookDaoJdbcTest {
 
     @DisplayName("получить все книги из БД")
     @Test
-    void ShoudGetAllBooks() {
+    void shoudGetAllBooks() {
         List<Book> books = dao.getAll();
         assertThat(books.size()).isEqualTo(DEFAULT_COUNT);
     }
