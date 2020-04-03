@@ -36,7 +36,7 @@ public class ShellCommands {
         messageService.showMessage("Книга успешно изменена: " + title);
     }
 
-    @ShellMethod(value = "Search books by name", key = {"sbn", "book name"})
+    @ShellMethod(value = "Search books by name", key = {"sbn", "search book"})
     public Book searchBookByName() {
         messageService.showMessage("Введите название книги:");
         String value = messageService.getMessage();
@@ -93,13 +93,21 @@ public class ShellCommands {
         return messageService.getMessage();
     }
 
-    private String getAuthor() {
-        messageService.showMessage("Введите автора книги:");
-        return messageService.getMessage();
+    private Author getAuthor() {
+        messageService.showMessage("Введите полное имя автора:");
+        String fullname = messageService.getMessage();
+        long id = authorDao.count() + 1L;
+        Author author = new Author(id, fullname);
+        authorDao.insert(author);
+        return author;
     }
 
-    private String getGenre() {
+    private Genre getGenre() {
         messageService.showMessage("Введите жанр книги");
-        return messageService.getMessage();
+        String name = messageService.getMessage();
+        long id = genreDao.count() + 1L;
+        Genre genre = new Genre(id, name);
+        genreDao.insert(genre);
+        return genre;
     }
 }

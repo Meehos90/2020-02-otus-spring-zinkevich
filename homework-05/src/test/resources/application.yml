@@ -1,9 +1,8 @@
 spring:
-  datasource:
+   datasource:
     url: jdbc:h2:mem:db;
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
     initialization-mode: always
-    schema: schema.sql
     data: data.sql

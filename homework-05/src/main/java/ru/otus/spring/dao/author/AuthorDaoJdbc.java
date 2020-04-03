@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.Author;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
@@ -21,31 +21,31 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public void insert(Author author) {
-        jdbc.getJdbcOperations().update("insert into authors (id, fullname) values (?, ?)",
-                author.getId(), author.getFullName());
+        jdbc.update("insert into authors values (:id, :fullname)",
+                Map.of("id", author.getId(), "fullname", author.getFullName()));
     }
 
     @Override
     public void update(Author author) {
-        jdbc.getJdbcOperations().update("update authors set fullname = ? where id = ?",
-                author.getFullName(), author.getId());
+        jdbc.update("update authors set fullname = :fullname where id = :id",
+                Map.of("fullname", author.getFullName(), "id", author.getId()));
     }
 
     @Override
     public void delete(long id) {
-        jdbc.update("delete from authors where id = :id", Collections.singletonMap("id", id));
+        jdbc.update("delete from authors where id = :id", Map.of("id", id));
     }
 
     @Override
     public Author getById(long id) {
         return jdbc.queryForObject("select * from authors where id = :id",
-                Collections.singletonMap("id", id), new AuthorMapper());
+                Map.of("id", id), new AuthorMapper());
     }
 
     @Override
     public Author getByFullname(String fullname) {
         return jdbc.queryForObject("select * from authors where fullname = :fullname",
-                Collections.singletonMap("fullname", fullname), new AuthorMapper());
+                Map.of("fullname", fullname), new AuthorMapper());
     }
 
     @Override

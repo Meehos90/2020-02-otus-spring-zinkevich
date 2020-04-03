@@ -5,14 +5,15 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.Book;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
 @RequiredArgsConstructor
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
+    private final static String SELECT_BOOKS = "select * from books b join authors a on b.author_id = a.id join genres g on b.genre_id = g.id";
 
     @Override
     public int count() {
@@ -21,40 +22,36 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public void insert(Book book) {
-        jdbc.getJdbcOperations().update("insert into books (id, title, author, genre) values (?, ?, ?, ?)",
-                book.getId(), book.getTitle(), book.getAuthor(), book.getGenre());
+        jdbc.update("insert into books values (:id, :title, :author_id, :genre_id)",
+                Map.of("id", book.getId(), "title", book.getTitle(), "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId()));
     }
 
     @Override
     public void update(Book book) {
-        long id = book.getId();
-        String title = book.getTitle();
-        String author = book.getAuthor();
-        String genre = book.getGenre();
-        jdbc.getJdbcOperations().update("update books set title = ? where id = ?", title, id);
-        jdbc.getJdbcOperations().update("update books set author = ? where id = ?", author, id);
-        jdbc.getJdbcOperations().update("update books set genre = ? where id = ?", genre, id);
+        jdbc.update("update books b join authors a on b.author_id = a.id on genres g b.genre_id = g.id set title = :title, author = :author, genre = :genre where id = :id",
+                Map.of("title", book.getTitle(), "author", book.getAuthor(), "genre", book.getGenre(), "id", book.getId()));
     }
 
     @Override
     public void delete(long id) {
-        jdbc.update("delete from books where id = :id", Collections.singletonMap("id", id));
+        jdbc.update("delete from books where id = :id", Map.of("id", id));
     }
 
     @Override
     public Book getByTitle(String title) {
-        return jdbc.queryForObject("select * from books where title = :title",
-                Collections.singletonMap("title", title), new BookMapper());
+        return jdbc.queryForObject(SELECT_BOOKS + " where title = :title",
+                Map.of("title", title), new BookMapper());
     }
 
     @Override
-    public Book getByAuthor(String author) {
-        return jdbc.queryForObject("select * from books where author = :author",
-                Collections.singletonMap("author", author), new BookMapper());
+    public Book getByAuthor(String fullname) {
+        return jdbc.queryForObject(SELECT_BOOKS + " where fullname = :fullname",
+                Map.of("fullname", fullname), new BookMapper());
     }
 
     @Override
     public List<Book> getAll() {
-        return jdbc.query("select * from books", new BookMapper());
+        return jdbc.query(SELECT_BOOKS,
+                new BookMapper());
     }
 }

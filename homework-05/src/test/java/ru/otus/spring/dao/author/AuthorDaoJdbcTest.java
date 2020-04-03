@@ -15,7 +15,6 @@ import static ru.otus.spring.dao.Constants.*;
 
 @DisplayName("Dao для работы с авторами книг")
 @JdbcTest
-@AutoConfigureTestDatabase
 @Import(AuthorDaoJdbc.class)
 class AuthorDaoJdbcTest {
 

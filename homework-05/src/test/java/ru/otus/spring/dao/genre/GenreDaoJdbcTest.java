@@ -16,7 +16,6 @@ import static ru.otus.spring.dao.Constants.*;
 
 @DisplayName("Dao для работы с жанрами")
 @JdbcTest
-@AutoConfigureTestDatabase
 @Import(GenreDaoJdbc.class)
 class GenreDaoJdbcTest {
 

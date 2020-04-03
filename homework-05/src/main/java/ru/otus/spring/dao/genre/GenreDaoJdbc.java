@@ -5,8 +5,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.model.Genre;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
@@ -21,30 +21,31 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public void insert(Genre genre) {
-        jdbc.getJdbcOperations().update("insert into genres (id, name) values (?, ?)",
-                genre.getId(), genre.getName());
+        jdbc.update("insert into genres values (:id, :name)",
+                Map.of("id", genre.getId(),"name", genre.getName()));
     }
 
     @Override
     public void update(Genre genre) {
-        jdbc.getJdbcOperations().update("update genres set name = ? where id = ?", genre.getName(), genre.getId());
+        jdbc.update("update genres set name = :name where id = :id",
+                Map.of("name", genre.getName(), "id", genre.getId()));
     }
 
     @Override
     public void delete(long id) {
-        jdbc.update("delete from genres where id = :id", Collections.singletonMap("id", id));
+        jdbc.update("delete from genres where id = :id", Map.of("id", id));
     }
 
     @Override
     public Genre getById(long id) {
         return jdbc.queryForObject("select * from genres where id = :id",
-                Collections.singletonMap("id", id), new GenreMapper());
+                Map.of("id", id), new GenreMapper());
     }
 
     @Override
     public Genre getByName(String name) {
         return jdbc.queryForObject("select * from genres where name = :name",
-                Collections.singletonMap("name", name), new GenreMapper());
+                Map.of("name", name), new GenreMapper());
     }
 
     @Override
