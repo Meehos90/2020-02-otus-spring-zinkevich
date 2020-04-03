@@ -46,11 +46,11 @@ class BookDaoJdbcTest {
     @DisplayName("изменить книгу в БД")
     @Test
     void shouldUpdateBook() {
-        Author author = new Author(TEST_ID, TEST_AUTHOR_FULLNAME);
-        Genre genre = new Genre(TEST_ID, TEST_GENRE_NAME);
-        Book expected = new Book(TEST_ID, TEST_BOOK_TITLE, author, genre);
+        Author author = new Author(3L, "Стивен Кинг");
+        Genre genre = new Genre(3L, "Ужасы");
+        Book expected = new Book(3L, "Оно", author, genre);
         dao.update(expected);
-        Book actual = dao.getByTitle(TEST_BOOK_TITLE);
+        Book actual = dao.getByTitle("Оно");
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
@@ -73,7 +73,7 @@ class BookDaoJdbcTest {
     @Test
     void getByAuthor() {
         Book book = dao.getByAuthor(TEST_AUTHOR_FULLNAME);
-        assertThat(book.getAuthor()).isEqualTo(TEST_AUTHOR_FULLNAME);
+        assertThat(book.getAuthor().getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
     }
 
     @DisplayName("получить все книги из БД")

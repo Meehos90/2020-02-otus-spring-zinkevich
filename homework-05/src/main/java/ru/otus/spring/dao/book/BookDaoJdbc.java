@@ -28,8 +28,8 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public void update(Book book) {
-        jdbc.update("update books b join authors a on b.author_id = a.id on genres g b.genre_id = g.id set title = :title, author = :author, genre = :genre where id = :id",
-                Map.of("title", book.getTitle(), "author", book.getAuthor(), "genre", book.getGenre(), "id", book.getId()));
+        jdbc.update("update books b set title = :title, author_id = :author_id, genre_id = :genre_id where id = :id",
+                Map.of("title", book.getTitle(), "author_id", book.getAuthor().getId(), "genre_id", book.getGenre().getId(), "id", book.getId()));
     }
 
     @Override
@@ -51,7 +51,6 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getAll() {
-        return jdbc.query(SELECT_BOOKS,
-                new BookMapper());
+        return jdbc.query(SELECT_BOOKS, new BookMapper());
     }
 }
