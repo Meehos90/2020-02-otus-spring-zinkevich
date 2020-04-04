@@ -45,21 +45,21 @@ public class ShellCommands {
         messageService.showMessage("Книга \"" + title + "\" успешно удалена.");
     }
 
-    @ShellMethod(value = "Search books by name", key = {"sbbn", "search book by name"})
+    @ShellMethod(value = "Search books by name", key = {"sbn", "search book by name"})
     public Book searchBookByName() {
         messageService.showMessage("Введите название книги:");
         String value = messageService.getMessage();
         return bookDao.getByTitle(value);
     }
 
-    @ShellMethod(value = "Search books by author", key = {"sbba", "search book by author"})
+    @ShellMethod(value = "Search books by author", key = {"sba", "search book by author"})
     public Book searchBookByAuthor() {
         messageService.showMessage("Введите полное имя автора книги:");
         String value = messageService.getMessage();
         return bookDao.getByAuthor(value);
     }
 
-    @ShellMethod(value = "View all books", key = {"library"})
+    @ShellMethod(value = "View all books", key = {"lib", "library"})
     public List<Book> getAllBooks() {
         return bookDao.getAll();
     }
@@ -107,13 +107,23 @@ public class ShellCommands {
         String name = getGenreName();
         List<Genre> genres = genreDao.getAll();
         return genres.stream().filter(g -> g.getName().equals(name)).findFirst()
-                .orElse(new Genre(genreDao.count() + 1L, name));
+                .orElse(insertAndReturnGenre(name));
     }
 
     private Author getAuthor() {
         String fullname = getAuthorFullName();
         List<Author> authors = authorDao.getAll();
         return authors.stream().filter(author -> author.getFullName().equals(fullname)).findFirst()
-                .orElse(new Author(authorDao.count() + 1L, fullname));
+                .orElse(insertAndReturnAuthor(fullname));
+    }
+
+    private Genre insertAndReturnGenre(String name) {
+        genreDao.insert(new Genre(genreDao.count() + 1L, name));
+        return genreDao.getByName(name);
+    }
+
+    private Author insertAndReturnAuthor(String fullname) {
+        authorDao.insert(new Author(authorDao.count() + 1L, fullname));
+        return authorDao.getByFullname(fullname);
     }
 }
