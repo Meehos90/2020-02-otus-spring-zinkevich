@@ -16,6 +16,10 @@ import java.util.List;
 @ShellComponent
 @RequiredArgsConstructor
 public class ShellCommands {
+    public static final String ENTER_BOOK_TITLE = "Введите название книги:";
+    public static final String ENTER_GENRE_NAME = "Введите название жанра:";
+    public static final String ENTER_AUTHOR_FULLNAME = "Введите полное имя автора:";
+    public static final String ENTER_DELETE_BOOK_TITLE = "Введите название книги, которую хотите удалить:";
     private final BookDao bookDao;
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
@@ -38,7 +42,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Delete book by title", key = {"del", "delete book"})
     public void deleteBook() {
-        messageService.showMessage("Введите название книги, которую хотите удалить:");
+        messageService.showMessage(ENTER_DELETE_BOOK_TITLE);
         String title = messageService.getMessage();
         Book book = bookDao.getByTitle(title);
         bookDao.delete(book.getId());
@@ -47,14 +51,14 @@ public class ShellCommands {
 
     @ShellMethod(value = "Search books by name", key = {"sbn", "search book by name"})
     public Book searchBookByName() {
-        messageService.showMessage("Введите название книги:");
+        messageService.showMessage(ENTER_BOOK_TITLE);
         String value = messageService.getMessage();
         return bookDao.getByTitle(value);
     }
 
     @ShellMethod(value = "Search books by author", key = {"sba", "search book by author"})
     public Book searchBookByAuthor() {
-        messageService.showMessage("Введите полное имя автора книги:");
+        messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         String value = messageService.getMessage();
         return bookDao.getByAuthor(value);
     }
@@ -66,7 +70,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Search genres by name", key = {"sgn", "genre name"})
     public Genre getGenreByName() {
-        messageService.showMessage("Введите название жанра");
+        messageService.showMessage(ENTER_GENRE_NAME);
         String value = messageService.getMessage();
         return genreDao.getByName(value);
     }
@@ -78,7 +82,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "Search authors by fullname", key = {"saf", "author fullname"})
     public Author getAuthorByName() {
-        messageService.showMessage("Введите полное имя автора");
+        messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         String value = messageService.getMessage();
         return authorDao.getByFullname(value);
     }
@@ -89,17 +93,17 @@ public class ShellCommands {
     }
 
     private String getTitle() {
-        messageService.showMessage("Введите название книги");
+        messageService.showMessage(ENTER_BOOK_TITLE);
         return messageService.getMessage();
     }
 
     private String getAuthorFullName() {
-        messageService.showMessage("Введите полное имя автора:");
+        messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         return messageService.getMessage();
     }
 
     private String getGenreName() {
-        messageService.showMessage("Введите жанр книги:");
+        messageService.showMessage(ENTER_GENRE_NAME);
         return messageService.getMessage();
     }
 
