@@ -27,14 +27,14 @@ public class ShellCommands {
 
     @ShellMethod(value = "Create book", key = {"ins", "book insert"})
     public void insertBook() {
-        String title = getTitle();
+        String title = getMessage(ENTER_BOOK_TITLE);
         bookDao.insert(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
         messageService.showMessage("Успешно добавлена книга: " + title);
     }
 
     @ShellMethod(value = "Update book", key = {"upd", "update book"})
     public void updateBook() {
-        String title = getTitle();
+        String title = getMessage(ENTER_BOOK_TITLE);
         Book book = bookDao.getByTitle(title);
         bookDao.update(new Book(book.getId(), title, getAuthor(), getGenre()));
         messageService.showMessage("Книга успешно изменена: " + title);
@@ -92,30 +92,20 @@ public class ShellCommands {
         return authorDao.getAll();
     }
 
-    private String getTitle() {
-        messageService.showMessage(ENTER_BOOK_TITLE);
-        return messageService.getMessage();
-    }
-
-    private String getAuthorFullName() {
-        messageService.showMessage(ENTER_AUTHOR_FULLNAME);
-        return messageService.getMessage();
-    }
-
-    private String getGenreName() {
-        messageService.showMessage(ENTER_GENRE_NAME);
+    private String getMessage(String message) {
+        messageService.showMessage(message);
         return messageService.getMessage();
     }
 
     private Genre getGenre() {
-        String name = getGenreName();
+        String name = getMessage(ENTER_GENRE_NAME);
         List<Genre> genres = genreDao.getAll();
         return genres.stream().filter(g -> g.getName().equals(name)).findFirst()
                 .orElse(insertAndReturnGenre(name));
     }
 
     private Author getAuthor() {
-        String fullname = getAuthorFullName();
+        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
         List<Author> authors = authorDao.getAll();
         return authors.stream().filter(author -> author.getFullName().equals(fullname)).findFirst()
                 .orElse(insertAndReturnAuthor(fullname));
