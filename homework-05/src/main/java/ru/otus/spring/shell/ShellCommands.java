@@ -99,16 +99,22 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        List<Genre> genres = genreDao.getAll();
-        return genres.stream().filter(g -> g.getName().equals(name)).findFirst()
-                .orElse(insertAndReturnGenre(name));
+        for(Genre genre : genreDao.getAll()) {
+            if(genre.getName().equals(name)) {
+                return genre;
+            }
+        }
+        return insertAndReturnGenre(name);
     }
 
     private Author getAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        List<Author> authors = authorDao.getAll();
-        return authors.stream().filter(author -> author.getFullName().equals(fullname)).findFirst()
-                .orElse(insertAndReturnAuthor(fullname));
+        for (Author author : authorDao.getAll()) {
+            if(author.getFullName().equals(fullname)) {
+                return author;
+            }
+        }
+        return insertAndReturnAuthor(fullname);
     }
 
     private Genre insertAndReturnGenre(String name) {
