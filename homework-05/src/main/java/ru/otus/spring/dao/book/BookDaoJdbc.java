@@ -50,6 +50,12 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
+    public List<Book> getByGenre(String name) {
+        return jdbc.query(SELECT_BOOKS + " where name = :name",
+                Map.of("name", name), new BookMapper());
+    }
+
+    @Override
     public List<Book> getAll() {
         return jdbc.query(SELECT_BOOKS, new BookMapper());
     }

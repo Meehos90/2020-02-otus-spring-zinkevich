@@ -63,6 +63,13 @@ public class ShellCommands {
         return bookDao.getByAuthor(value);
     }
 
+    @ShellMethod(value = "Search books by genre", key = {"sbg", "search book by genre"})
+    public List<Book> searchBookByGenre() {
+        messageService.showMessage(ENTER_GENRE_NAME);
+        String value = messageService.getMessage();
+        return bookDao.getByGenre(value);
+    }
+
     @ShellMethod(value = "View all books", key = {"lib", "library"})
     public List<Book> getAllBooks() {
         return bookDao.getAll();
@@ -73,6 +80,15 @@ public class ShellCommands {
         messageService.showMessage(ENTER_GENRE_NAME);
         String value = messageService.getMessage();
         return genreDao.getByName(value);
+    }
+
+    @ShellMethod(value = "Delete genre", key = {"dg", "delete genre", "del genre"})
+    private void deleteGenre() {
+        messageService.showMessage(ENTER_GENRE_NAME);
+        String value = messageService.getMessage();
+        Genre genre = genreDao.getByName(value);
+        genreDao.delete(genre.getId());
+        messageService.showMessage("Жанр \"" + value + "\" успешно удален вместе с книгами.");
     }
 
     @ShellMethod(value = "View all genres", key = {"genres"})

@@ -78,6 +78,15 @@ class BookDaoJdbcTest {
         }
     }
 
+    @DisplayName("получить книгу из БД по названию жанра")
+    @Test
+    void getByGenre() {
+        List<Book> books = dao.getByGenre(EXPECTED_GENRE_NAME);
+        for(Book book : books) {
+            assertThat(book.getGenre().getName()).isEqualTo(EXPECTED_GENRE_NAME);
+        }
+    }
+
     @DisplayName("получить все книги из БД")
     @Test
     void shoudGetAllBooks() {
