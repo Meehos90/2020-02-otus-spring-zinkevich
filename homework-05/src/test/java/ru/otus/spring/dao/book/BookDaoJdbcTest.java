@@ -72,8 +72,10 @@ class BookDaoJdbcTest {
     @DisplayName("получить книгу из БД по имени автора")
     @Test
     void getByAuthor() {
-        Book book = dao.getByAuthor(EXPECTED_AUTHOR_FULLNAME);
-        assertThat(book.getAuthor().getFullName()).isEqualTo(EXPECTED_AUTHOR_FULLNAME);
+        List<Book> books = dao.getByAuthor(EXPECTED_AUTHOR_FULLNAME);
+        for(Book book : books) {
+            assertThat(book.getAuthor().getFullName()).isEqualTo(EXPECTED_AUTHOR_FULLNAME);
+        }
     }
 
     @DisplayName("получить все книги из БД")

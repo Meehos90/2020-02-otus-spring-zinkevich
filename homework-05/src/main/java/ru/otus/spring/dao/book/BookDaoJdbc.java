@@ -44,8 +44,8 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public Book getByAuthor(String fullname) {
-        return jdbc.queryForObject(SELECT_BOOKS + " where fullname = :fullname",
+    public List<Book> getByAuthor(String fullname) {
+        return jdbc.query(SELECT_BOOKS + " where fullname = :fullname",
                 Map.of("fullname", fullname), new BookMapper());
     }
 

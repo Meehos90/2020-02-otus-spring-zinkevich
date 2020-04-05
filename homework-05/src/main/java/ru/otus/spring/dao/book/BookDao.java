@@ -10,6 +10,6 @@ public interface BookDao {
     void update(Book book);
     void delete(long id);
     Book getByTitle(String title);
-    Book getByAuthor(String author);
+    List<Book> getByAuthor(String author);
     List<Book> getAll();
 }

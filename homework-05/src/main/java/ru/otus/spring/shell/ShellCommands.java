@@ -57,7 +57,7 @@ public class ShellCommands {
     }
 
     @ShellMethod(value = "Search books by author", key = {"sba", "search book by author"})
-    public Book searchBookByAuthor() {
+    public List<Book> searchBookByAuthor() {
         messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         String value = messageService.getMessage();
         return bookDao.getByAuthor(value);
@@ -90,6 +90,15 @@ public class ShellCommands {
     @ShellMethod(value = "View all authors", key = {"authors"})
     public List<Author> getAllAuthors() {
         return authorDao.getAll();
+    }
+
+    @ShellMethod(value = "Delete author", key = {"da", "delete author", "del auth"})
+    private void deleteAuthor() {
+        messageService.showMessage(ENTER_AUTHOR_FULLNAME);
+        String value = messageService.getMessage();
+        Author author = authorDao.getByFullname(value);
+        authorDao.delete(author.getId());
+        messageService.showMessage("Автор \"" + value + "\" успешно удален вместе с его книгами.");
     }
 
     private String getMessage(String message) {
