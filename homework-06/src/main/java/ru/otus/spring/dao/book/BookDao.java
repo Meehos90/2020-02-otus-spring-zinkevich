@@ -5,12 +5,12 @@ import ru.otus.spring.model.Book;
 import java.util.List;
 
 public interface BookDao {
-    int count();
-    void insert(Book book);
-    void update(Book book);
-    void delete(long id);
-    Book getByTitle(String title);
-    List<Book> getByAuthor(String fullname);
-    List<Book> getByGenre(String name);
+    long count();
+    void save(Book book);
+    void updateBookById(Book book);
+    void deleteById(long id);
+    Book findByTitle(String title);
+    List<Book> findByAuthor(String fullname);
+    List<Book> findByGenre(String name);
     List<Book> getAll();
 }

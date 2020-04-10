@@ -5,11 +5,11 @@ import ru.otus.spring.model.Genre;
 import java.util.List;
 
 public interface GenreDao {
-    int count();
-    void insert(Genre genre);
-    void update(Genre genre);
-    void delete(long id);
-    Genre getById(long id);
-    Genre getByName(String name);
-    List<Genre> getAll();
+    long count();
+    void save(Genre genre);
+    void updateNameById(Genre genre);
+    void deleteById(long id);
+    Genre findById(long id);
+    Genre findByName(String name);
+    List<Genre> findAll();
 }

@@ -15,8 +15,8 @@ import javax.persistence.*;
 @Table(name = "comments")
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @SequenceGenerator(name = "comment_id_seq", sequenceName = "comment_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "comment_id_seq")
     private long id;
 
     @Column(name = "content", nullable = false, unique = true)

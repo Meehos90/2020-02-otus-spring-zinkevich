@@ -1,55 +1,77 @@
 package ru.otus.spring.dao.genre;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Genre;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
-@RequiredArgsConstructor
+@Transactional
 public class GenreDaoJpa implements GenreDao {
-    private final NamedParameterJdbcOperations jdbc;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public int count() {
-        return jdbc.getJdbcOperations().queryForObject("select count(*) from genres", Integer.class);
+    public long count() {
+        TypedQuery<Long> query = em.createQuery("select count(g) from Genre g", Long.class);
+        return query.getSingleResult();
     }
 
     @Override
-    public void insert(Genre genre) {
-        jdbc.update("insert into genres values (:id, :name)",
-                Map.of("id", genre.getId(),"name", genre.getName()));
+    public void save(Genre genre) {
+        if (genre.getId() <= 0) {
+            em.persist(genre);
+        } else {
+            em.merge(genre);
+        }
     }
 
     @Override
-    public void update(Genre genre) {
-        jdbc.update("update genres set name = :name where id = :id",
-                Map.of("name", genre.getName(), "id", genre.getId()));
+    public void updateNameById(Genre genre) {
+        Query query = em.createQuery("update Genre g " +
+                "set g.name = :name " +
+                "where g.id = :id");
+        query.setParameter("name", genre.getName());
+        query.setParameter("id", genre.getId());
+        query.executeUpdate();
     }
 
     @Override
-    public void delete(long id) {
-        jdbc.update("delete from genres where id = :id", Map.of("id", id));
+    public void deleteById(long id) {
+        Query query = em.createQuery("delete " +
+                "from Genre g " +
+                "where g.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
     }
 
     @Override
-    public Genre getById(long id) {
-        return jdbc.queryForObject("select * from genres where id = :id",
-                Map.of("id", id), new GenreMapper());
+    public Genre findById(long id) {
+        return Optional.ofNullable(em.find(Genre.class, id)).orElseThrow(() -> new NoEntityException(String.valueOf(id)));
     }
 
     @Override
-    public Genre getByName(String name) {
-        return jdbc.queryForObject("select * from genres where name = :name",
-                Map.of("name", name), new GenreMapper());
+    public Genre findByName(String name) {
+        TypedQuery<Genre> query = em.createQuery("select g " +
+                        "from Genre g " +
+                        "where g.name = :name",
+                Genre.class);
+        query.setParameter("name", name);
+        return query.getSingleResult();
     }
 
     @Override
-    public List<Genre> getAll() {
-        return jdbc.query("select * from genres", new GenreMapper());
+    public List<Genre> findAll() {
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g", Genre.class);
+        return query.getResultList();
     }
 }

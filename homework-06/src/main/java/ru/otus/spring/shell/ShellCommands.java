@@ -28,15 +28,15 @@ public class ShellCommands {
     @ShellMethod(value = "Create book", key = {"ins", "book insert"})
     public void insertBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        bookDao.insert(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
+        bookDao.save(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
         messageService.showMessage("Успешно добавлена книга: " + title);
     }
 
     @ShellMethod(value = "Update book", key = {"upd", "update book"})
     public void updateBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        Book book = bookDao.getByTitle(title);
-        bookDao.update(new Book(book.getId(), title, getAuthor(), getGenre()));
+        Book book = bookDao.findByTitle(title);
+        bookDao.updateBookById(new Book(book.getId(), title, getAuthor(), getGenre()));
         messageService.showMessage("Книга успешно изменена: " + title);
     }
 
@@ -44,8 +44,8 @@ public class ShellCommands {
     public void deleteBook() {
         messageService.showMessage(ENTER_DELETE_BOOK_TITLE);
         String title = messageService.getMessage();
-        Book book = bookDao.getByTitle(title);
-        bookDao.delete(book.getId());
+        Book book = bookDao.findByTitle(title);
+        bookDao.deleteById(book.getId());
         messageService.showMessage("Книга \"" + title + "\" успешно удалена.");
     }
 
@@ -53,21 +53,21 @@ public class ShellCommands {
     public Book searchBookByName() {
         messageService.showMessage(ENTER_BOOK_TITLE);
         String value = messageService.getMessage();
-        return bookDao.getByTitle(value);
+        return bookDao.findByTitle(value);
     }
 
     @ShellMethod(value = "Search books by author", key = {"sba", "search book by author"})
     public List<Book> searchBookByAuthor() {
         messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         String value = messageService.getMessage();
-        return bookDao.getByAuthor(value);
+        return bookDao.findByAuthor(value);
     }
 
     @ShellMethod(value = "Search books by genre", key = {"sbg", "search book by genre"})
     public List<Book> searchBookByGenre() {
         messageService.showMessage(ENTER_GENRE_NAME);
         String value = messageService.getMessage();
-        return bookDao.getByGenre(value);
+        return bookDao.findByGenre(value);
     }
 
     @ShellMethod(value = "View all books", key = {"lib", "library"})
@@ -79,21 +79,21 @@ public class ShellCommands {
     public Genre getGenreByName() {
         messageService.showMessage(ENTER_GENRE_NAME);
         String value = messageService.getMessage();
-        return genreDao.getByName(value);
+        return genreDao.findByName(value);
     }
 
     @ShellMethod(value = "Delete genre", key = {"dg", "delete genre", "del genre"})
     private void deleteGenre() {
         messageService.showMessage(ENTER_GENRE_NAME);
         String value = messageService.getMessage();
-        Genre genre = genreDao.getByName(value);
-        genreDao.delete(genre.getId());
+        Genre genre = genreDao.findByName(value);
+        genreDao.deleteById(genre.getId());
         messageService.showMessage("Жанр \"" + value + "\" успешно удален вместе с книгами.");
     }
 
     @ShellMethod(value = "View all genres", key = {"genres"})
     public List<Genre> getAllGenres() {
-        return genreDao.getAll();
+        return genreDao.findAll();
     }
 
     @ShellMethod(value = "Search authors by fullname", key = {"saf", "author fullname"})
@@ -131,7 +131,7 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        for(Genre genre : genreDao.getAll()) {
+        for(Genre genre : genreDao.findAll()) {
             if(genre.getName().equals(name)) {
                 return genre;
             }
@@ -150,12 +150,12 @@ public class ShellCommands {
     }
 
     private Genre insertAndReturnGenre(String name) {
-        genreDao.insert(new Genre(genreDao.count() + 1L, name));
-        return genreDao.getByName(name);
+        genreDao.save(new Genre(0, name));
+        return genreDao.findByName(name);
     }
 
     private Author insertAndReturnAuthor(String fullname) {
-        authorDao.save(new Author(authorDao.count() + 1L, fullname));
+        authorDao.save(new Author(0, fullname));
         return authorDao.findByFullName(fullname);
     }
 }
