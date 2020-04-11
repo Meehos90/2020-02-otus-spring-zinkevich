@@ -22,7 +22,7 @@ public class Comment {
     @Column(name = "content", nullable = false, unique = true)
     private String content;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "book_id")
     private Book book;
 
