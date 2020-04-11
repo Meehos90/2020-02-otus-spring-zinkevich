@@ -13,6 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
+@NamedEntityGraph(name = "comment-entity-graph", attributeNodes = {
+        @NamedAttributeNode("book")})
 public class Comment {
     @Id
     @SequenceGenerator(name = "comment_id_seq", sequenceName = "comment_id_seq", allocationSize = 1)

@@ -14,5 +14,14 @@ insert into books (id, title, author_id, genre_id) values (nextval('book_id_seq'
 insert into books (id, title, author_id, genre_id) values (nextval('book_id_seq'), 'Воля к смыслу', 3, 3);
 
 insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Страшная книга', 1);
-insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Интересная книга', 3);
-insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Не осилил', 5);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Интересная книга', 1);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Очень понравилось', 2);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Не интересно читать', 2);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Крутая книжка, автор молодец', 3);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Не осилил', 3);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Скучно', 4);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Можно почитать', 4);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Самое увлекательное чтиво в жизни', 5);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Читаю в метро, пока интересно', 5);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'В жизни не читал ничего лучше', 6);
+insert into comments (id, content, book_id) values (nextval('comment_id_seq'), 'Какая-то философия', 6);

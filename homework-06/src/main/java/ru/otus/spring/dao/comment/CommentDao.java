@@ -11,6 +11,6 @@ public interface CommentDao {
     void deleteById(long id);
     Comment findById(long id);
     Comment findByContent(String content);
-    Comment findByBookTitle(String title);
+    List<Comment> findByBookTitle(String title);
     List<Comment> findAll();
 }

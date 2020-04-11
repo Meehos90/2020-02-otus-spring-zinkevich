@@ -37,19 +37,12 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public void updateNameById(Genre genre) {
-        Query query = em.createQuery("update Genre g " +
-                "set g.name = :name " +
-                "where g.id = :id");
-        query.setParameter("name", genre.getName());
-        query.setParameter("id", genre.getId());
-        query.executeUpdate();
+        em.merge(genre);
     }
 
     @Override
     public void deleteById(long id) {
-        Query query = em.createQuery("delete " +
-                "from Genre g " +
-                "where g.id = :id");
+        Query query = em.createQuery("delete from Genre g where g.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }

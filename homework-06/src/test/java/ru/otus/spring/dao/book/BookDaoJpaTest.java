@@ -14,12 +14,12 @@ import ru.otus.spring.model.Genre;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static ru.otus.spring.dao.Constants.Books.*;
 
 @DisplayName("Dao для работы с книгами")
 @DataJpaTest
 @Import({BookDaoJpa.class, AuthorDaoJpa.class, GenreDaoJpa.class})
 class BookDaoJpaTest {
-    private static final long DEFAULT_BOOKS_COUNT = 6L;
 
     @Autowired
     private BookDaoJpa bookDao;
@@ -30,65 +30,59 @@ class BookDaoJpaTest {
 
     @DisplayName("возвращать ожидаемое количество книг")
     @Test
-    void shoudReturnExpectedBookCount() {
+    void shouldReturnExpectedBookCount() {
         long count = bookDao.count();
         assertThat(count).isEqualTo(DEFAULT_BOOKS_COUNT);
     }
 
     @DisplayName("добавлять книгу в БД")
     @Test
-    void shoudInsertBook() {
+    void shouldInsertBook() {
         Book expected = getBook(0);
         bookDao.save(expected);
-        Book actual = bookDao.findByTitle("TEST_BOOK_TITLE");
+        Book actual = bookDao.findByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);
     }
 
     @DisplayName("изменить книгу в БД")
     @Test
     void shouldUpdateBook() {
-        Book expected = getBook(3L);
+        Book expected = getBook(UPDATE_TEST_BOOK);
         bookDao.updateBookById(expected);
-        Book actual = bookDao.findByTitle("TEST_BOOK_TITLE");
+        Book actual = bookDao.findByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);
-    }
-
-    private Book getBook(long id) {
-        Author author = authorDao.findById(1L);
-        Genre genre = genreDao.findById(1L);
-        return new Book(id, "TEST_BOOK_TITLE", author, genre);
     }
 
     @DisplayName("удалить книгу из БД")
     @Test
-    void shoudDeleteBook() {
-        bookDao.deleteById(6L);
+    void shouldDeleteBook() {
+        bookDao.deleteById(DELETE_BOOK_ID);
         long count = bookDao.count();
-        assertThat(count).isEqualTo(5L);
+        assertThat(count).isEqualTo(DEFAULT_COUNT_AFTER_DELETE);
     }
 
     @DisplayName("получить книгу из БД по названию")
     @Test
     void shouldGetByTitleBook() {
-        Book book = bookDao.findByTitle("Зов Ктулху");
-        assertThat(book.getTitle()).isEqualTo("Зов Ктулху");
+        Book book = bookDao.findByTitle(EXPECTED_TEST_BOOK_TITLE);
+        assertThat(book.getTitle()).isEqualTo(EXPECTED_TEST_BOOK_TITLE);
     }
 
     @DisplayName("получить книгу из БД по имени автора")
     @Test
-    void getByAuthor() {
-        List<Book> books = bookDao.findByAuthor("Говард Лавкрафт");
+    void shouldReturnBookByAuthor() {
+        List<Book> books = bookDao.findByAuthor(TEST_AUTHOR_FULLNAME);
         for(Book book : books) {
-            assertThat(book.getAuthor().getFullName()).isEqualTo("Говард Лавкрафт");
+            assertThat(book.getAuthor().getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
         }
     }
 
     @DisplayName("получить книгу из БД по названию жанра")
     @Test
-    void getByGenre() {
-        List<Book> books = bookDao.findByGenre("Ужасы");
+    void shouldReturnBookByGenre() {
+        List<Book> books = bookDao.findByGenre(TEST_GENRE_NAME);
         for(Book book : books) {
-            assertThat(book.getGenre().getName()).isEqualTo("Ужасы");
+            assertThat(book.getGenre().getName()).isEqualTo(TEST_GENRE_NAME);
         }
     }
 
@@ -97,5 +91,11 @@ class BookDaoJpaTest {
     void shoudGetAllBooks() {
         List<Book> books = bookDao.getAll();
         assertThat(books.size()).isEqualTo(DEFAULT_BOOKS_COUNT);
+    }
+
+    private Book getBook(long id) {
+        Author author = authorDao.findById(TEST_AUTHOR_ID);
+        Genre genre = genreDao.findById(TEST_GENRE_ID);
+        return new Book(id, TEST_BOOK_TITLE, author, genre);
     }
 }

@@ -37,19 +37,12 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     public void updateFullNameById(Author author) {
-        Query query = em.createQuery("update Author a " +
-                "set a.fullName = :fullName " +
-                "where a.id = :id");
-        query.setParameter("fullName", author.getFullName());
-        query.setParameter("id", author.getId());
-        query.executeUpdate();
+        em.merge(author);
     }
 
     @Override
     public void deleteById(long id) {
-        Query query = em.createQuery("delete " +
-                "from Author a " +
-                "where a.id = :id");
+        Query query = em.createQuery("delete from Author a where a.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }
@@ -61,10 +54,7 @@ public class AuthorDaoJpa implements AuthorDao {
 
     @Override
     public Author findByFullName(String fullName) {
-        TypedQuery<Author> query = em.createQuery("select a " +
-                        "from Author a " +
-                        "where a.fullName = :fullName",
-                Author.class);
+        TypedQuery<Author> query = em.createQuery("select a from Author a where a.fullName = :fullName", Author.class);
         query.setParameter("fullName", fullName);
         return query.getSingleResult();
     }
