@@ -96,6 +96,6 @@ class BookDaoJpaTest {
     private Book getBook(long id) {
         Author author = authorDao.findById(TEST_AUTHOR_ID);
         Genre genre = genreDao.findById(TEST_GENRE_ID);
-        return new Book(id, TEST_BOOK_TITLE, author, genre, null);
+        return new Book(id, TEST_BOOK_TITLE, author, genre);
     }
 }

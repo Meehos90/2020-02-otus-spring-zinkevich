@@ -39,7 +39,7 @@ public class ShellCommands {
     @ShellMethod(value = "Create book", key = {"crb", "book create"})
     public void createBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        bookDao.save(new Book(0, title, getAuthor(), getGenre(), null));
+        bookDao.save(new Book(0, title, getAuthor(), getGenre()));
         messageService.showMessage("Успешно добавлена книга: " + title);
     }
 
@@ -68,7 +68,7 @@ public class ShellCommands {
     public void updateBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
         Book book = bookDao.findByTitle(title);
-        bookDao.updateBookById(new Book(book.getId(), title, getAuthor(), getGenre(), null));
+        bookDao.updateBookById(new Book(book.getId(), title, getAuthor(), getGenre()));
         messageService.showMessage("Книга успешно изменена: " + title);
     }
 
