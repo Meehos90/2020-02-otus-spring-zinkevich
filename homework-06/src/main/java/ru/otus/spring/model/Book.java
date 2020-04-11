@@ -3,19 +3,19 @@ package ru.otus.spring.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
 @NamedEntityGraph(name = "book-entity-graph", attributeNodes = {
         @NamedAttributeNode("author"),
-        @NamedAttributeNode("genre")
+        @NamedAttributeNode("genre"),
+        @NamedAttributeNode("comments")
 })
 public class Book {
     @Id
@@ -33,5 +33,9 @@ public class Book {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "genre_id")
     private Genre genre;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "book_id")
+    private List<Comment> comments;
 
 }

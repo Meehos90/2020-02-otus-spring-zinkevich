@@ -5,48 +5,42 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.spring.dao.author.AuthorDao;
 import ru.otus.spring.dao.book.BookDao;
+import ru.otus.spring.dao.comment.CommentDao;
 import ru.otus.spring.dao.genre.GenreDao;
 import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
+import ru.otus.spring.model.Comment;
 import ru.otus.spring.model.Genre;
 import ru.otus.spring.service.IOService;
 
 import java.util.List;
 
+import static ru.otus.spring.shell.Constants.*;
+
 @ShellComponent
 @RequiredArgsConstructor
 public class ShellCommands {
-    public static final String ENTER_BOOK_TITLE = "Введите название книги:";
-    public static final String ENTER_GENRE_NAME = "Введите название жанра:";
-    public static final String ENTER_AUTHOR_FULLNAME = "Введите полное имя автора:";
-    public static final String ENTER_DELETE_BOOK_TITLE = "Введите название книги, которую хотите удалить:";
+
     private final BookDao bookDao;
     private final AuthorDao authorDao;
     private final GenreDao genreDao;
+    private final CommentDao commentDao;
     private final IOService messageService;
 
-    @ShellMethod(value = "Create book", key = {"ins", "book insert"})
-    public void insertBook() {
+    /* START CRUD BOOKS
+    create book - crb
+    search book by name - sbn
+    search book by author - sba
+    search book by genre - sbn
+    update book - upb
+    delete book - deb
+    all books - library
+    */
+    @ShellMethod(value = "Create book", key = {"crb", "book create"})
+    public void createBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        bookDao.save(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
+        bookDao.save(new Book(0, title, getAuthor(), getGenre(), null));
         messageService.showMessage("Успешно добавлена книга: " + title);
-    }
-
-    @ShellMethod(value = "Update book", key = {"upd", "update book"})
-    public void updateBook() {
-        String title = getMessage(ENTER_BOOK_TITLE);
-        Book book = bookDao.findByTitle(title);
-        bookDao.updateBookById(new Book(book.getId(), title, getAuthor(), getGenre()));
-        messageService.showMessage("Книга успешно изменена: " + title);
-    }
-
-    @ShellMethod(value = "Delete book by title", key = {"del", "delete book"})
-    public void deleteBook() {
-        messageService.showMessage(ENTER_DELETE_BOOK_TITLE);
-        String title = messageService.getMessage();
-        Book book = bookDao.findByTitle(title);
-        bookDao.deleteById(book.getId());
-        messageService.showMessage("Книга \"" + title + "\" успешно удалена.");
     }
 
     @ShellMethod(value = "Search books by name", key = {"sbn", "search book by name"})
@@ -70,30 +64,50 @@ public class ShellCommands {
         return bookDao.findByGenre(value);
     }
 
+    @ShellMethod(value = "Update book", key = {"upb", "update book"})
+    public void updateBook() {
+        String title = getMessage(ENTER_BOOK_TITLE);
+        Book book = bookDao.findByTitle(title);
+        bookDao.updateBookById(new Book(book.getId(), title, getAuthor(), getGenre(), null));
+        messageService.showMessage("Книга успешно изменена: " + title);
+    }
+
+    @ShellMethod(value = "Delete book by title", key = {"deb", "delete book"})
+    public void deleteBook() {
+        messageService.showMessage(ENTER_DELETE_BOOK_TITLE);
+        String title = messageService.getMessage();
+        Book book = bookDao.findByTitle(title);
+        bookDao.deleteById(book.getId());
+        messageService.showMessage("Книга \"" + title + "\" успешно удалена.");
+    }
+
     @ShellMethod(value = "View all books", key = {"lib", "library"})
     public List<Book> getAllBooks() {
         return bookDao.getAll();
     }
 
-    @ShellMethod(value = "Search genres by name", key = {"sgn", "genre name"})
-    public Genre getGenreByName() {
-        messageService.showMessage(ENTER_GENRE_NAME);
-        String value = messageService.getMessage();
-        return genreDao.findByName(value);
+    /* END CRUD BOOKS */
+    /* START CRUD AUTHORS
+    create author - cra
+    update author - upa
+    search authors by fullname - saf
+    delete author - dea
+    all authors - authors
+    */
+    @ShellMethod(value = "Insert author", key = {"insa"})
+    private void createAuthor() {
+        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
+        Author author = new Author(authorDao.count() + 1L, fullname);
+        authorDao.save(author);
     }
 
-    @ShellMethod(value = "Delete genre", key = {"dg", "delete genre", "del genre"})
-    private void deleteGenre() {
-        messageService.showMessage(ENTER_GENRE_NAME);
-        String value = messageService.getMessage();
-        Genre genre = genreDao.findByName(value);
-        genreDao.deleteById(genre.getId());
-        messageService.showMessage("Жанр \"" + value + "\" успешно удален вместе с книгами.");
-    }
-
-    @ShellMethod(value = "View all genres", key = {"genres"})
-    public List<Genre> getAllGenres() {
-        return genreDao.findAll();
+    @ShellMethod(value = "Update author", key = {"upa", "update author"})
+    public void updateAuthor() {
+        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
+        Author author = authorDao.findByFullName(fullname);
+        String changeFullName = getMessage(ENTER_NEW_AUTHOR_FULLNAME);
+        authorDao.updateFullNameById(new Author(author.getId(), changeFullName));
+        messageService.showMessage("Автор успешно изменен: " + changeFullName);
     }
 
     @ShellMethod(value = "Search authors by fullname", key = {"saf", "author fullname"})
@@ -103,27 +117,116 @@ public class ShellCommands {
         return authorDao.findByFullName(value);
     }
 
-    @ShellMethod(value = "View all authors", key = {"authors"})
-    public List<Author> getAllAuthors() {
-        return authorDao.findAll();
-    }
-
-    @ShellMethod(value = "Delete author", key = {"da", "delete author", "del auth"})
+    @ShellMethod(value = "Delete author", key = {"dea", "delete author", "del auth"})
     private void deleteAuthor() {
         messageService.showMessage(ENTER_AUTHOR_FULLNAME);
         String value = messageService.getMessage();
         Author author = authorDao.findByFullName(value);
         authorDao.deleteById(author.getId());
-        messageService.showMessage("Автор \"" + value + "\" успешно удален вместе с его книгами.");
+        messageService.showMessage("Автор \"" + value + "\" " + DELETED_SUCCESSFULLY);
     }
 
-    @ShellMethod(value = "Insert author", key = {"insa"})
-    private void insertAuthor() {
-        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        Author author = new Author(authorDao.count() + 1L, fullname);
-        authorDao.save(author);
+    @ShellMethod(value = "View all authors", key = {"authors"})
+    public List<Author> getAllAuthors() {
+
+        return authorDao.findAll();
+    }
+    /* END CRUD AUTHORS */
+
+    /* START CRUD GENRES
+    search genre by name - sgn
+    delete genre - deg
+    all genres - genres
+    */
+    @ShellMethod(value = "Search genres by name", key = {"sgn", "genre name"})
+    public Genre getGenreByName() {
+        messageService.showMessage(ENTER_GENRE_NAME);
+        String value = messageService.getMessage();
+        return genreDao.findByName(value);
     }
 
+    @ShellMethod(value = "Delete genre", key = {"deg", "delete genre", "del genre"})
+    public void deleteGenre() {
+        messageService.showMessage(ENTER_GENRE_NAME);
+        String value = messageService.getMessage();
+        Genre genre = genreDao.findByName(value);
+        genreDao.deleteById(genre.getId());
+        messageService.showMessage("Жанр \"" + value + "\" " + DELETED_SUCCESSFULLY);
+    }
+
+    @ShellMethod(value = "View all genres", key = {"genres"})
+    public List<Genre> getAllGenres() {
+        return genreDao.findAll();
+    }
+    /* END CRUD GENRES */
+
+    /* START CRUD COMMENTS
+    update comment by id - upc
+    create comment by book title - scb
+    delete comment by id - dec
+    search comment by id - sci
+    search comment by content - scc
+    search comments by book title - fcb
+    view all comments - comments
+    */
+    @ShellMethod(value = "Save comment by book", key = {"scb"})
+    public void createComment() {
+        messageService.showMessage(ENTER_BOOK_TITLE);
+        Book book = bookDao.findByTitle(messageService.getMessage());
+        messageService.showMessage(ENTER_COMMENT_CONTENT);
+        commentDao.save(new Comment(0, messageService.getMessage(), book));
+        messageService.showMessage("Комментарий успешно сохранен");
+    }
+
+    @ShellMethod(value = "Update comment by Id", key = {"upc"})
+    public void updateComment() {
+       messageService.showMessage(ENTER_ID_COMMENT);
+       long id = Long.parseLong(messageService.getMessage());
+       Comment comment = commentDao.findById(id);
+       messageService.showMessage(ENTER_COMMENT_CONTENT);
+       String content = messageService.getMessage();
+       comment.setContent(content);
+       commentDao.updateContentById(comment);
+       messageService.showMessage("Комментарий успешно обновлен : " + content);
+    }
+
+    @ShellMethod(value = "Delete comment by Id", key = {"dec"})
+    public void deleteComment() {
+        messageService.showMessage(ENTER_ID_COMMENT);
+        long id = Long.parseLong(messageService.getMessage());
+        commentDao.deleteById(id);
+        messageService.showMessage("Комментарий успешно удален : " + id);
+    }
+
+    @ShellMethod(value = "Search comment by Id", key = {"sci"})
+    public Comment findComment() {
+        messageService.showMessage(ENTER_ID_COMMENT);
+        long id = Long.parseLong(messageService.getMessage());
+        return commentDao.findById(id);
+    }
+
+    @ShellMethod(value = "Search comment by content", key = {"scc"})
+    public Comment findCommentByContent() {
+        messageService.showMessage(ENTER_COMMENT_CONTENT);
+        String content = messageService.getMessage();
+        return commentDao.findByContent(content);
+    }
+
+    @ShellMethod(value = "Search comment by book title", key = {"fcb"})
+    public List<Comment> findCommentsByBookTitle() {
+        messageService.showMessage(ENTER_BOOK_TITLE);
+        String title = messageService.getMessage();
+        return commentDao.findByBookTitle(title);
+    }
+
+    @ShellMethod(value = "View all comments", key = {"comments"})
+    public List<Comment> getAllComments() {
+        return commentDao.findAll();
+    }
+
+    /* END CRUD COMMENTS */
+
+    /* UTILS */
     private String getMessage(String message) {
         messageService.showMessage(message);
         return messageService.getMessage();

@@ -32,6 +32,7 @@ create table books (
     title varchar(255),
     author_id bigint,
     genre_id bigint,
+    comment_id bigint,
     foreign key (author_id) references authors(id) on delete cascade,
     foreign key (genre_id) references genres(id) on delete cascade,
     primary key (id)

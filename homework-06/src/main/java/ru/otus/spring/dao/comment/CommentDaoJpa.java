@@ -49,10 +49,7 @@ public class CommentDaoJpa implements CommentDao {
 
     @Override
     public Comment findByContent(String content) {
-        TypedQuery<Comment> query = em.createQuery("select c " +
-                        "from Comment c " +
-                        "where c.content = :content",
-                Comment.class);
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.content = :content", Comment.class);
         query.setParameter("content", content);
         return query.getSingleResult();
     }
@@ -69,7 +66,7 @@ public class CommentDaoJpa implements CommentDao {
     @Override
     public List<Comment> findAll() {
         EntityGraph<?> entityGraph = em.getEntityGraph("comment-entity-graph");
-        return em.createQuery("select c from Comment c", Comment.class)
+        return em.createQuery("select c from Comment c join fetch c.book", Comment.class)
                 .setHint("javax.persistence.fetchgraph", entityGraph)
                 .getResultList();
     }

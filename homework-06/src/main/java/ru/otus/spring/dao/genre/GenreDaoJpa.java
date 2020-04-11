@@ -54,10 +54,7 @@ public class GenreDaoJpa implements GenreDao {
 
     @Override
     public Genre findByName(String name) {
-        TypedQuery<Genre> query = em.createQuery("select g " +
-                        "from Genre g " +
-                        "where g.name = :name",
-                Genre.class);
+        TypedQuery<Genre> query = em.createQuery("select g from Genre g where g.name = :name", Genre.class);
         query.setParameter("name", name);
         return query.getSingleResult();
     }
