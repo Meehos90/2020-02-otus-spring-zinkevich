@@ -14,7 +14,7 @@ import ru.otus.spring.model.Genre;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static ru.otus.spring.dao.Constants.Authors.EXPECTED_QERIES_COUNT;
+import static ru.otus.spring.dao.Constants.EXPECTED_QERIES_COUNT;
 import static ru.otus.spring.dao.Constants.Genres.*;
 
 @DisplayName("Dao для работы с жанрами")

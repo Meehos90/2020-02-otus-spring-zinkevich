@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.otus.spring.dao.Constants.Authors.*;
 import static ru.otus.spring.dao.Constants.Books.*;
 import static ru.otus.spring.dao.Constants.Books.TEST_AUTHOR_FULLNAME;
+import static ru.otus.spring.dao.Constants.EXPECTED_QERIES_COUNT;
 
 @DisplayName("Dao для работы с книгами")
 @DataJpaTest
@@ -109,7 +110,7 @@ class BookDaoJpaTest {
                 .allMatch(b -> b.getTitle() != null)
                 .allMatch(b -> b.getAuthor() != null)
                 .allMatch(b -> b.getGenre() != null);
-        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QERIES_COUNT);
     }
 
     private Book getBook(long id) {

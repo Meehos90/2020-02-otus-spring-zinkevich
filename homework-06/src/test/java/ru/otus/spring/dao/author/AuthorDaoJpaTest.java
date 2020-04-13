@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.otus.spring.dao.Constants.Authors.*;
+import static ru.otus.spring.dao.Constants.EXPECTED_QERIES_COUNT;
 
 @DisplayName("Dao для работы с авторами книг")
 @DataJpaTest

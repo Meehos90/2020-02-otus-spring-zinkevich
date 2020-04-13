@@ -90,4 +90,5 @@ class CommentDaoJpaTest {
         Book book = bookDao.findByTitle(TEST_BOOK_TITLE);
         return new Comment(id, content, book);
     }
+
 }

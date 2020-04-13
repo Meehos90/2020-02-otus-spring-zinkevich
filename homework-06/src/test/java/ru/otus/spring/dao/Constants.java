@@ -1,6 +1,7 @@
 package ru.otus.spring.dao;
 
 public interface Constants {
+    int EXPECTED_QERIES_COUNT = 1;
 
     interface Books {
         long DEFAULT_BOOKS_COUNT = 6L;
@@ -12,7 +13,6 @@ public interface Constants {
         String TEST_GENRE_NAME = "Ужасы";
         long TEST_BOOK_ID = 3L;
         int EXPECTED_NUMBER_OF_BOOKS = 6;
-        int EXPECTED_QUERIES_COUNT = 1;
     }
 
     interface Authors {
@@ -21,7 +21,6 @@ public interface Constants {
         String EXPECTED_AUTHOR_FULLNAME = "EXPECTED_AUTHOR_FULLNAME";
         long TEST_AUTHOR_ID = 3L;
         String TEST_AUTHOR_FULLNAME = "Говард Лавкрафт";
-        int EXPECTED_QERIES_COUNT = 1;
     }
 
     interface Genres {
@@ -31,7 +30,6 @@ public interface Constants {
         long DEFAULT_COUNT_AFTER_DELETE = 2L;
         String TEST_GENRE_NAME = "Ужасы";
         int EXEPECTED_NUMBER_OF_GENRES = 3;
-        int EXPECTED_QERIES_COUNT = 1;
     }
 
     interface Comments {
