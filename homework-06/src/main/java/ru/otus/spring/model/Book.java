@@ -24,7 +24,7 @@ public class Book {
     @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private Author author;
 

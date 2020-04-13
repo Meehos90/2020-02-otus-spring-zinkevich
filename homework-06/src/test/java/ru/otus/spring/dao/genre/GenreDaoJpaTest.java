@@ -1,15 +1,20 @@
 package ru.otus.spring.dao.genre;
 
+import lombok.val;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Genre;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.otus.spring.dao.Constants.Authors.EXPECTED_QERIES_COUNT;
 import static ru.otus.spring.dao.Constants.Genres.*;
 
 @DisplayName("Dao для работы с жанрами")
@@ -19,6 +24,8 @@ class GenreDaoJpaTest {
 
     @Autowired
     GenreDaoJpa dao;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("возвращать ожидаемое количество жанров")
     @Test
@@ -39,10 +46,11 @@ class GenreDaoJpaTest {
     @DisplayName("изменить жанр в БД")
     @Test
     void shouldUpdateGenre() {
-        Genre expected = new Genre(TEST_GENRE_ID, EXPECTED_GENRE_NAME);
-        dao.updateNameById(expected);
-        Genre actual = dao.findById(TEST_GENRE_ID);
-        assertThat(actual).isEqualToComparingFieldByField(expected);
+        dao.deleteById(TEST_GENRE_ID);
+        Throwable thrown = assertThrows(NoEntityException.class, () -> {
+            dao.findById(TEST_GENRE_ID);
+        });
+        assertNotNull(thrown.getMessage());
     }
 
     @DisplayName("удалить жанр из БД")
@@ -70,8 +78,13 @@ class GenreDaoJpaTest {
     @DisplayName("получить все жанры из БД")
     @Test
     void shoudGetAllGenres() {
-        List<Genre> genres = dao.findAll();
-        assertThat(genres.size()).isEqualTo(TEST_GENRE_ID);
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+        val genres = dao.findAll();
+        assertThat(genres).isNotNull().hasSize(EXEPECTED_NUMBER_OF_GENRES)
+                .allMatch(g -> g.getName() != null);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QERIES_COUNT);
     }
 
 }

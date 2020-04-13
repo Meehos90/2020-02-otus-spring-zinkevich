@@ -7,7 +7,7 @@ import java.util.List;
 public interface AuthorDao {
     long count();
     void save(Author author);
-    void updateFullNameById(Author author);
+    void updateFullName(Author author);
     void deleteById(long id);
     Author findById(long id);
     Author findByFullName(String fullname);

@@ -6,12 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.dao.book.BookDaoJpa;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.otus.spring.dao.Constants.Authors.TEST_AUTHOR_ID;
 import static ru.otus.spring.dao.Constants.Comments.*;
 
 @DisplayName("Dao для работы с комментариями")
@@ -53,8 +57,10 @@ class CommentDaoJpaTest {
     @Test
     void shouldDeleteCommentById() {
         commentDao.deleteById(TEST_COMMENT_ID);
-        long count = commentDao.count();
-        assertThat(count).isEqualTo(DEFAULT_COUNT_AFTER_DELETE);
+        Throwable thrown = assertThrows(NoEntityException.class, () -> {
+            commentDao.findById(TEST_COMMENT_ID);
+        });
+        assertNotNull(thrown.getMessage());
     }
 
     @DisplayName("Найти комментарий по ID")

@@ -1,12 +1,16 @@
 package ru.otus.spring.dao.book;
 
+import lombok.val;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.dao.author.AuthorDaoJpa;
 import ru.otus.spring.dao.genre.GenreDaoJpa;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Genre;
@@ -14,7 +18,11 @@ import ru.otus.spring.model.Genre;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static ru.otus.spring.dao.Constants.Authors.*;
 import static ru.otus.spring.dao.Constants.Books.*;
+import static ru.otus.spring.dao.Constants.Books.TEST_AUTHOR_FULLNAME;
 
 @DisplayName("Dao для работы с книгами")
 @DataJpaTest
@@ -27,6 +35,8 @@ class BookDaoJpaTest {
     private AuthorDaoJpa authorDao;
     @Autowired
     private GenreDaoJpa genreDao;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("возвращать ожидаемое количество книг")
     @Test
@@ -56,9 +66,11 @@ class BookDaoJpaTest {
     @DisplayName("удалить книгу из БД")
     @Test
     void shouldDeleteBook() {
-        bookDao.deleteById(DELETE_BOOK_ID);
-        long count = bookDao.count();
-        assertThat(count).isEqualTo(DEFAULT_COUNT_AFTER_DELETE);
+        bookDao.deleteById(TEST_BOOK_ID);
+        Throwable thrown = assertThrows(NoEntityException.class, () -> {
+            bookDao.findById(TEST_BOOK_ID);
+        });
+        assertNotNull(thrown.getMessage());
     }
 
     @DisplayName("получить книгу из БД по названию")
@@ -89,8 +101,15 @@ class BookDaoJpaTest {
     @DisplayName("получить все книги из БД")
     @Test
     void shoudGetAllBooks() {
-        List<Book> books = bookDao.getAll();
-        assertThat(books.size()).isEqualTo(DEFAULT_BOOKS_COUNT);
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+        val books = bookDao.findAll();
+        assertThat(books).isNotNull().hasSize(EXPECTED_NUMBER_OF_BOOKS)
+                .allMatch(b -> b.getTitle() != null)
+                .allMatch(b -> b.getAuthor() != null)
+                .allMatch(b -> b.getGenre() != null);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QUERIES_COUNT);
     }
 
     private Book getBook(long id) {

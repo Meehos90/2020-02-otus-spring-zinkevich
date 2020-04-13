@@ -1,11 +1,13 @@
 package ru.otus.spring.dao.book;
 
 import org.springframework.stereotype.Repository;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Book;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings({"SqlNoDataSourceInspection", "ConstantConditions", "SqlDialectInspection"})
 @Repository
@@ -43,6 +45,11 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
+    public Book findById(long id) {
+        return Optional.ofNullable(em.find(Book.class, id)).orElseThrow(() -> new NoEntityException(String.valueOf(id)));
+    }
+
+    @Override
     public Book findByTitle(String title) {
         TypedQuery<Book> query = em.createQuery("select b from Book b where b.title = :title", Book.class);
         query.setParameter("title", title);
@@ -68,7 +75,7 @@ public class BookDaoJpa implements BookDao {
     }
 
     @Override
-    public List<Book> getAll() {
+    public List<Book> findAll() {
         EntityGraph<?> entityGraph = em.getEntityGraph("book-entity-graph");
         return em.createQuery("select b from Book b", Book.class)
                 .setHint("javax.persistence.fetchgraph", entityGraph)

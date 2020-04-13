@@ -9,8 +9,9 @@ public interface BookDao {
     void save(Book book);
     void updateBookById(Book book);
     void deleteById(long id);
+    Book findById(long id);
     Book findByTitle(String title);
     List<Book> findByAuthor(String fullname);
     List<Book> findByGenre(String name);
-    List<Book> getAll();
+    List<Book> findAll();
 }

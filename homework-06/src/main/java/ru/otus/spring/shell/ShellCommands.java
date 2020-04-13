@@ -1,6 +1,7 @@
 package ru.otus.spring.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.spring.dao.author.AuthorDao;
@@ -12,7 +13,7 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 import ru.otus.spring.model.Genre;
 import ru.otus.spring.service.IOService;
-import javax.persistence.NoResultException;
+
 import java.util.List;
 
 import static ru.otus.spring.shell.Constants.*;
@@ -39,7 +40,8 @@ public class ShellCommands {
     @ShellMethod(value = "Create book", key = {"crb", "book create"})
     public void createBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        bookDao.save(new Book(0, title, getAuthor(), getGenre()));
+        Author author = getAuthor();
+        bookDao.save(new Book(0, title, author, getGenre()));
         messageService.showMessage("Успешно добавлена книга: " + title);
     }
 
@@ -83,7 +85,7 @@ public class ShellCommands {
 
     @ShellMethod(value = "View all books", key = {"lib", "library"})
     public List<Book> getAllBooks() {
-        return bookDao.getAll();
+        return bookDao.findAll();
     }
 
     /* END CRUD BOOKS */
@@ -106,7 +108,7 @@ public class ShellCommands {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
         Author author = authorDao.findByFullName(fullname);
         String changeFullName = getMessage(ENTER_NEW_AUTHOR_FULLNAME);
-        authorDao.updateFullNameById(new Author(author.getId(), changeFullName));
+        authorDao.updateFullName(new Author(author.getId(), changeFullName));
         messageService.showMessage("Автор успешно изменен: " + changeFullName);
     }
 
@@ -234,34 +236,25 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        for (Genre genre : genreDao.findAll()) {
-            if (genre.getName().equals(name)) {
-                return genre;
-            }
+        Genre genre;
+        try {
+            genre = genreDao.findByName(name);
+        } catch (EmptyResultDataAccessException e) {
+            return insertAndReturnGenre(name);
         }
-        return insertAndReturnGenre(name);
+        return genre;
     }
 
     private Author getAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        for (Author author : authorDao.findAll()) {
-            if (author.getFullName().equals(fullname)) {
-                return author;
-            }
-        }
-        return insertAndReturnAuthor(fullname);
-    }
-
-/*    private Author ensureAuthor() {
-        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
         Author author;
         try {
             author = authorDao.findByFullName(fullname);
-        } catch (RuntimeException e) {
+        } catch (EmptyResultDataAccessException e) {
             return insertAndReturnAuthor(fullname);
         }
         return author;
-    }*/
+    }
 
     private Genre insertAndReturnGenre(String name) {
         genreDao.save(new Genre(0, name));

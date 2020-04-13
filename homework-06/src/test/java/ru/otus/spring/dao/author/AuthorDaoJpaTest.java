@@ -1,15 +1,19 @@
 package ru.otus.spring.dao.author;
 
+import lombok.val;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Author;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static ru.otus.spring.dao.Constants.Authors.*;
 
 @DisplayName("Dao для работы с авторами книг")
@@ -19,6 +23,8 @@ class AuthorDaoJpaTest {
 
     @Autowired
     private AuthorDaoJpa dao;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("возвращать ожидаемое количество авторов")
     @Test
@@ -49,8 +55,10 @@ class AuthorDaoJpaTest {
     @Test
     void shoudDeleteAuthor() {
         dao.deleteById(TEST_AUTHOR_ID);
-        long count = dao.count();
-        assertThat(count).isEqualTo(DEFAULT_COUNT_AFTER_DELETE);
+        Throwable thrown = assertThrows(NoEntityException.class, () -> {
+            dao.findById(TEST_AUTHOR_ID);
+        });
+        assertNotNull(thrown.getMessage());
     }
 
     @DisplayName("получить автора из БД по id")
@@ -70,7 +78,12 @@ class AuthorDaoJpaTest {
     @DisplayName("получить всех авторов из БД")
     @Test
     void shoudGetAllAuthors() {
-        List<Author> authors = dao.findAll();
-        assertThat(authors.size()).isEqualTo(TEST_AUTHOR_ID);
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
+        val authors = dao.findAll();
+        assertThat(authors).isNotNull().hasSize(EXEPECTED_NUMBER_OF_AUTHORS)
+                .allMatch(a -> a.getFullName() != null);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QERIES_COUNT);
     }
 }
