@@ -12,7 +12,7 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 import ru.otus.spring.model.Genre;
 import ru.otus.spring.service.IOService;
-
+import javax.persistence.NoResultException;
 import java.util.List;
 
 import static ru.otus.spring.shell.Constants.*;
@@ -94,10 +94,10 @@ public class ShellCommands {
     delete author - dea
     all authors - authors
     */
-    @ShellMethod(value = "Insert author", key = {"insa"})
+    @ShellMethod(value = "Insert author", key = {"cra"})
     private void createAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        Author author = new Author(authorDao.count() + 1L, fullname);
+        Author author = new Author(0, fullname);
         authorDao.save(author);
     }
 
@@ -180,14 +180,14 @@ public class ShellCommands {
 
     @ShellMethod(value = "Update comment by Id", key = {"upc"})
     public void updateComment() {
-       messageService.showMessage(ENTER_ID_COMMENT);
-       long id = Long.parseLong(messageService.getMessage());
-       Comment comment = commentDao.findById(id);
-       messageService.showMessage(ENTER_COMMENT_CONTENT);
-       String content = messageService.getMessage();
-       comment.setContent(content);
-       commentDao.updateContentById(comment);
-       messageService.showMessage("Комментарий успешно обновлен : " + content);
+        messageService.showMessage(ENTER_ID_COMMENT);
+        long id = Long.parseLong(messageService.getMessage());
+        Comment comment = commentDao.findById(id);
+        messageService.showMessage(ENTER_COMMENT_CONTENT);
+        String content = messageService.getMessage();
+        comment.setContent(content);
+        commentDao.updateContentById(comment);
+        messageService.showMessage("Комментарий успешно обновлен : " + content);
     }
 
     @ShellMethod(value = "Delete comment by Id", key = {"dec"})
@@ -234,8 +234,8 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        for(Genre genre : genreDao.findAll()) {
-            if(genre.getName().equals(name)) {
+        for (Genre genre : genreDao.findAll()) {
+            if (genre.getName().equals(name)) {
                 return genre;
             }
         }
@@ -245,12 +245,23 @@ public class ShellCommands {
     private Author getAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
         for (Author author : authorDao.findAll()) {
-            if(author.getFullName().equals(fullname)) {
+            if (author.getFullName().equals(fullname)) {
                 return author;
             }
         }
         return insertAndReturnAuthor(fullname);
     }
+
+/*    private Author ensureAuthor() {
+        String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
+        Author author;
+        try {
+            author = authorDao.findByFullName(fullname);
+        } catch (RuntimeException e) {
+            return insertAndReturnAuthor(fullname);
+        }
+        return author;
+    }*/
 
     private Genre insertAndReturnGenre(String name) {
         genreDao.save(new Genre(0, name));
