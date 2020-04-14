@@ -1,6 +1,7 @@
 package ru.otus.spring.shell;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import ru.otus.spring.dao.author.AuthorDao;
@@ -28,7 +29,7 @@ public class ShellCommands {
     @ShellMethod(value = "Create book", key = {"ins", "book insert"})
     public void insertBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
-        bookDao.insert(new Book(1L + bookDao.count(), title, getAuthor(), getGenre()));
+        bookDao.insert(new Book(0, title, getAuthor(), getGenre()));
         messageService.showMessage("Успешно добавлена книга: " + title);
     }
 
@@ -124,31 +125,33 @@ public class ShellCommands {
 
     private Genre getGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        for(Genre genre : genreDao.getAll()) {
-            if(genre.getName().equals(name)) {
-                return genre;
-            }
+        Genre genre;
+        try {
+            genre = genreDao.getByName(name);
+        } catch (EmptyResultDataAccessException e) {
+            return insertAndReturnGenre(name);
         }
-        return insertAndReturnGenre(name);
+        return genre;
     }
 
     private Author getAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        for (Author author : authorDao.getAll()) {
-            if(author.getFullName().equals(fullname)) {
-                return author;
-            }
+        Author author;
+        try {
+            author = authorDao.getByFullname(fullname);
+        } catch (EmptyResultDataAccessException e) {
+            return insertAndReturnAuthor(fullname);
         }
-        return insertAndReturnAuthor(fullname);
+        return author;
     }
 
     private Genre insertAndReturnGenre(String name) {
-        genreDao.insert(new Genre(genreDao.count() + 1L, name));
+        genreDao.insert(new Genre(0, name));
         return genreDao.getByName(name);
     }
 
     private Author insertAndReturnAuthor(String fullname) {
-        authorDao.insert(new Author(authorDao.count() + 1L, fullname));
+        authorDao.insert(new Author(0, fullname));
         return authorDao.getByFullname(fullname);
     }
 }

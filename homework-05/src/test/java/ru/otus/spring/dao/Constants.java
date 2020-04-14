@@ -6,7 +6,6 @@ public interface Constants {
     
     long EXPECTED_ID = 1L;
     long TEST_ID = 3L;
-    long INSERT_ID = 4L;
     
     String TEST_BOOK_TITLE = "Оно";
     String EXPECTED_GENRE_NAME = "Ужасы";

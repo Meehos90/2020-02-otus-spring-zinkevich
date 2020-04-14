@@ -33,7 +33,7 @@ class BookDaoJdbcTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shoudInsertBook() {
-        Book expected = getBook(INSERT_ID);
+        Book expected = getBook(0);
         dao.insert(expected);
         Book actual = dao.getByTitle(TEST_BOOK_TITLE);
         assertThat(actual).isEqualToComparingFieldByField(expected);

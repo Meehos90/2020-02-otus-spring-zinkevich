@@ -1,13 +1,34 @@
-DROP TABLE IF EXISTS BOOKS;
-DROP TABLE IF EXISTS AUTHORS;
-DROP TABLE IF EXISTS GENRES;
-CREATE TABLE AUTHORS(ID BIGINT PRIMARY KEY, FULLNAME VARCHAR(255));
-CREATE TABLE GENRES(ID BIGINT PRIMARY KEY, NAME VARCHAR(255));
-CREATE TABLE BOOKS (
-    ID BIGINT PRIMARY KEY,
-    TITLE VARCHAR(255),
-    AUTHOR_ID BIGINT,
-    GENRE_ID BIGINT,
-    FOREIGN KEY (AUTHOR_ID) REFERENCES AUTHORS(ID) ON DELETE CASCADE,
-    FOREIGN KEY (GENRE_ID) REFERENCES GENRES(ID) ON DELETE CASCADE
+drop table if exists books;
+drop table if exists authors;
+drop table if exists genres;
+
+drop sequence if exists author_id_seq;
+create sequence author_id_seq;
+
+drop sequence if exists genre_id_seq;
+create sequence genre_id_seq;
+
+drop sequence if exists book_id_seq;
+create sequence book_id_seq;
+
+create table authors(
+    id bigint not null default nextval('author_id_seq'),
+    fullname varchar(255) not null,
+    primary key (id)
+);
+
+create table genres(
+    id bigint default nextval('genre_id_seq'),
+    name varchar(255),
+    primary key (id)
+);
+
+create table books (
+    id bigint default nextval('book_id_seq'),
+    title varchar(255),
+    author_id bigint,
+    genre_id bigint,
+    foreign key (author_id) references authors(id) on delete cascade,
+    foreign key (genre_id) references genres(id) on delete cascade,
+    primary key (id)
 );
