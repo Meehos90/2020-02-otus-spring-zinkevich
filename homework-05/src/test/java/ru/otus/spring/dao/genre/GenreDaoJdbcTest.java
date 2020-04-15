@@ -30,7 +30,7 @@ class GenreDaoJdbcTest {
     @DisplayName("добавлять жанр в БД")
     @Test
     void shoudInsertAuthor() {
-        Genre expected = new Genre(4L, EXPECTED_GENRE_NAME);
+        Genre expected = new Genre(0, EXPECTED_GENRE_NAME);
         dao.insert(expected);
         Genre actual = dao.getById(expected.getId());
         assertThat(actual).isEqualToComparingFieldByField(expected);

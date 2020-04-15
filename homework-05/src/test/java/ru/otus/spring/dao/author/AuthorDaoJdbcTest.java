@@ -30,7 +30,7 @@ class AuthorDaoJdbcTest {
     @DisplayName("добавлять автора в БД")
     @Test
     void shoudInsertAuthor() {
-        Author expected = new Author(4L, EXPECTED_AUTHOR_FULLNAME);
+        Author expected = new Author(0, EXPECTED_AUTHOR_FULLNAME);
         dao.insert(expected);
         Author actual = dao.getById(expected.getId());
         assertThat(actual).isEqualToComparingFieldByField(expected);
