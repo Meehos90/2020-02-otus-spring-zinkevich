@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import javax.persistence.*;
-
 @Data
-@ToString(exclude = "book")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Document(collection = "comments")
 public class Comment {
     @Id
@@ -25,4 +22,8 @@ public class Comment {
     @Field(name = "book_id")
     private Book book;
 
+    public Comment(String content, Book book) {
+        this.content = content;
+        this.book = book;
+    }
 }
