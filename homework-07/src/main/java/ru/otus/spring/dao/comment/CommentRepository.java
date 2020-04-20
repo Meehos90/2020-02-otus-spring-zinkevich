@@ -1,8 +1,6 @@
 package ru.otus.spring.dao.comment;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.otus.spring.model.Comment;
 
 import java.util.List;
@@ -10,9 +8,7 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findById(long id);
 
-    @Query("select c from Comment c where c.content = :content")
-    Comment findByContent(@Param("content") String content);
+    Comment findByContent(String content);
 
-    @Query("select c from Comment c where c.book.title = :title")
-    List<Comment> findByBookTitle(@Param("title") String title);
+    List<Comment> findByBookTitle(String title);
 }
