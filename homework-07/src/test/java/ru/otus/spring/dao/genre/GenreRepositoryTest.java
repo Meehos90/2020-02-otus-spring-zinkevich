@@ -1,10 +1,12 @@
 package ru.otus.spring.dao.genre;
 
 import lombok.val;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.otus.spring.exception.NoEntityException;
 import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Genre;
@@ -12,6 +14,7 @@ import ru.otus.spring.model.Genre;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.otus.spring.dao.Constants.Authors.EXPECTED_AUTHOR_FULLNAME;
 import static ru.otus.spring.dao.Constants.Authors.TEST_AUTHOR_ID;
+import static ru.otus.spring.dao.Constants.EXPECTED_QERIES_COUNT;
 import static ru.otus.spring.dao.Constants.Genres.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +24,8 @@ class GenreRepositoryTest {
 
     @Autowired
     GenreRepository repository;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("возвращать ожидаемое количество жанров")
     @Test
@@ -72,9 +77,13 @@ class GenreRepositoryTest {
     @DisplayName("получить все жанры из БД")
     @Test
     void shoudGetAllGenres() {
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
         val genres = repository.findAll();
         assertThat(genres).isNotNull().hasSize(EXEPECTED_NUMBER_OF_GENRES)
                 .allMatch(g -> g.getName() != null);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QERIES_COUNT);
     }
 
 }

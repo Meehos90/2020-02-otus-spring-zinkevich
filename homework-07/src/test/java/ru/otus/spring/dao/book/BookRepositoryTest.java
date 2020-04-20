@@ -1,10 +1,12 @@
 package ru.otus.spring.dao.book;
 
 import lombok.val;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import ru.otus.spring.dao.author.AuthorRepository;
 import ru.otus.spring.dao.genre.GenreRepository;
 import ru.otus.spring.model.Author;
@@ -17,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static ru.otus.spring.dao.Constants.Authors.TEST_AUTHOR_ID;
 import static ru.otus.spring.dao.Constants.Books.*;
+import static ru.otus.spring.dao.Constants.EXPECTED_QERIES_COUNT;
 
 
 @DisplayName("Dao для работы с книгами")
@@ -29,6 +32,8 @@ class BookRepositoryTest {
     private AuthorRepository authorRepository;
     @Autowired
     private GenreRepository genreRepository;
+    @Autowired
+    private TestEntityManager em;
 
     @DisplayName("возвращать ожидаемое количество книг")
     @Test
@@ -73,7 +78,7 @@ class BookRepositoryTest {
     @DisplayName("получить книгу из БД по имени автора")
     @Test
     void shouldReturnBookByAuthor() {
-        List<Book> books = bookRepository.findByAuthor(TEST_AUTHOR_FULLNAME);
+        List<Book> books = bookRepository.findByAuthorFullName(TEST_AUTHOR_FULLNAME);
         for (Book book : books) {
             assertThat(book.getAuthor().getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
         }
@@ -82,7 +87,7 @@ class BookRepositoryTest {
     @DisplayName("получить книгу из БД по названию жанра")
     @Test
     void shouldReturnBookByGenre() {
-        List<Book> books = bookRepository.findByGenre(TEST_GENRE_NAME);
+        List<Book> books = bookRepository.findByGenreName(TEST_GENRE_NAME);
         for (Book book : books) {
             assertThat(book.getGenre().getName()).isEqualTo(TEST_GENRE_NAME);
         }
@@ -91,11 +96,15 @@ class BookRepositoryTest {
     @DisplayName("получить все книги из БД")
     @Test
     void shoudGetAllBooks() {
+        SessionFactory sessionFactory = em.getEntityManager().getEntityManagerFactory()
+                .unwrap(SessionFactory.class);
+        sessionFactory.getStatistics().setStatisticsEnabled(true);
         val books = bookRepository.findAll();
         assertThat(books).isNotNull().hasSize(EXPECTED_NUMBER_OF_BOOKS)
                 .allMatch(b -> b.getTitle() != null)
                 .allMatch(b -> b.getAuthor() != null)
                 .allMatch(b -> b.getGenre() != null);
+        assertThat(sessionFactory.getStatistics().getPrepareStatementCount()).isEqualTo(EXPECTED_QERIES_COUNT);
     }
 
     private Book getBook(long id) {

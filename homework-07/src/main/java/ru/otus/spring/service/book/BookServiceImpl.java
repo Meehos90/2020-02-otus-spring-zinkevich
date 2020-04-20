@@ -35,7 +35,7 @@ public class BookServiceImpl extends AbstractService implements BookService {
     @Override
     public List<Book> findByAuthor() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        List<Book> books = bookRepository.findByAuthor(fullname);
+        List<Book> books = bookRepository.findByAuthorFullName(fullname);
         if ((long) books.size() == 0) {
             throw new NoEntityException(BOOK_NOT_FOUND);
         }
@@ -45,7 +45,7 @@ public class BookServiceImpl extends AbstractService implements BookService {
     @Override
     public List<Book> findByGenre() {
         String name = getMessage(ENTER_GENRE_NAME);
-        List<Book> books = bookRepository.findByGenre(name);
+        List<Book> books = bookRepository.findByGenreName(name);
         if ((long) books.size() == 0) {
             throw new NoEntityException(BOOK_NOT_FOUND);
         }
@@ -109,7 +109,7 @@ public class BookServiceImpl extends AbstractService implements BookService {
     public Book getBook() {
         String title = getMessage(ENTER_BOOK_TITLE);
         Book book = bookRepository.findByTitle(title);
-        if(book == null) {
+        if (book == null) {
             throw new NoEntityException(BOOK_NOT_FOUND);
         }
         return book;

@@ -11,10 +11,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
-@NamedEntityGraph(name = "book-entity-graph", attributeNodes = {
-        @NamedAttributeNode("author"),
-        @NamedAttributeNode("genre")
-})
 public class Book {
     @Id
     @SequenceGenerator(name = "book_id_seq", sequenceName = "book_id_seq", allocationSize = 1)
