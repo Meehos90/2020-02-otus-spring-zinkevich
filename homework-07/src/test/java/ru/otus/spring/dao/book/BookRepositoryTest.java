@@ -73,7 +73,7 @@ class BookRepositoryTest {
     @DisplayName("получить книгу из БД по имени автора")
     @Test
     void shouldReturnBookByAuthor() {
-        List<Book> books = bookRepository.findByAuthor(TEST_AUTHOR_FULLNAME);
+        List<Book> books = bookRepository.findByAuthorFullName(TEST_AUTHOR_FULLNAME);
         for (Book book : books) {
             assertThat(book.getAuthor().getFullName()).isEqualTo(TEST_AUTHOR_FULLNAME);
         }
@@ -82,7 +82,7 @@ class BookRepositoryTest {
     @DisplayName("получить книгу из БД по названию жанра")
     @Test
     void shouldReturnBookByGenre() {
-        List<Book> books = bookRepository.findByGenre(TEST_GENRE_NAME);
+        List<Book> books = bookRepository.findByGenreName(TEST_GENRE_NAME);
         for (Book book : books) {
             assertThat(book.getGenre().getName()).isEqualTo(TEST_GENRE_NAME);
         }

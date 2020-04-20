@@ -9,8 +9,10 @@ import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
     Comment findById(long id);
+
     @Query("select c from Comment c where c.content = :content")
     Comment findByContent(@Param("content") String content);
+
     @Query("select c from Comment c where c.book.title = :title")
     List<Comment> findByBookTitle(@Param("title") String title);
 }

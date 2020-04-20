@@ -7,6 +7,7 @@ import ru.otus.spring.model.Genre;
 
 public interface GenreRepository extends JpaRepository<Genre, Long> {
     Genre findById(long id);
+
     @Query("select g from Genre g where g.name = :name")
     Genre findByName(@Param("name") String name);
 }

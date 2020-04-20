@@ -9,6 +9,7 @@ spring:
     data: data.sql
 
   jpa:
+    show-sql: false
     generate-ddl: false
     hibernate:
       ddl-auto: none
