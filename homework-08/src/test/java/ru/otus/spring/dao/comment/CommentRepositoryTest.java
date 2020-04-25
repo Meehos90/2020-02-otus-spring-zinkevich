@@ -85,6 +85,7 @@ public class CommentRepositoryTest extends AbstractRepositoryTest {
         Comment comment = commentRepository.findByContent(content);
         return comment.getId();
     }
+    
     private Comment getComment(String content) {
         Book book = bookRepository.findByTitle(TEST_BOOK);
         return new Comment(content, book);
