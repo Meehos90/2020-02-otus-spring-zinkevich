@@ -7,7 +7,7 @@ import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
-import static ru.otus.spring.model.Constants.Genres.*;
+import static ru.otus.spring.service.Constants.*;
 
 @Service
 public class GenreServiceImpl extends AbstractService implements GenreService {

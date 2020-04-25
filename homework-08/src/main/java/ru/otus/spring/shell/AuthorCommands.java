@@ -20,27 +20,27 @@ public class AuthorCommands {
     delete author - dea
     all authors - authors
     */
-
+    
     @ShellMethod(value = "Insert author", key = {"cra"})
     private void createAuthor() {
         authorService.save();
     }
-
+    
     @ShellMethod(value = "Update author", key = {"upa", "update author"})
     private void updateAuthor() {
         authorService.update();
     }
-
+    
     @ShellMethod(value = "Search authors by fullname", key = {"saf", "author fullname"})
     private Author getAuthorByName() {
         return authorService.findByFullname();
     }
-
+    
     @ShellMethod(value = "Delete author", key = {"dea", "delete author", "del auth"})
     private void deleteAuthor() {
         authorService.delete();
     }
-
+    
     @ShellMethod(value = "View all authors", key = {"authors"})
     private List<Author> getAllAuthors() {
         return authorService.findAll();

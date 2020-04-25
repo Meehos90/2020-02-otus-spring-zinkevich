@@ -8,7 +8,7 @@ import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
-import static ru.otus.spring.model.Constants.Comments.*;
+import static ru.otus.spring.service.Constants.*;
 
 @Service
 public class CommentServiceImpl extends AbstractService implements CommentService {
@@ -16,13 +16,13 @@ public class CommentServiceImpl extends AbstractService implements CommentServic
     public void save() {
         Book book = getBook();
         String content = getMessage(ENTER_COMMENT_CONTENT);
-        commentRepository.save(new Comment(0, content, book));
+        commentRepository.save(new Comment(content, book));
         showMessage(COMMENT_SAVE);
     }
 
     @Override
     public void update() {
-        long id = existCommentById();
+        String id = existCommentById();
         Comment comment = commentRepository.findById(id);
         String content = getMessage(ENTER_COMMENT_CONTENT);
         comment.setContent(content);
@@ -32,14 +32,14 @@ public class CommentServiceImpl extends AbstractService implements CommentServic
 
     @Override
     public void delete() {
-        long id = existCommentById();
+        String id = existCommentById();
         commentRepository.deleteById(id);
         showMessage(COMMENT_DELETED_SUCCESSFULLY + " " + id);
     }
 
     @Override
     public Comment findCommentById() {
-        long id = existCommentById();
+        String id = existCommentById();
         return commentRepository.findById(id);
     }
 
@@ -68,8 +68,8 @@ public class CommentServiceImpl extends AbstractService implements CommentServic
         return commentRepository.findAll();
     }
 
-    private long existCommentById() {
-        long id = Long.parseLong(getMessage(ENTER_ID_COMMENT));
+    private String existCommentById() {
+        String id = getMessage(ENTER_ID_COMMENT);
         if (!commentRepository.existsById(id)) {
             throw new NoEntityException(COMMENT_NOT_FOUND);
         }

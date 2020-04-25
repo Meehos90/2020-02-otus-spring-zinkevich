@@ -5,23 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "books")
+@Document(collection = "book")
 public class Book {
     @Id
-    private long id;
-
-    @Field(name = "title")
+    private String id;
+    
     private String title;
-
-    @Field(name = "author_id")
+    
     private Author author;
-
-    @Field(name = "genre_id")
+    
     private Genre genre;
 
     public Book(String title, Author author, Genre genre) {

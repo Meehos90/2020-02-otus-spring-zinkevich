@@ -7,14 +7,14 @@ import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
-import static ru.otus.spring.model.Constants.Authors.*;
+import static ru.otus.spring.service.Constants.*;
 
 @Service
 public class AuthorServiceImpl extends AbstractService implements AuthorService {
     @Override
     public void save() {
         String fullname = getMessage(ENTER_AUTHOR_FULLNAME);
-        Author author = new Author(0, fullname);
+        Author author = new Author( fullname);
         authorRepository.save(author);
         showMessage(AUTHOR_SAVE);
     }

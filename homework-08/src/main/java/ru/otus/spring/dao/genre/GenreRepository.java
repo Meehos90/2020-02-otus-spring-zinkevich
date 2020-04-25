@@ -1,8 +1,6 @@
 package ru.otus.spring.dao.genre;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
 import ru.otus.spring.model.Genre;
 
 import java.util.List;
@@ -12,12 +10,13 @@ public interface GenreRepository extends MongoRepository<Genre, Long> {
 
     Genre save(Genre genre);
 
-    void deleteById(long id);
+    void deleteById(String id);
 
-    Genre findById(long id);
+    Genre findById(String id);
 
-    @Query("select g from Genre g where g.name = :name")
-    Genre findByName(@Param("name") String name);
+    Genre findByName(String name);
 
     List<Genre> findAll();
+    
+    Genre findByIdIsNull(String id);
 }

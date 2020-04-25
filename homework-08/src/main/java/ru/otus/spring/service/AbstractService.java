@@ -11,10 +11,7 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Genre;
 import ru.otus.spring.service.message.IOService;
 
-import static ru.otus.spring.model.Constants.Authors.ENTER_AUTHOR_FULLNAME;
-import static ru.otus.spring.model.Constants.Books.BOOK_NOT_FOUND;
-import static ru.otus.spring.model.Constants.Books.ENTER_BOOK_TITLE;
-import static ru.otus.spring.model.Constants.Genres.ENTER_GENRE_NAME;
+import static ru.otus.spring.service.Constants.*;
 
 public class AbstractService {
     @Autowired
@@ -65,12 +62,12 @@ public class AbstractService {
     }
 
     private Genre insertAndReturnGenre(String name) {
-        genreRepository.save(new Genre(0, name));
+        genreRepository.save(new Genre( name));
         return genreRepository.findByName(name);
     }
 
     private Author insertAndReturnAuthor(String fullname) {
-        authorRepository.save(new Author(0, fullname));
+        authorRepository.save(new Author( fullname));
         return authorRepository.findByFullName(fullname);
     }
 }
