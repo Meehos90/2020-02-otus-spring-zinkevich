@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost
+      port: 0
+      database: library
+logging:
+  level:
+    root: ERROR
+changelogs.logsPackage: ru.otus.spring.changelogs.test
