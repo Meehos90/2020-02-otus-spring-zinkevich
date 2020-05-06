@@ -1,0 +1,20 @@
+<footer th:fragment="footer" class="mastfoot mt-auto">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#locales").change(function () {
+                var selectedOption = $('#locales').val();
+                if (selectedOption != '') {
+                    window.location.replace('?lang=' + selectedOption);
+                }
+            });
+        });
+    </script>
+    <div class="inner">
+        <span th:text="#{localized.language.change}"></span>:
+        <select id="locales">
+            <option value=""></option>
+            <option value="ru" th:text="#{localized.lang.ru}"></option>
+            <option value="en" th:text="#{localized.lang.en}"></option>
+        </select>
+    </div>
+</footer>

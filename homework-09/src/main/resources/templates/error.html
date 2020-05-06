@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner">
+        <div th:if="${errorMessage}" th:text="${errorMessage}" class="alert alert-error" role="alert"/>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner">
+        <div class="card text-center">
+            <div class="card-header" th:text="#{localized.book}"/>
+            <div class="card-body" th:each="book : ${page.content}">
+                <h2 class="card-title" th:text="${book.title}"/>
+                <hr>
+                <p class="card-text leftstr" th:text="#{localized.author}"/>
+                <p class="card-text rightstr" th:text="${book.author.fullName}">
+                <p class="card-text leftstr" th:text="#{localized.genre}"/>
+                <p class="card-text rightstr" th:text="${book.genre.name}"/>
+                <div style="clear: left; margin-bottom: 2rem;"></div>
+                <a class="btn btn-lg btn-secondary" th:href="@{/addBook}" th:text="#{localized.addBook}"/>
+                <a class="btn btn-lg btn-secondary" th:href="@{/editBook/{id}(id=${book.id})}" th:text="#{localized.edit}"/>
+                <a class="btn btn-lg btn-secondary" th:href="@{/deleteBook/{id}(id=${book.id})}" th:text="#{localized.delete}"/>
+            </div>
+            <div class="card-footer text-muted pagination-div">
+                <span th:if="${page.hasNext()}">
+                <a th:href="@{/books(page=${page.number-1},size=${page.size})}" th:text="#{localized.previous}"/>
+            </span>
+                <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                    <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+                    <span th:unless="${page.number == i}">
+             <a th:href="@{/books(page=${i},size=${page.size})}">[[${i}+1]]</a>
+            </span>
+                </th:block>
+                <span th:if="${page.hasNext()}">
+                <a th:href="@{/books(page=${page.number+1},size=${page.size})}" th:text="#{localized.next}"/>
+            </span>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>
