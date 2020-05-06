@@ -9,7 +9,8 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Genre;
 import ru.otus.spring.service.AbstractService;
 
-import static ru.otus.spring.model.Constants.Books.BOOK_NOT_FOUND;
+import static ru.otus.spring.service.Constants.BOOK_NOT_FOUND;
+
 
 @Service
 public class BookServiceImpl extends AbstractService implements BookService {

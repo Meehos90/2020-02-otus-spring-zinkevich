@@ -7,7 +7,7 @@ import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
-import static ru.otus.spring.model.Constants.Authors.AUTHOR_NOT_FOUND;
+import static ru.otus.spring.service.Constants.AUTHOR_NOT_FOUND;
 
 @Service
 public class AuthorServiceImpl extends AbstractService implements AuthorService {

@@ -8,8 +8,8 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 import ru.otus.spring.service.AbstractService;
 
-import static ru.otus.spring.model.Constants.Books.BOOK_NOT_FOUND;
-import static ru.otus.spring.model.Constants.Comments.COMMENT_NOT_FOUND;
+import static ru.otus.spring.service.Constants.BOOK_NOT_FOUND;
+import static ru.otus.spring.service.Constants.COMMENT_NOT_FOUND;
 
 @Service
 public class CommentServiceImpl extends AbstractService implements CommentService {

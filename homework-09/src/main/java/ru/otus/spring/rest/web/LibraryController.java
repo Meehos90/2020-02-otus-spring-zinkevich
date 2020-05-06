@@ -1,21 +1,16 @@
 package ru.otus.spring.rest.web;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Locale;
+import org.springframework.web.bind.annotation.GetMapping;
+import ru.otus.spring.rest.AbstractController;
 
 @Controller
-public class LibraryController {
-    public static Locale locale;
+public class LibraryController extends AbstractController {
 
-    @RequestMapping("/")
-    String index(HttpServletRequest request, Model model) {
-        locale = request.getLocale();
-        model.addAttribute("title", "Библиотека");
+    @GetMapping("/")
+    public String index(Model model) {
+        model.addAttribute("title", messageService.getLocaleMessage("localized.library"));
         return "library";
     }
 }
