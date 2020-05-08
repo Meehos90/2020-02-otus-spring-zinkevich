@@ -24,7 +24,6 @@ public class BookController extends AbstractController {
     public String findAll(@PageableDefault(size = 1) Pageable pageable, Model model) {
         Page<Book> page = bookService.findAll(pageable);
         model.addAttribute("page", page);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.books"));
         return "books";
     }
 
@@ -32,7 +31,6 @@ public class BookController extends AbstractController {
     public String getAddBook(Model model) {
         BookForm bookForm = new BookForm();
         model.addAttribute("bookForm", bookForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.add"));
         return "addBook";
     }
 
@@ -43,7 +41,6 @@ public class BookController extends AbstractController {
         bookForm.setId(book.getId());
         model.addAttribute("book", book);
         model.addAttribute("bookForm", bookForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.edit"));
         return "editBook";
     }
 
@@ -65,14 +62,12 @@ public class BookController extends AbstractController {
     public String getDeleteBook(Model model, @PathVariable("id") Long id) {
         Book book = bookService.findById(id);
         model.addAttribute("book", book);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "deleteBook";
     }
 
     @PostMapping("deleteBook/{id}")
     public String postDeleteBook(Model model, @PathVariable Long id) {
         bookService.deleteById(id);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "redirect:/books";
     }
 

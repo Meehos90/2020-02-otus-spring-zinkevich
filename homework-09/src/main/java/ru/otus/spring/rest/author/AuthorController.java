@@ -23,7 +23,6 @@ public class AuthorController extends AbstractController {
     public String listAuthors(Model model) {
         List<Author> authors = authorService.findAll();
         model.addAttribute("authors", authors);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.authors"));
         return "authors";
     }
 
@@ -31,7 +30,6 @@ public class AuthorController extends AbstractController {
     public String getAddAuthor(Model model) {
         AuthorForm authorForm = new AuthorForm();
         model.addAttribute("authorForm", authorForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.add"));
         return "addAuthor";
     }
 
@@ -42,7 +40,6 @@ public class AuthorController extends AbstractController {
         authorForm.setId(author.getId());
         model.addAttribute("author", author);
         model.addAttribute("authorForm", authorForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.edit"));
         return "editAuthor";
     }
 
@@ -62,14 +59,12 @@ public class AuthorController extends AbstractController {
     public String getDeleteAuthor(Model model, @PathVariable("id") Long id) {
         Author author = authorService.findById(id);
         model.addAttribute("author", author);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "deleteAuthor";
     }
 
     @PostMapping("deleteAuthor/{id}")
     public String postDeleteBook(Model model, @PathVariable Long id) {
         authorService.deleteById(id);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "redirect:/authors";
     }
 }

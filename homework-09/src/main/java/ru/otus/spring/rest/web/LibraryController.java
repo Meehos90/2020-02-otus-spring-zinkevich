@@ -10,7 +10,6 @@ public class LibraryController extends AbstractController {
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("title", messageService.getLocaleMessage("localized.library"));
         return "library";
     }
 }

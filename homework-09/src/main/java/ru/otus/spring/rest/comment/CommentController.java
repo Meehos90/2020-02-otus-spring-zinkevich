@@ -26,7 +26,6 @@ public class CommentController extends AbstractController {
     public String listBooks(@PageableDefault(size = 1) Pageable pageable, Model model) {
         Page<Comment> page = commentService.findAll(pageable);
         model.addAttribute("page", page);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.comments"));
         return "comments";
     }
 
@@ -34,7 +33,6 @@ public class CommentController extends AbstractController {
     public String getAddComment(Model model) {
         CommentForm commentForm = new CommentForm();
         model.addAttribute("commentForm", commentForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.add"));
         return "addComment";
     }
 
@@ -45,7 +43,6 @@ public class CommentController extends AbstractController {
         commentForm.setId(comment.getId());
         model.addAttribute("comment", comment);
         model.addAttribute("commentForm", commentForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.edit"));
         return "editComment";
     }
 
@@ -66,14 +63,12 @@ public class CommentController extends AbstractController {
     public String getDeleteComment(Model model, @PathVariable("id") Long id) {
         Comment comment = commentService.findById(id);
         model.addAttribute("comment", comment);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "deleteComment";
     }
 
     @PostMapping("deleteComment/{id}")
     public String postDeleteComment(Model model, @PathVariable Long id) {
         commentService.deleteById(id);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "redirect:/comments";
     }
 }

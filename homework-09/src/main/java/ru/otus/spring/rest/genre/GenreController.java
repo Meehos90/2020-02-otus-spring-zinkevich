@@ -23,7 +23,6 @@ public class GenreController extends AbstractController {
     public String listGenres(Model model) {
         List<Genre> genres = genreService.findAll();
         model.addAttribute("genres", genres);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.genres"));
         return "genres";
     }
 
@@ -31,7 +30,6 @@ public class GenreController extends AbstractController {
     public String getAddGenre(Model model) {
         GenreForm genreForm = new GenreForm();
         model.addAttribute("genreForm", genreForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.add"));
         return "addGenre";
     }
 
@@ -42,7 +40,6 @@ public class GenreController extends AbstractController {
         genreForm.setId(genre.getId());
         model.addAttribute("genre", genre);
         model.addAttribute("genreForm", genreForm);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.edit"));
         return "editGenre";
     }
 
@@ -62,14 +59,12 @@ public class GenreController extends AbstractController {
     public String getDeleteGenre(Model model, @PathVariable("id") Long id) {
         Genre genre = genreService.findById(id);
         model.addAttribute("genre", genre);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "deleteGenre";
     }
 
     @PostMapping("deleteGenre/{id}")
     public String postDeleteGenre(Model model, @PathVariable Long id) {
         genreService.deleteById(id);
-        model.addAttribute("title", messageService.getLocaleMessage("localized.delete"));
         return "redirect:/genres";
     }
 }
