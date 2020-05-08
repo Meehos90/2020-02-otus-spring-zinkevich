@@ -16,11 +16,6 @@ import static ru.otus.spring.service.Constants.BOOK_NOT_FOUND;
 public class BookServiceImpl extends AbstractService implements BookService {
 
     @Override
-    public void add(String title, String author, String genre) {
-        bookRepository.save(new Book(0, title, getAuthor(author), getGenre(genre)));
-    }
-
-    @Override
     public Book findById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new NoEntityException(BOOK_NOT_FOUND));
     }
@@ -32,9 +27,21 @@ public class BookServiceImpl extends AbstractService implements BookService {
 
 
     @Override
-    public Book update(Long id, String title, String author, String genre) {
-        Book book = findById(id);
-        return bookRepository.save(new Book(book.getId(), title, getAuthor(author), getGenre(genre)));
+    public Book edit(Long id, String title, String author, String genre) {
+        if (existsById(id)) {
+            Book book = findById(id);
+            return bookRepository.save(new Book(book.getId(), title, getAuthor(author), getGenre(genre)));
+        } else {
+            return bookRepository.save(new Book(0, title, getAuthor(author), getGenre(genre)));
+        }
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        if (id != null) {
+            return bookRepository.existsById(id);
+        }
+        return false;
     }
 
     @Override

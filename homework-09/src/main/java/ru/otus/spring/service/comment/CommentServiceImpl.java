@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.exception.NoEntityException;
+import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 import ru.otus.spring.service.AbstractService;
@@ -14,7 +15,7 @@ import static ru.otus.spring.service.Constants.COMMENT_NOT_FOUND;
 @Service
 public class CommentServiceImpl extends AbstractService implements CommentService {
 
-    @Override
+
     public void add(String content, String bookTitle) {
         Comment comment = new Comment(0, content, getBook(bookTitle));
         commentRepository.save(comment);
@@ -26,9 +27,21 @@ public class CommentServiceImpl extends AbstractService implements CommentServic
     }
 
     @Override
-    public Comment update(Long id, String content, String bookTitle) {
-        Comment comment = findById(id);
-        return commentRepository.save(new Comment(comment.getId(), content, getBook(bookTitle)));
+    public Comment edit(Long id, String content, String bookTitle) {
+        if (existsById(id)) {
+            Comment comment = findById(id);
+            return commentRepository.save(new Comment(comment.getId(), content, getBook(bookTitle)));
+        } else {
+            return commentRepository.save(new Comment(0, content, getBook(bookTitle)));
+        }
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        if (id != null) {
+            return commentRepository.existsById(id);
+        }
+        return false;
     }
 
     @Override

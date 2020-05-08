@@ -12,7 +12,6 @@ import ru.otus.spring.rest.AbstractController;
 import ru.otus.spring.service.genre.GenreService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,7 +20,7 @@ public class GenreController extends AbstractController {
     private final GenreService genreService;
 
     @GetMapping(value = "/genres")
-    public String listGenres(Model model){
+    public String listGenres(Model model) {
         List<Genre> genres = genreService.findAll();
         model.addAttribute("genres", genres);
         model.addAttribute("title", messageService.getLocaleMessage("localized.genres"));
@@ -48,20 +47,15 @@ public class GenreController extends AbstractController {
     }
 
     @PostMapping(path = {"/editGenre/{id}", "/addGenre"})
-    public String postEditGenre(Model model, @ModelAttribute("genreForm") GenreForm genreForm, @PathVariable Optional<Long> id) {
+    public String postEditGenre(Model model, @ModelAttribute("genreForm") GenreForm genreForm, @PathVariable(required = false) Long id) {
         String name = genreForm.getName();
-        if (genreService.existsByName(name)) {
-            model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.genreExists"));
-            return "error";
-        }
-        if(id.isPresent()) {
-            Genre genre = genreService.findById(id.get());
+        if (!genreService.existsByName(name)) {
+            Genre genre = genreService.edit(id, name);
             model.addAttribute("genre", genre);
-            genreService.update(genre.getId(), name);
-        } else {
-            genreService.add(name);
+            return "redirect:/genres";
         }
-        return "redirect:/genres";
+        model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.genreExists"));
+        return "error";
     }
 
     @GetMapping("/deleteGenre/{id}")

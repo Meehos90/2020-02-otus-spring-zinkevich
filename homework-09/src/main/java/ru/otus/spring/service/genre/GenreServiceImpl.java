@@ -12,11 +12,6 @@ import static ru.otus.spring.service.Constants.GENRE_NOT_FOUND;
 @Service
 public class GenreServiceImpl extends AbstractService implements GenreService {
 
-    @Override
-    public void add(String fullName) {
-        Genre genre = new Genre(0, fullName);
-        genreRepository.save(genre);
-    }
 
     @Override
     public void deleteById(Long id) {
@@ -40,8 +35,20 @@ public class GenreServiceImpl extends AbstractService implements GenreService {
     }
 
     @Override
-    public Genre update(Long id, String name) {
-        Genre genre = findById(id);
-        return genreRepository.save(new Genre(genre.getId(), name));
+    public Genre edit(Long id, String name) {
+        if (existsById(id)) {
+            Genre genre = findById(id);
+            return genreRepository.save(new Genre(genre.getId(), name));
+        } else {
+            return genreRepository.save(new Genre(0, name));
+        }
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        if (id != null) {
+            return genreRepository.existsById(id);
+        }
+        return false;
     }
 }

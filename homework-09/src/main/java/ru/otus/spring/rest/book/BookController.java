@@ -14,9 +14,6 @@ import ru.otus.spring.model.Book;
 import ru.otus.spring.rest.AbstractController;
 import ru.otus.spring.service.book.BookService;
 
-import java.util.Optional;
-
-
 @Controller
 @RequiredArgsConstructor
 @SuppressWarnings("all")
@@ -51,22 +48,17 @@ public class BookController extends AbstractController {
     }
 
     @PostMapping(path = {"/editBook/{id}", "/addBook"})
-    public String postEditBook(Model model, @ModelAttribute("bookForm") BookForm bookForm, @PathVariable Optional<Long> id) {
+    public String postEditBook(Model model, @ModelAttribute("bookForm") BookForm bookForm, @PathVariable(required = false) Long id) {
         String title = bookForm.getTitle();
         String fullName = bookForm.getAuthor();
         String name = bookForm.getGenre();
-        if (bookService.existsByTitle(title)) {
-            model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.bookExists"));
-            return "error";
-        }
-        if(id.isPresent()) {
-            Book book = bookService.findById(id.get());
+        if (!bookService.existsByTitle(title)) {
+            Book book = bookService.edit(id, title, fullName, name);
             model.addAttribute("book", book);
-            bookService.update(book.getId(), title, fullName, name);
-        } else {
-            bookService.add(title, fullName, name);
+            return "redirect:/books";
         }
-        return "redirect:/books";
+        model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.bookExists"));
+        return "error";
     }
 
     @GetMapping("/deleteBook/{id}")

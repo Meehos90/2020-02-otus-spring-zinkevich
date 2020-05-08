@@ -12,15 +12,13 @@ import static ru.otus.spring.service.Constants.AUTHOR_NOT_FOUND;
 @Service
 public class AuthorServiceImpl extends AbstractService implements AuthorService {
     @Override
-    public void add(String fullName) {
-        Author author = new Author(0, fullName);
-        authorRepository.save(author);
-    }
-
-    @Override
-    public Author update(Long id, String fullName) {
-        Author author = findById(id);
-        return authorRepository.save(new Author(author.getId(), fullName));
+    public Author edit(Long id, String fullName) {
+        if (existsById(id)) {
+            Author author = findById(id);
+           return authorRepository.save(new Author(author.getId(), fullName));
+        } else {
+           return authorRepository.save(new Author(0, fullName));
+        }
     }
 
     @Override
@@ -36,6 +34,14 @@ public class AuthorServiceImpl extends AbstractService implements AuthorService 
     @Override
     public boolean existsByFullName(String fullName) {
         return authorRepository.existsByFullName(fullName);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        if (id != null) {
+            return authorRepository.existsById(id);
+        }
+        return false;
     }
 
     @Override

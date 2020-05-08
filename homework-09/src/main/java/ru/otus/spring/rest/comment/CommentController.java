@@ -15,8 +15,6 @@ import ru.otus.spring.rest.AbstractController;
 import ru.otus.spring.service.book.BookService;
 import ru.otus.spring.service.comment.CommentService;
 
-import java.util.Optional;
-
 @Controller
 @RequiredArgsConstructor
 @SuppressWarnings("all")
@@ -52,21 +50,16 @@ public class CommentController extends AbstractController {
     }
 
     @PostMapping(path = {"/editComment/{id}", "/addComment"})
-    public String postEditComment(Model model, @ModelAttribute("commentForm") CommentForm commentForm, @PathVariable Optional<Long> id) {
+    public String postEditComment(Model model, @ModelAttribute("commentForm") CommentForm commentForm, Long id) {
         String content = commentForm.getContent();
         String bookTitle = commentForm.getBook();
-        if(!bookService.existsByTitle(bookTitle)) {
-            model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.bookNotExists"));
-            return "error";
-        }
-        if(id.isPresent()) {
-            Comment comment = commentService.findById(id.get());
+        if (bookService.existsByTitle(bookTitle)) {
+            Comment comment = commentService.edit(id, content, bookTitle);
             model.addAttribute("comment", comment);
-            commentService.update(comment.getId(), content, bookTitle);
-        } else {
-            commentService.add(content, bookTitle);
+            return "redirect:/comments";
         }
-        return "redirect:/comments";
+        model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.bookNotExists"));
+        return "error";
     }
 
     @GetMapping("/deleteComment/{id}")

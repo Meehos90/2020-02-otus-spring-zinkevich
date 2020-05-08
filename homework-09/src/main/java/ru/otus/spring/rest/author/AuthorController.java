@@ -12,7 +12,6 @@ import ru.otus.spring.rest.AbstractController;
 import ru.otus.spring.service.author.AuthorService;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -48,20 +47,15 @@ public class AuthorController extends AbstractController {
     }
 
     @PostMapping(path = {"/editAuthor/{id}", "/addAuthor"})
-    public String postEditAuthor(Model model, @ModelAttribute("authorForm") AuthorForm authorForm, @PathVariable Optional<Long> id) {
+    public String postEditAuthor(Model model, @ModelAttribute("authorForm") AuthorForm authorForm, @PathVariable(required = false) Long id) {
         String fullName = authorForm.getFullName();
-        if (authorService.existsByFullName(fullName)) {
-            model.addAttribute("errorMessage",  messageService.getLocaleMessage("localized.authorExists"));
-            return "error";
-        }
-        if (id.isPresent()) {
-            Author author = authorService.findById(id.get());
+        if (!authorService.existsByFullName(fullName)) {
+            Author author = authorService.edit(id, fullName);
             model.addAttribute("author", author);
-            authorService.update(author.getId(), fullName);
-        } else {
-            authorService.add(fullName);
+            return "redirect:/authors";
         }
-        return "redirect:/authors";
+        model.addAttribute("errorMessage", messageService.getLocaleMessage("localized.authorExists"));
+        return "error";
     }
 
     @GetMapping("/deleteAuthor/{id}")

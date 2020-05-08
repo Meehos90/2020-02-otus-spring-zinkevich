@@ -5,13 +5,13 @@ import ru.otus.spring.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    void add(String fullName);
-
-    Author update(Long id, String fullName);
+    Author edit(Long id, String fullName);
 
     List<Author> findAll();
 
     boolean existsByFullName(String fullName);
+
+    boolean existsById(Long id);
 
     Author findById(Long id);
 
