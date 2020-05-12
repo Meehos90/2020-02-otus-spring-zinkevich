@@ -1,0 +1,26 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title = #{localized.delete})"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner cover">
+        <h2 th:text="#{localized.delete}"/>
+        <form th:action="@{/deleteBook/{id}(id=${book.id})}" th:object="${book}" method="POST">
+            <div class="form-group">
+                <label class="leftstr" for="book" th:text="#{localized.bookId}"/>
+                <input class="rightstr" id="book" type="text" required="required" th:field="*{id}" readonly/>
+                <div style="clear: left; margin-bottom: 2rem;"></div>
+            </div>
+            <div class="form-group">
+                <label class="leftstr" for="title" th:text="#{localized.bookTitle}"/>
+                <input class="rightstr" id="title" type="text" required="required" th:field="*{title}" readonly/>
+                <div style="clear: left; margin-bottom: 2rem;"></div>
+            </div>
+            <button style="margin-bottom: 2rem" class="btn btn-lg btn-secondary" type="submit" th:text="#{localized.delete}"/>
+        </form>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

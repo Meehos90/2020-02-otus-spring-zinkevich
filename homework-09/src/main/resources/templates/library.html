@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title = #{localized.library})"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading" th:text="#{localized.welcome}"/>
+        <p class="lead"><b><a th:href="@{/books}" th:text="#{localized.getBook}"/></b></p>
+        <p class="lead"><b><a th:href="@{/addBook}" th:text="#{localized.addBook}"/></b></p>
+        <p class="lead"><b><a th:href="@{/addAuthor}" th:text="#{localized.addAuthor}"/></b></p>
+        <p class="lead"><b><a th:href="@{/addGenre}" th:text="#{localized.addGenre}"/></b></p>
+        <p style="margin-bottom: 2rem" class="lead"><b><a th:href="@{/addComment}" th:text="#{localized.addComment}"/></b></p>
+</main>
+<footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

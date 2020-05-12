@@ -1,0 +1,17 @@
+<header class="masthead mb-auto">
+    <div class="inner">
+        <h3 class="masthead-brand" th:text="#{localized.library}"/>
+        <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link" th:classappend="${#request.getRequestURI() == '/' ? 'active':''}" th:href="@{/}"
+               th:text="#{localized.library}"/>
+            <a class="nav-link" th:classappend="${#request.getRequestURI() == '/books' ? 'active':''}"
+               th:href="@{/books}" th:text="#{localized.books}"/>
+            <a class="nav-link" th:classappend="${#request.getRequestURI() == '/authors' ? 'active':''}"
+               th:href="@{/authors}" th:text="#{localized.authors}"/>
+            <a class="nav-link" th:classappend="${#request.getRequestURI() == '/genres' ? 'active':''}"
+               th:href="@{/genres}" th:text="#{localized.genres}"/>
+            <a class="nav-link" th:classappend="${#request.getRequestURI() == '/comments' ? 'active':''}"
+               th:href="@{/comments}" th:text="#{localized.comments}"/>
+        </nav>
+    </div>
+</header>

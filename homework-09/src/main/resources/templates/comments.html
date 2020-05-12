@@ -1,0 +1,39 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title = #{localized.comments})"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner">
+        <div class="card text-center">
+            <div class="card-header" th:text="#{localized.comments}"/>
+            <div class="card-body" th:each="comment : ${page.content}">
+                <p class="card-title" th:text="${comment.content}"/>
+                <hr>
+                <p class="card-text leftstr" th:text="#{localized.book}"/>
+                <p class="card-text rightstr" th:text="${comment.book.title}">
+                <div style="clear: left; margin-bottom: 2rem;"></div>
+                <a class="btn btn-lg btn-secondary" th:href="@{/addComment}" th:text="#{localized.addComment}"/>
+                <a class="btn btn-lg btn-secondary" th:href="@{/editComment/{id}(id=${comment.id})}" th:text="#{localized.edit}"/>
+                <a class="btn btn-lg btn-secondary" th:href="@{/deleteComment/{id}(id=${comment.id})}" th:text="#{localized.delete}"/>
+            </div>
+            <div class="card-footer text-muted pagination-div">
+                <span th:if="${page.hasPrevious()}">
+                <a th:href="@{/comments(page=${page.number-1},size=${page.size})}" th:text="#{localized.previous}"/>
+            </span>
+                <th:block th:each="i: ${#numbers.sequence(0, page.totalPages - 1)}">
+                    <span th:if="${page.number == i}" class="selected">[[${i}+1]]</span>
+                    <span th:unless="${page.number == i}">
+             <a th:href="@{/comments(page=${i},size=${page.size})}">[[${i}+1]]</a>
+            </span>
+                </th:block>
+                <span th:if="${page.hasNext()}">
+                <a th:href="@{/comments(page=${page.number+1},size=${page.size})}" th:text="#{localized.next}"/>
+            </span>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

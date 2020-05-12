@@ -1,0 +1,185 @@
+/*
+ * Globals
+ */
+
+/* Links */
+a,
+a:focus,
+a:hover {
+    color: #fff;
+}
+
+.alert-error {
+    color: #fff;
+    background-color: #721c24;
+    border-color: #f00;
+}
+
+table.table {
+    color: #f00;
+}
+
+/* Custom default button */
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+    color: #fff;
+    text-shadow: none;
+    background-color: #f00;
+    border: .2rem solid #000;
+}
+
+.list-group-item {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+
+/*
+ * Base structure
+ */
+
+html,
+body {
+    height: 100%;
+    background-color: #333;
+    background-image: url("../img/book.png") ;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+body {
+    display: -ms-flexbox;
+    display: flex;
+    color: #f00;
+    text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+}
+
+h2 {
+    padding: 2rem;
+}
+
+.cover-container {
+    max-width: 42em;
+}
+
+.leftstr, .rightstr {
+    float: left;
+    width: 50%;
+}
+.rightstr {
+    text-align: left;
+}
+
+input.rightstr {
+    width: 40%!important;
+}
+/*
+ * Header
+ */
+
+h1.cover-heading {
+    padding: 2rem;
+}
+
+.masthead {
+    margin-bottom: 2rem;
+}
+
+.masthead-brand {
+    margin-bottom: 0;
+}
+
+.nav-masthead .nav-link {
+    padding: .25rem 0;
+    font-weight: 700;
+    color: #fff;
+    background-color: transparent;
+    border-bottom: .25rem solid transparent;
+}
+
+.nav-masthead .nav-link:hover,
+.nav-masthead .nav-link:focus {
+    border-bottom-color: #800000;
+}
+
+.nav-masthead .nav-link + .nav-link {
+    margin-left: 1rem;
+}
+
+.nav-masthead .active {
+    color: #f00;
+    border-bottom-color: #fff;
+}
+
+.table-dark {
+    background-color: #333;
+}
+
+a.page-link  {
+    color: #f00;
+}
+
+.page-item.active .page-link {
+    color: #f00;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+.page-item.disabled .page-link {
+    color: #f00;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+.pagination-div {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-color: rgba(0, 0, 0, 0.8);
+}
+
+.card {
+    background-color: rgba(51, 51, 51, 0.8);
+    font-size: 1.2rem;
+}
+
+.text-muted {
+    color: #f00!important;
+}
+
+.cover {
+    padding: 1.5rem 1.5rem;
+    background-color: rgba(51, 51, 51, 0.8);
+}
+.cover .btn-lg {
+    padding: .5rem 1.25rem;
+    font-weight: 700;
+}
+
+@media (min-width: 48em) {
+    .masthead-brand {
+        float: left;
+    }
+    .nav-masthead {
+        float: right;
+    }
+}
+
+
+/*
+ * Cover
+ */
+.cover {
+    padding: 0 1.5rem;
+}
+.cover .btn-lg {
+    padding: .5rem 1.25rem;
+    font-weight: 700;
+}
+
+
+/*
+ * Footer
+ */
+.mastfoot {
+    color: rgba(255, 255, 255, .5);
+}

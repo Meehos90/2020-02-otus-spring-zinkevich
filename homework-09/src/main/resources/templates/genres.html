@@ -1,0 +1,34 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title = #{localized.genres})"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner">
+        <div class="card text-center">
+            <div class="card-header" th:text="#{localized.genres}"/>
+            <div class="card-body align-center">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col" th:text="#{localized.genreName}"/>
+                        <th scope="col" th:text="#{localized.edit}"/>
+                        <th scope="col" th:text="#{localized.delete}"/>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each ="genre : ${genres}">
+                        <th scope="row" th:utext="${genre.name}"/>
+                        <td><a th:href="@{/editGenre/{id}(id=${genre.id})}" th:text="#{localized.edit}"/></td>
+                        <td><a th:href="@{/deleteGenre/{id}(id=${genre.id})}" th:text="#{localized.delete}"/></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <a style="margin: 2rem" class="btn btn-lg btn-secondary" th:href="@{/addGenre}" th:text="#{localized.add}"/>
+            </div>
+        </div>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>

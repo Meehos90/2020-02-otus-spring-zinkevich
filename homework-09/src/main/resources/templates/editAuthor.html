@@ -1,0 +1,21 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title = #{localized.edit})"/>
+<body class="text-center">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="fragments/header :: header"/>
+    <main role="main" class="inner cover">
+        <h2 th:text="#{localized.edit}"/>
+        <form th:action="@{/editAuthor/{id}(id=${author.id})}" th:object="${authorForm}" method="POST">
+            <div class="form-group">
+                <label class="leftstr" for="title" th:text="#{localized.authorFullName}"/>
+                <input class="rightstr" id="title" type="text" required="required" th:field="*{fullName}"/>
+                <div style="clear: left; margin-bottom: 2rem;"></div>
+            </div>
+            <button style="margin-bottom: 2rem" class="btn btn-lg btn-secondary" type="submit" th:text="#{localized.edit}"/>
+        </form>
+    </main>
+    <footer th:replace="fragments/footer :: footer"/>
+</div>
+</body>
+</html>
