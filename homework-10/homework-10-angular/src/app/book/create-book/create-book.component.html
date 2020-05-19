@@ -1,0 +1,15 @@
+<h2>Добавить книгу</h2>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group container-fluid">
+    <label for="fullName">Название книги</label>
+    <input type="text" class="form-control" id="fullName" required [(ngModel)]="book.title" name="fullName">
+    <small [ngClass]="{modal:!error}" class="form-text alert alert-danger">Такая книга уже существует!</small>
+
+    <label for="author">Автор книги</label>
+    <input type="text" class="form-control" id="author" required [(ngModel)]="book.author.fullName" name="author">
+
+    <label for="genre">Жанр книги</label>
+    <input type="text" class="form-control" id="genre" required [(ngModel)]="book.genre.name" name="genre">
+  </div>
+  <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Добавить</button>
+</form>
