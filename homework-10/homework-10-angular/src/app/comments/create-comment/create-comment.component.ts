@@ -3,6 +3,10 @@ import {Comment} from "../comment";
 import {HttpErrorResponse} from "@angular/common/http";
 import {CommentService} from "../comment.service";
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {Book} from "../../book/book";
+import {BookService} from "../../book/book.service";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-create-comment',
@@ -14,11 +18,14 @@ export class CreateCommentComponent implements OnInit {
   comment: Comment = new Comment();
   submitted = false;
   error: HttpErrorResponse;
+  books: Observable<Book[]>;
 
-  constructor(private commentService: CommentService, private router: Router) {
+  constructor(private commentService: CommentService, private bookService: BookService,
+              private router: Router) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.books = this.bookService.getBooksList();
   }
 
   save() {
@@ -30,7 +37,11 @@ export class CreateCommentComponent implements OnInit {
       }, error => this.error = error);
   }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
     this.submitted = true;
     this.save();
   }

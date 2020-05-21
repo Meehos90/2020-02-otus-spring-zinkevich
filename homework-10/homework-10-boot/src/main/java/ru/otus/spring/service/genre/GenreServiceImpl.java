@@ -1,16 +1,18 @@
 package ru.otus.spring.service.genre;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.dao.genre.GenreRepository;
 import ru.otus.spring.exception.EntityNotFoundException;
-import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Genre;
-import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
-public class GenreServiceImpl extends AbstractService implements GenreService {
+public class GenreServiceImpl implements GenreService {
 
+    private final GenreRepository genreRepository;
 
     @Override
     public void deleteById(Long id) {

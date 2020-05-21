@@ -3,6 +3,10 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {Comment} from '../comment';
 import {ActivatedRoute, Router} from "@angular/router";
 import {CommentService} from "../comment.service";
+import {BookService} from "../../book/book.service";
+import {Observable} from "rxjs";
+import {Book} from "../../book/book";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-update-comment',
@@ -14,13 +18,15 @@ export class UpdateCommentComponent implements OnInit {
   id: number;
   comment: Comment;
   error: HttpErrorResponse;
+  books: Observable<Book[]>;
 
   constructor(private route: ActivatedRoute, private router: Router,
-              private commentService: CommentService) {
+              private bookService: BookService, private commentService: CommentService) {
   }
 
   ngOnInit() {
     this.comment = new Comment();
+    this.books = this.bookService.getBooksList();
     this.id = this.route.snapshot.params['id'];
 
     this.commentService.getComment(this.id)
@@ -39,7 +45,11 @@ export class UpdateCommentComponent implements OnInit {
       }, error => this.error = error);
   }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
     this.updateComment();
   }
 

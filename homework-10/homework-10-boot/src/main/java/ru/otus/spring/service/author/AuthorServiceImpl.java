@@ -1,15 +1,17 @@
 package ru.otus.spring.service.author;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.dao.author.AuthorRepository;
 import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Author;
-import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
-public class AuthorServiceImpl extends AbstractService implements AuthorService {
+public class AuthorServiceImpl implements AuthorService {
+    private final AuthorRepository authorRepository;
 
     @Override
     public Author save(Author author) {

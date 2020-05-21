@@ -1,15 +1,22 @@
 package ru.otus.spring.service.comment;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.dao.book.BookRepository;
+import ru.otus.spring.dao.comment.CommentRepository;
 import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
-import ru.otus.spring.service.AbstractService;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
-public class CommentServiceImpl extends AbstractService implements CommentService {
+public class CommentServiceImpl implements CommentService {
+
+    private final CommentRepository commentRepository;
+
+    private final BookRepository bookRepository;
 
     public Comment save(Comment comment) {
         return commentRepository.save(new Comment(0, comment.getContent(), getBook(comment.getBook().getTitle())));

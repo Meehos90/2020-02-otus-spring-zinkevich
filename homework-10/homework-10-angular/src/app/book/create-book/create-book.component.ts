@@ -1,8 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Book} from "../book";
+import {Author} from "../../author/author";
+import {Genre} from "../../genre/genre";
 import {HttpErrorResponse} from "@angular/common/http";
 import {BookService} from "../book.service";
+import {AuthorService} from "../../author/author.service";
+import {GenreService} from "../../genre/genre.service";
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-create-book',
@@ -11,13 +17,18 @@ import {Router} from "@angular/router";
 })
 export class CreateBookComponent implements OnInit {
   book: Book = new Book;
+  authors: Observable<Author[]>;
+  genres: Observable<Genre[]>;
   submitted = false;
   error: HttpErrorResponse;
 
-  constructor(private bookService: BookService, private router: Router) {
+  constructor(private bookService: BookService, private  authorService: AuthorService,
+              private genreService: GenreService, private router: Router) {
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.authors = this.authorService.getAuthorsList();
+    this.genres = this.genreService.getGenresList();
   }
 
   save() {
@@ -29,7 +40,11 @@ export class CreateBookComponent implements OnInit {
       }, error => this.error = error)
   }
 
-  onSubmit() {
+  onSubmit(form: NgForm) {
+    if (form.invalid) {
+      form.control.markAllAsTouched();
+      return;
+    }
     this.submitted = true;
     this.save();
   }
