@@ -1,0 +1,16 @@
+<h2>Добавить отзыв</h2>
+<form #commentForm="ngForm" (ngSubmit)="onSubmit(commentForm)">
+  <div class="form-group container-fluid">
+    <label for="content">Напишите сюда свой отзыв</label>
+    <input #content="ngModel" class="form-control" type="text" id="content" required [(ngModel)]="comment.content" name="content">
+    <small *ngIf="content.invalid && content.touched" class="form-text alert alert-danger">Напишите отзыв!</small>
+
+    <label for="book">Книга, к которой написан отзыв</label>
+    <select #book="ngModel" class="form-control" type="text" id="book" required [(ngModel)]="comment.book.title" name="book">
+      <option *ngFor="let book of books | async" [ngValue]="book.title">{{book.title}}</option>
+    </select>
+    <small *ngIf="book.invalid && book.touched" class="form-text alert alert-danger">Выберите книгу!</small>
+    <small [ngClass]="{modal:!error}" class="form-text alert alert-danger">Такой книги у нас нет!</small>
+  </div>
+  <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Добавить</button>
+</form>

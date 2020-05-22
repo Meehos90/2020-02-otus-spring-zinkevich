@@ -1,0 +1,25 @@
+<table class="table">
+  <thead class="thead-light">
+  <tr>
+    <th scope="col">Полное имя автора</th>
+    <th scope="col">Об авторе</th>
+    <th scope="col">Изменить</th>
+    <th scope="col">Удалить</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let author of authors | async">
+    <td scope="row"><b>{{author.fullName}}</b></td>
+    <td>
+      <button class="btn btn-info" (click)="authorDetails(author.id)">Об авторе</button>
+    </td>
+    <td>
+      <button class="btn btn-warning" (click)="updateAuthor(author.id)">Изменить</button>
+    </td>
+    <td>
+      <button class="btn btn-danger" (click)="deleteAuthor(author.id)">Удалить</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<button (click)="createAuthor()" type="button" class="btn btn-success">Добавить автора</button>

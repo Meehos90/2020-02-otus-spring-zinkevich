@@ -1,0 +1,41 @@
+body {
+  background-image: url("assets/img/book.png") ;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  text-align: center!important;
+}
+
+html, body {
+  height: 100%;
+}
+
+.substrate {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 2rem;
+  border: 1px solid;
+}
+
+main {
+  margin-top: 2rem;
+}
+
+.btn-success, .btn-info, .btn-warning, .btn-danger, .btn-light{
+  border-color: #1d2124!important;
+}
+
+label {
+  margin-right: 1rem;
+}
+
+a {
+  color: black!important;
+}
+
+.modal-footer {
+  text-align: center!important;
+}
+
+.container-fluid {
+  width: 50%!important;
+}

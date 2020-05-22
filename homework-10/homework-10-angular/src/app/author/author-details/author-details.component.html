@@ -1,0 +1,13 @@
+<h3>Автор</h3>
+<form *ngIf="author">
+  <div class="form-group container-fluid">
+    <label for="id">ID автора</label>
+    <input class="form-control" type="text" id="id" required [(ngModel)]="author.id" name="id" readonly>
+
+    <label for="fullName">Полное имя автора</label>
+    <input class="form-control" type="text" id="fullName" required [(ngModel)]="author.fullName" name="fullName" readonly>
+  </div>
+</form>
+<br>
+<br>
+<button routerLink="/authors" class="btn btn-light">Вернуться к списку авторов</button><br>
