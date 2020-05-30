@@ -9,7 +9,7 @@ public interface GenreRepository extends ReactiveMongoRepository<Genre, String> 
 
     Mono<Long> count();
 
-    Mono<Genre> save(Mono<Genre> genre);
+    Mono<Genre> save(Genre genre);
 
     Mono<Void> deleteById(String id);
 

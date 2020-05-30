@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotEmpty;
+
 
 @Data
 @AllArgsConstructor
@@ -14,7 +16,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Author {
     @Id
     private String id;
-    
+
+    @NotEmpty
     private String fullName;
 
     public Author(String fullName) {
