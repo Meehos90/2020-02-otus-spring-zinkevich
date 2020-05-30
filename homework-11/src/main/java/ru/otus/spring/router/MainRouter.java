@@ -19,7 +19,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class MainRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> functionalRoute(AuthorRepository repository, RequestHandler requestHandler) {
+    public RouterFunction<ServerResponse> functionalRoute(AuthorRepository repository) {
         AuthorHandler authorHandler = new AuthorHandler(repository);
         RouterFunction<ServerResponse> route = route()
                 .GET("/api/authors", accept(APPLICATION_JSON), authorHandler::findAllAuthors)
