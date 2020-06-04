@@ -1,5 +1,6 @@
 package ru.otus.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Document(collection = "author")
 public class Author {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Id
     private String id;
 

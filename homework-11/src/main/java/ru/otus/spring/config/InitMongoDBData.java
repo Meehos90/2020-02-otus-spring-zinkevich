@@ -5,9 +5,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.otus.spring.dao.author.AuthorRepository;
 import ru.otus.spring.dao.book.BookRepository;
+import ru.otus.spring.dao.comment.CommentRepository;
 import ru.otus.spring.dao.genre.GenreRepository;
 import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
+import ru.otus.spring.model.Comment;
 import ru.otus.spring.model.Genre;
 
 import java.util.Arrays;
@@ -18,6 +20,7 @@ public class InitMongoDBData {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
+    private final CommentRepository commentRepository;
 
     Author howardLovecraft = new Author("Говард Лавкрафт");
     Author johnTolkien = new Author("Джон Толкин");
@@ -26,6 +29,13 @@ public class InitMongoDBData {
     Genre horror = new Genre("ужасы");
     Genre fantasy = new Genre("фэнтези");
     Genre psychotherapy = new Genre("психотерапия");
+
+    Book mountainsOfMadness = new Book("Хребты Безумия", howardLovecraft, horror);
+    Book callOfCthulhu = new Book("Зов Ктулху", howardLovecraft, horror);
+    Book lordOfTheRings = new Book("Властелин колец", johnTolkien, fantasy);
+    Book fellowshipOfTheRing = new Book("Братство кольца", johnTolkien, fantasy);
+    Book searchForMeaning = new Book("Человек в поисках смысла", viktorFrankl, psychotherapy);
+    Book willToMeaning = new Book("Воля к смыслу", viktorFrankl, psychotherapy);
 
     @Bean
     public void initAuthors() {
@@ -47,12 +57,23 @@ public class InitMongoDBData {
 
     @Bean void initBooks() {
         bookRepository.saveAll(Arrays.asList(
-                new Book("Хребты Безумия", howardLovecraft, horror),
-                new Book("Зов Ктулху", howardLovecraft, horror),
-                new Book("Властелин колец", johnTolkien, fantasy),
-                new Book("Братство кольца", johnTolkien, fantasy),
-                new Book("Человек в поисках смысла", viktorFrankl, psychotherapy),
-                new Book("Воля к смыслу", viktorFrankl, psychotherapy)
+                mountainsOfMadness,
+                callOfCthulhu,
+                lordOfTheRings,
+                fellowshipOfTheRing,
+                searchForMeaning,
+                willToMeaning
+        )).subscribe();
+    }
+
+    @Bean void initComments() {
+        commentRepository.saveAll(Arrays.asList(
+                new Comment("страшная книга", mountainsOfMadness),
+                new Comment("очень понравилось", callOfCthulhu),
+                new Comment("крутая книжка, автор молодец", lordOfTheRings),
+                new Comment("можно почитать", fellowshipOfTheRing),
+                new Comment("читаю в метро, пока интересно", searchForMeaning),
+                new Comment("какая-то философия", willToMeaning)
         )).subscribe();
     }
 }

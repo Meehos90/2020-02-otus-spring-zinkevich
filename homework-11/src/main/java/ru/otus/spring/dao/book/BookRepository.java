@@ -3,13 +3,14 @@ package ru.otus.spring.dao.book;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import ru.otus.spring.model.Book;
 
 public interface BookRepository extends ReactiveMongoRepository<Book, String> {
 
     Mono<Long> count();
     
-    Mono<Book> save(Mono<Book> book);
+    Mono<Book> save(Book book);
 
     Mono<Void> deleteById(String id);
 
@@ -30,5 +31,4 @@ public interface BookRepository extends ReactiveMongoRepository<Book, String> {
     Mono<Void> removeBooksByAuthorId(String id);
 
     Mono<Void> removeBooksByGenreId(String id);
-    
 }

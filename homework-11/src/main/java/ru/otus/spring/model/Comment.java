@@ -1,5 +1,6 @@
 package ru.otus.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @Document(collection = "comment")
 public class Comment {
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Id
     private String id;
     
