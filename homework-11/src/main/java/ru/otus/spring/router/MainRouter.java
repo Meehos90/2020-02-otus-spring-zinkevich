@@ -31,8 +31,8 @@ public class MainRouter {
                                                           CommentRepository commentRepository) {
         AuthorHandler authorHandler = new AuthorHandler(authorRepository);
         GenreHandler genreHandler = new GenreHandler(genreRepository);
-        BookHandler bookHandler = new BookHandler(bookRepository, authorRepository);
-        CommentHandler commentHandler = new CommentHandler(commentRepository);
+        BookHandler bookHandler = new BookHandler(bookRepository, authorRepository, genreRepository);
+        CommentHandler commentHandler = new CommentHandler(commentRepository, bookRepository);
 
         RouterFunction<ServerResponse> route = route()
                 .GET("/api/authors", accept(APPLICATION_JSON), authorHandler::findAllAuthors)

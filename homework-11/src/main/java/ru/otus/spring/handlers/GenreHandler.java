@@ -45,10 +45,12 @@ public class GenreHandler {
     public Mono<ServerResponse> putGenre(ServerRequest request) {
         return request.body(BodyExtractors.toMono(Genre.class))
                 .filter(g -> g.getName() != null)
-                .map(g -> {
-                    g.setId(request.pathVariable("id"));
-                    return repository.save(g);
-                })
+                .flatMap(g -> repository.findById(request.pathVariable("id"))
+                        .map(genre -> {
+                            g.setId(genre.getId());
+                            return repository.save(g);
+                        })
+                        .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, "Id does not exists"))))
                 .flatMap(genre -> ok().contentType(APPLICATION_JSON).body(genre, Genre.class))
                 .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, "Body is empty")));
     }

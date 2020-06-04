@@ -45,10 +45,12 @@ public class AuthorHandler {
     public Mono<ServerResponse> putAuthor(ServerRequest request) {
         return request.body(BodyExtractors.toMono(Author.class))
                 .filter(a -> a.getFullName() != null)
-                .map(a -> {
-                    a.setId(request.pathVariable("id"));
-                    return repository.save(a);
-                })
+                .flatMap(a -> repository.findById(request.pathVariable("id"))
+                        .map(author -> {
+                            a.setId(author.getId());
+                            return repository.save(a);
+                        })
+                        .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, "Id does not exists"))))
                 .flatMap(author -> ok().contentType(APPLICATION_JSON).body(author, Author.class))
                 .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, "Body is empty")));
     }
