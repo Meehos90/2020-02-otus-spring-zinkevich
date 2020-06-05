@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono;
 import ru.otus.spring.dao.book.BookRepository;
 import ru.otus.spring.dao.comment.CommentRepository;
 import ru.otus.spring.exception.ServerWebInputException;
-import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 
 import java.util.Optional;

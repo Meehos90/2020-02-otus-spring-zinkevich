@@ -9,13 +9,12 @@ import ru.otus.spring.dao.author.AuthorRepository;
 import ru.otus.spring.dao.book.BookRepository;
 import ru.otus.spring.dao.genre.GenreRepository;
 import ru.otus.spring.exception.ServerWebInputException;
-import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
-import ru.otus.spring.model.Genre;
 
 import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
 import static org.springframework.web.reactive.function.server.ServerResponse.ok;
@@ -33,7 +32,7 @@ public class BookHandler {
     public Mono<ServerResponse> getBookById(ServerRequest request) {
         return bookRepository.findById(request.pathVariable("id"))
                 .flatMap(book -> ok().contentType(APPLICATION_JSON).bodyValue(book))
-                .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, String.format("Book with id = %s is not found",
+                .switchIfEmpty(Mono.error(new ServerWebInputException(NOT_FOUND, String.format("Book with id = %s is not found",
                         request.pathVariable("id")))));
     }
 
@@ -42,7 +41,7 @@ public class BookHandler {
         if (title.isPresent()) {
             return bookRepository.findByTitle(title.get())
                     .flatMap(book -> ok().contentType(APPLICATION_JSON).bodyValue(book))
-                    .switchIfEmpty(Mono.error(new ServerWebInputException(BAD_REQUEST, String.format("Book with title = %s is not found", title))));
+                    .switchIfEmpty(Mono.error(new ServerWebInputException(NOT_FOUND, String.format("Book with title = %s is not found", title))));
         } else {
             throw new ServerWebInputException(BAD_REQUEST, "Title is empty");
         }

@@ -9,15 +9,11 @@ public interface CommentRepository extends ReactiveMongoRepository<Comment, Stri
 
     Mono<Long> count();
 
-    Mono<Comment> save(Mono<Comment> comment);
-
     Mono<Void> deleteById(String id);
 
     Mono<Comment> findById(String id);
 
     Mono<Comment> findByContent(String content);
-
-    Flux<Comment> findByBookTitle(String title);
 
     Flux<Comment> findAll();
 }
