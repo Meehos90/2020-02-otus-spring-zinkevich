@@ -1,0 +1,13 @@
+<h3>Отзыв</h3>
+<form *ngIf="comment">
+  <div class="form-group container-fluid">
+    <label for="id">ID отзыва</label>
+    <input class="form-control" type="text" id="id" required [(ngModel)]="comment.id" name="id" readonly>
+
+    <label for="book">Отзыв по книге</label>
+    <input class="form-control" type="text" id="book" required [(ngModel)]="comment.book.title" name="book" readonly>
+  </div>
+</form>
+<br>
+<br>
+<button routerLink="/comments" class="btn btn-light">Вернуться к списку отзывов</button><br>

@@ -1,0 +1,25 @@
+<table class="table">
+  <thead class="thead-light">
+  <tr>
+    <th scope="col">Название жанра</th>
+    <th scope="col">О жанре</th>
+    <th scope="col">Изменить</th>
+    <th scope="col">Удалить</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let genre of genres | async">
+    <td scope="row"><b>{{genre.name}}</b></td>
+    <td>
+      <button class="btn btn-info" (click)="genreDetails(genre.id)">О жанре</button>
+    </td>
+    <td>
+      <button class="btn btn-warning" (click)="updateGenre(genre.id)">Изменить</button>
+    </td>
+    <td>
+      <button class="btn btn-danger" (click)="deleteGenre(genre.id)">Удалить</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<button (click)="createGenre()" type="button" class="btn btn-success">Добавить жанр</button>
