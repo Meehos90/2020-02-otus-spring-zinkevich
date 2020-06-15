@@ -1,7 +1,11 @@
 <div class="container">
-  <form (ngSubmit)="onSubmit()" action="auth">
-    User Name : <input type="text" [(ngModel)]="user.name" name="name" id="name">
-    Password : <input type="password" [(ngModel)]="user.password" name="password" id="password">
+  <form (ngSubmit)="onSubmit()">
+    <div class="form-group container-fluid">
+      <label for="name">Ваше имя</label>
+      <input class="form-control" type="text" [(ngModel)]="user.name" name="name" id="name">
+      <label for="password">Пароль</label>
+      <input class="form-control" type="password" [(ngModel)]="user.password" name="password" id="password">
+    </div>
     <button type="submit" class="btn btn-success">Login</button>
   </form>
 </div>

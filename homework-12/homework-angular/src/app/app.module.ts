@@ -22,6 +22,7 @@ import { CommentDetailsComponent } from './comment/comment-details/comment-detai
 import { CommentListComponent } from './comment/comment-list/comment-list.component';
 import { UpdateCommentComponent } from './comment/update-comment/update-comment.component';
 import { AuthenticateComponent } from "./authenticate/authenticate.component";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import { AuthenticateComponent } from "./authenticate/authenticate.component";
     CommentDetailsComponent,
     CommentListComponent,
     UpdateCommentComponent,
-    AuthenticateComponent
+    AuthenticateComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
