@@ -40,8 +40,8 @@ const routes: Routes = [
   {path: 'comments/update/:id', component: UpdateCommentComponent},
   {path: 'comments/details/:id', component: CommentDetailsComponent},
 
-  {path: '', redirectTo: 'library', pathMatch: 'full'},
-  {path: '**', component: AuthenticateComponent},
+  {path: '', redirectTo: 'login', pathMatch: 'full'},
+  {path: 'login', component: AuthenticateComponent},
 ];
 
 @NgModule({

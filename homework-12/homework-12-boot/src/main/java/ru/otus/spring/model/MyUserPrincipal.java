@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MyUserPrincipal implements UserDetails {
-    private User user;
+    private final User user;
 
     public MyUserPrincipal(User user) {
         this.user = user;
@@ -17,7 +17,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("User"));
+        final List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("Admin"));
         return authorities;
     }
 
@@ -28,7 +28,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getName();
+        return user.getUsername();
     }
 
     @Override
@@ -49,5 +49,9 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

@@ -1,4 +1,4 @@
-insert into users (name, password, roles) values ('admin', 'admin', 'ADMIN');
+insert into users (username, password) values ('admin', 'admin');
 
 insert into authors (fullname) values ('Говард Лавкрафт');
 insert into authors (fullname) values ('Джон Толкин');

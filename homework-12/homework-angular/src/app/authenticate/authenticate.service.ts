@@ -11,7 +11,7 @@ export class AuthenticateService {
   }
 
   authenticate(user: Object): Observable<Object> {
-    return this.http.post(`/api/auth`, user);
+    return this.http.get(`/api/auth`, user);
   }
 
 }

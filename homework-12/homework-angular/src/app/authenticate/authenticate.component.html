@@ -1,8 +1,8 @@
 <div class="container">
-  <form (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" method="post" action="/login">
     <div class="form-group container-fluid">
-      <label for="name">Ваше имя</label>
-      <input class="form-control" type="text" [(ngModel)]="user.name" name="name" id="name">
+      <label for="username">Ваше имя</label>
+      <input class="form-control" type="text" [(ngModel)]="user.username" name="username" id="username">
       <label for="password">Пароль</label>
       <input class="form-control" type="password" [(ngModel)]="user.password" name="password" id="password">
     </div>
