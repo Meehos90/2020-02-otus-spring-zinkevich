@@ -10,8 +10,8 @@ export class AuthenticateService {
   constructor(private http: HttpClient) {
   }
 
-  authenticate(user: Object): Observable<Object> {
-    return this.http.get(`/api/auth`, user);
+  authenticate(): Observable<any> {
+    return this.http.get(`/api/auth`);
   }
 
 }

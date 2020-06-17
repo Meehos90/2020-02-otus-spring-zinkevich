@@ -22,10 +22,9 @@ export class AuthenticateComponent implements OnInit {
   }
 
   save() {
-    this.authenticateService.authenticate(this.user)
+    this.authenticateService.authenticate()
       .subscribe(data => {
         console.log(data);
-        this.user = new User();
       }, error => this.error = error);
   }
 
