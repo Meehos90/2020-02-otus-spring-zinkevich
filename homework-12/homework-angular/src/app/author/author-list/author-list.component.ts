@@ -3,6 +3,7 @@ import {AuthorService} from "../author.service";
 import {Author} from "../author";
 import {Component, OnInit} from "@angular/core";
 import {Router} from '@angular/router';
+import {TokenStorageService} from "../../auth/token-storage.service";
 
 @Component({
   selector: 'app-author-list',
@@ -11,13 +12,22 @@ import {Router} from '@angular/router';
 })
 export class AuthorListComponent implements OnInit {
   authors: Observable<Author[]>;
+  private roles: string[];
+  public authority: string;
 
-
-  constructor(private authorService: AuthorService, private router: Router) {
+  constructor(private authorService: AuthorService, private router: Router, private tokenStorage: TokenStorageService) {
   }
 
   ngOnInit() {
     this.reloadData();
+    if (this.tokenStorage.getToken()) {
+      this.roles = this.tokenStorage.getAuthorities();
+      if(this.roles.some(role => role === 'ROLE_ADMIN')) {
+        this.authority = 'admin';
+      } else {
+        this.authority = 'user';
+      }
+    }
   }
 
   reloadData() {

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from "@angular/router";
+import {TokenStorageService} from "../auth/token-storage.service";
 
 @Component({
   selector: 'app-library',
@@ -6,10 +8,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
+  content: string;
+  info: any;
 
-  constructor() { }
+  constructor(private token: TokenStorageService, private router: Router) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.info = {
+      token: this.token.getToken(),
+    };
+    this.router.navigate(['library']);
   }
 
 }

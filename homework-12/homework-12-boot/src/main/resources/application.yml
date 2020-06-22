@@ -18,3 +18,5 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+jwt:
+  jwtSecret: jwtSecretKey

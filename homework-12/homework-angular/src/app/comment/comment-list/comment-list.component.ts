@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {Comment} from "../comment";
 import {CommentService} from "../comment.service";
 import {Router} from "@angular/router";
+import {TokenStorageService} from "../../auth/token-storage.service";
 
 @Component({
   selector: 'app-comment-list',
@@ -11,12 +12,22 @@ import {Router} from "@angular/router";
 })
 export class CommentListComponent implements OnInit {
   comments: Observable<Comment[]>;
+  private roles: string[];
+  public authority: string;
 
-  constructor(private commentService: CommentService, private router: Router) {
+  constructor(private commentService: CommentService, private router: Router, private tokenStorage: TokenStorageService) {
   }
 
   ngOnInit() {
     this.reloadData();
+    if (this.tokenStorage.getToken()) {
+      this.roles = this.tokenStorage.getAuthorities();
+      if(this.roles.some(role => role === 'ROLE_ADMIN')) {
+        this.authority = 'admin';
+      } else {
+        this.authority = 'user';
+      }
+    }
   }
 
   reloadData() {

@@ -2,6 +2,8 @@ drop table if exists comments;
 drop table if exists books;
 drop table if exists authors;
 drop table if exists genres;
+drop table if exists user_roles;
+drop table if exists roles;
 drop table if exists users;
 
 create table authors(
@@ -35,10 +37,24 @@ create table comments (
     primary key (id)
 );
 
+create table roles (
+    id bigserial,
+    name varchar(60) not null unique,
+    primary key (id)
+);
+
 create table users (
     id bigserial,
     username varchar(255) not null unique,
     password varchar(255) not null,
     primary key (id)
+);
+
+create table user_roles (
+    user_id bigserial not null,
+    role_id bigserial not null,
+    foreign key (user_id) references users(id) on update cascade,
+    foreign key (role_id) references roles(id) on update cascade,
+    constraint user_roles_pkey primary key (user_id, role_id)
 );
 

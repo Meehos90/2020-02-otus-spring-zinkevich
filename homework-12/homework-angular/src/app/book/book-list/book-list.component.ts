@@ -3,6 +3,7 @@ import {BookService} from "../book.service";
 import {Book} from "../book";
 import {Component, OnInit} from "@angular/core";
 import {Router} from '@angular/router';
+import {TokenStorageService} from "../../auth/token-storage.service";
 
 @Component({
   selector: 'app-book-list',
@@ -11,12 +12,22 @@ import {Router} from '@angular/router';
 })
 export class BookListComponent implements OnInit {
   books: Observable<Book[]>;
+  private roles: string[];
+  public authority: string;
 
-  constructor(private bookService: BookService, private router: Router) {
+  constructor(private bookService: BookService, private router: Router, private tokenStorage: TokenStorageService) {
   }
 
   ngOnInit() {
     this.reloadData();
+    if (this.tokenStorage.getToken()) {
+      this.roles = this.tokenStorage.getAuthorities();
+      if(this.roles.some(role => role === 'ROLE_ADMIN')) {
+        this.authority = 'admin';
+      } else {
+        this.authority = 'user';
+      }
+    }
   }
 
   reloadData() {

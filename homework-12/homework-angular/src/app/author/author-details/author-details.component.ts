@@ -2,6 +2,7 @@ import {Author} from '../author';
 import {Component, OnInit} from '@angular/core';
 import {AuthorService} from '../author.service';
 import {ActivatedRoute, Router} from '@angular/router';
+import {TokenStorageService} from "../../auth/token-storage.service";
 
 @Component({
   selector: 'app-author-details',
@@ -26,6 +27,6 @@ export class AuthorDetailsComponent implements OnInit {
         console.log(data);
         this.author = data;
       }, error => console.log(error));
-  }
 
+  }
 }

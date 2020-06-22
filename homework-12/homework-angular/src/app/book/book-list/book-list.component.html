@@ -3,8 +3,8 @@
   <tr>
     <th scope="col">Название книги</th>
     <th scope="col">О книге</th>
-    <th scope="col">Изменить</th>
-    <th scope="col">Удалить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Изменить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Удалить</th>
   </tr>
   </thead>
   <tbody>
@@ -13,13 +13,13 @@
     <td>
       <button class="btn btn-info" (click)="bookDetails(book.id)">О книге</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-warning" (click)="updateBook(book.id)">Изменить</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-danger" (click)="deleteBook(book.id)">Удалить</button>
     </td>
   </tr>
   </tbody>
 </table>
-<button (click)="createBook()" type="button" class="btn btn-success">Добавить книгу</button>
+<button *ngIf="authority === 'admin'" (click)="createBook()" type="button" class="btn btn-success">Добавить книгу</button>

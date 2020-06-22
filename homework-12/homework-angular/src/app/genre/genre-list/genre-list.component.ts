@@ -3,6 +3,7 @@ import {Component, OnInit} from "@angular/core";
 import {Router} from '@angular/router';
 import {GenreService} from "../genre.service";
 import {Genre} from "../genre";
+import {TokenStorageService} from "../../auth/token-storage.service";
 
 @Component({
   selector: 'app-genre-list',
@@ -11,12 +12,22 @@ import {Genre} from "../genre";
 })
 export class GenreListComponent implements OnInit {
   genres: Observable<Genre[]>;
+  private roles: string[];
+  public authority: string;
 
-  constructor(private genreService: GenreService, private router: Router) {
+  constructor(private genreService: GenreService, private router: Router, private tokenStorage: TokenStorageService) {
   }
 
   ngOnInit() {
     this.reloadData();
+    if (this.tokenStorage.getToken()) {
+      this.roles = this.tokenStorage.getAuthorities();
+      if(this.roles.some(role => role === 'ROLE_ADMIN')) {
+        this.authority = 'admin';
+      } else {
+        this.authority = 'user';
+      }
+    }
   }
 
   reloadData() {

@@ -3,8 +3,8 @@
   <tr>
     <th scope="col">Название жанра</th>
     <th scope="col">О жанре</th>
-    <th scope="col">Изменить</th>
-    <th scope="col">Удалить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Изменить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Удалить</th>
   </tr>
   </thead>
   <tbody>
@@ -13,13 +13,13 @@
     <td>
       <button class="btn btn-info" (click)="genreDetails(genre.id)">О жанре</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-warning" (click)="updateGenre(genre.id)">Изменить</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-danger" (click)="deleteGenre(genre.id)">Удалить</button>
     </td>
   </tr>
   </tbody>
 </table>
-<button (click)="createGenre()" type="button" class="btn btn-success">Добавить жанр</button>
+<button *ngIf="authority === 'admin'" (click)="createGenre()" type="button" class="btn btn-success">Добавить жанр</button>

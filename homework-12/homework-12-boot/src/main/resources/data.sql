@@ -1,4 +1,11 @@
-insert into users (username, password) values ('admin', 'admin');
+insert into roles (name) values ('ROLE_ADMIN');
+insert into roles (name) values ('ROLE_USER');
+
+insert into users (username, password) values ('admin', '$2y$12$V9.muRaIngh3Aw7lE0rw3Of7l6.gpE1UWjCPZT7CNtlx7C/gc8gNe');
+insert into users (username, password) values ('user', '$2y$12$CYFwz9I9Rx48xN4SYhG0feRDhBkmilmKiusJUrdZlZAIXHsKJS/o.');
+
+insert into user_roles (user_id, role_id) values (1, 1);
+insert into user_roles (user_id, role_id) values (2, 2);
 
 insert into authors (fullname) values ('Говард Лавкрафт');
 insert into authors (fullname) values ('Джон Толкин');

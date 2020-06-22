@@ -3,8 +3,8 @@
   <tr>
     <th scope="col">Полное имя автора</th>
     <th scope="col">Об авторе</th>
-    <th scope="col">Изменить</th>
-    <th scope="col">Удалить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Изменить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Удалить</th>
   </tr>
   </thead>
   <tbody>
@@ -13,13 +13,13 @@
     <td>
       <button class="btn btn-info" (click)="authorDetails(author.id)">Об авторе</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-warning" (click)="updateAuthor(author.id)">Изменить</button>
     </td>
-    <td>
+    <td *ngIf="authority === 'admin'">
       <button class="btn btn-danger" (click)="deleteAuthor(author.id)">Удалить</button>
     </td>
   </tr>
   </tbody>
 </table>
-<button (click)="createAuthor()" type="button" class="btn btn-success">Добавить автора</button>
+<button *ngIf="authority === 'admin'" (click)="createAuthor()" type="button" class="btn btn-success">Добавить автора</button>
