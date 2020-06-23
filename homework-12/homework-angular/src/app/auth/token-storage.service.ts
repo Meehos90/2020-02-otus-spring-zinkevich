@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {BehaviorSubject} from "rxjs";
 
 const TOKEN_KEY = 'AuthToken';
 const USERNAME_KEY = 'AuthUsername';
@@ -9,6 +10,7 @@ const AUTHORITIES_KEY = 'AuthAuthorities';
 })
 export class TokenStorageService {
   private roles: Array<string> = [];
+  public authorityChange = new BehaviorSubject<string[]>(this.roles);
   constructor() { }
 
   signOut() {
@@ -36,6 +38,7 @@ export class TokenStorageService {
   public saveAuthorities(authorities: string[]) {
     window.sessionStorage.removeItem(AUTHORITIES_KEY);
     window.sessionStorage.setItem(AUTHORITIES_KEY, JSON.stringify(authorities));
+    this.authorityChange.next(this.getAuthorities());
   }
 
   public getAuthorities(): string[] {
