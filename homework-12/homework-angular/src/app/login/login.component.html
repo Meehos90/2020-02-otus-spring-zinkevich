@@ -1,0 +1,16 @@
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+  <div class="form-group container-fluid">
+    <label for="username">Имя</label>
+    <input type="text" class="form-control" id="username" name="username" [(ngModel)]="form.username" #username="ngModel" required/>
+    <small *ngIf="f.submitted && username.invalid">Введите имя</small>
+
+    <label for="password">Пароль</label>
+    <input type="password" class="form-control" id="password" name="password" [(ngModel)]="form.password" #password="ngModel" required/>
+    <small class="form-text alert alert-danger" *ngIf="f.submitted && password.invalid">Введите пароль!</small>
+
+  </div>
+  <button class="btn btn-primary">Авторизоваться</button>
+</form>
+<hr/>
+<p>Вы еще не пользователь?</p><a routerLink="/register" class="btn btn-success">Зарегистрируйтесь</a>
+

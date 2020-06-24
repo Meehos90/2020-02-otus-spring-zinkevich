@@ -1,0 +1,25 @@
+<table class="table">
+  <thead class="thead-light">
+  <tr>
+    <th scope="col">Отзыв</th>
+    <th scope="col">Об отзыве</th>
+    <th *ngIf="authority === 'admin'" scope="col">Изменить</th>
+    <th *ngIf="authority === 'admin'" scope="col">Удалить</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let comment of comments | async">
+    <td scope="row"><b>{{comment.content}}</b></td>
+    <td>
+      <button class="btn btn-info" (click)="commentDetails(comment.id)">Об отзыве</button>
+    </td>
+    <td *ngIf="authority === 'admin'">
+      <button class="btn btn-warning" (click)="updateComment(comment.id)">Изменить</button>
+    </td>
+    <td *ngIf="authority === 'admin'">
+      <button class="btn btn-danger" (click)="deleteComment(comment.id)">Удалить</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<button (click)="createComment()" type="button" class="btn btn-success">Добавить отзыв</button>

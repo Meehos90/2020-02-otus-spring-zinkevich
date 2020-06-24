@@ -1,0 +1,19 @@
+<h2>Редактировать книгу</h2>
+<form #bookForm="ngForm" (ngSubmit)="onSubmit(bookForm)">
+  <div class="form-group container-fluid">
+    <label for="fullName">Название книги</label>
+    <input type="text" class="form-control" id="fullName" required [(ngModel)]="book.title" name="fullName">
+    <small [ngClass]="{modal:!error}" class="form-text alert alert-danger">Такая книга уже существует!</small>
+    <label for="author">Автор книги</label>
+    <select #author="ngModel" [(ngModel)]="book.author.fullName" class="form-control" id="author" required="required" name="author">
+      <option *ngFor="let author of authors | async" [ngValue]="author.fullName">{{author.fullName}}</option>
+    </select>
+    <small *ngIf="author.invalid && author.touched" class="form-text alert alert-danger">Выберите автора!</small>
+    <label for="genre">Жанр книги</label>
+    <select #genre="ngModel" [(ngModel)]="book.genre.name" class="form-control" id="genre" required="required" name="genre">
+      <option *ngFor="let genre of genres | async" [ngValue]="genre.name">{{genre.name}}</option>
+    </select>
+    <small *ngIf="genre.invalid && genre.touched" class="form-text alert alert-danger">Выберите жанр!</small>
+  </div>
+  <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Добавить</button>
+</form>

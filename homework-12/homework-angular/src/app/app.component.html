@@ -1,0 +1,42 @@
+<main class="container">
+  <div class="substrate">
+    <header>
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+           <a class="navbar-brand" routerLink="/library">Библиотека</a>
+           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                   aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+             <span class="navbar-toggler-icon"></span>
+           </button>
+           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+             <ul class="nav nav-tabs">
+               <li *ngIf="authority === 'user' || authority === 'admin'" class="nav-item">
+                 <a class="nav-item nav-link" routerLink="/books" routerLinkActive="active">Книги</a>
+               </li>
+               <li *ngIf="authority === 'user' || authority === 'admin'"  class="nav-item">
+                 <a class="nav-item nav-link" routerLink="/authors" routerLinkActive="active">Авторы</a>
+               </li>
+               <li *ngIf="authority === 'user' || authority === 'admin'"  class="nav-item">
+                 <a class="nav-item nav-link" routerLink="/genres" routerLinkActive="active">Жанры</a>
+               </li>
+               <li *ngIf="authority === 'user' || authority === 'admin'"  class="nav-item">
+                 <a class="nav-item nav-link" routerLink="/comments" routerLinkActive="active">Отзывы</a>
+               </li>
+               <li *ngIf="authority === 'user' || authority === 'admin'"  class="nav-item">
+                 <a class="nav-item nav-link" routerLink="/cabinet">Кабинет</a>
+               </li>
+
+               <li *ngIf="!authority" class="nav-item">
+                 <a class="nav-link" routerLink="login">Авторизация</a>
+               </li>
+               <li *ngIf="!authority" class="nav-item">
+                 <a class="nav-link" routerLink="register">Регистрация</a>
+               </li>
+             </ul>
+           </div>
+        </nav>
+      </div>
+    </header>
+    <router-outlet></router-outlet>
+  </div>
+</main>

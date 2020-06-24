@@ -1,0 +1,14 @@
+<h4 class="cover-heading">Добро пожаловать в нашу Библиотеку!</h4>
+
+<div class="container" *ngIf="info.token; else loggedOut">
+  <p class="lead"><b><a routerLink="/books">У нас вы можете выбрать книгу</a></b></p>
+  <p class="lead"><b><a routerLink="/authors">Посмотреть список авторов</a></b></p>
+  <p class="lead"><b><a routerLink="/genres">Посмотреть список жанров</a></b></p>
+  <p style="margin-bottom: 2rem" class="lead"><b><a routerLink="/comments/add">Оставить отзыв к книге</a></b></p>
+</div>
+
+<ng-template #loggedOut>
+  <p class="lead"><b><a routerLink="/login">Пожалуйста залогиньтесь</a></b></p>
+</ng-template>
+
+

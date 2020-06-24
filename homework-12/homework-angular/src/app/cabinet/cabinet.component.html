@@ -1,0 +1,21 @@
+<h3>Ваша информация</h3>
+<form *ngIf="info.username; else loggedOut">
+  <div class="form-group container-fluid">
+    <label for="username">Имя пользователя</label>
+    <input class="form-control" type="text" id="username" required [(ngModel)]="info.username" name="username" readonly>
+
+    <label for="roles">Роли</label>
+    <input class="form-control" type="text" id="roles" required [(ngModel)]="info.authorities" name="roles" readonly>
+  </div>
+  <button class="btn btn-light" (click)="logout()">Выйти</button><br>
+</form>
+<br>
+<br>
+<ng-template  #loggedOut>
+  <p class="lead">
+    <b><a routerLink="/login">Пожалуйста залогиньтесь</a></b>
+  </p>
+</ng-template>
+
+
+

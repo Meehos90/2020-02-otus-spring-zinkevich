@@ -1,0 +1,20 @@
+<div class="container" *ngIf="isSignedUp; else signupForm">
+  Ваша регистрация прошла успешно! Пожалуйста, <a routerLink="/login"><b>авторизуйтесь</b></a>
+</div>
+<ng-template #signupForm>
+  <form name="form" (ngSubmit)="onSubmit()" #f="ngForm" novalidate>
+    <div class="form-group container-fluid">
+      <label for="username">Введите ваше имя</label>
+      <input type="text" class="form-control" id="username" name="username" [(ngModel)]="form.username" #username="ngModel" required/>
+      <small class="form-text alert alert-danger" *ngIf="f.submitted && username.invalid">Введите имя</small>
+      <label for="role">Роль</label>
+      <select type="text" class="form-control" id="role" name="role" [(ngModel)]="form.role" required>
+        <option *ngFor="let role of roles" [ngValue]="role">{{role}}</option>
+      </select>
+      <label for="password">Пароль</label>
+      <input type="password" class="form-control" id="password" name="password" [(ngModel)]="form.password" #password="ngModel"/>
+      <small class="form-text alert alert-danger" *ngIf="f.submitted && password.invalid">Введите пароль!</small>
+    </div>
+    <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Зарегистрировать</button>
+  </form>
+</ng-template>
