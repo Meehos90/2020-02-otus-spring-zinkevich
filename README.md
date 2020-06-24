@@ -12,3 +12,6 @@
 * **[Восьмое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-08)**
 * **[Девятое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-09)**
 * **[Десятое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-10)**
+* **[Одинадацатое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-11)**
+* **[Двенадцатое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-12)**
+* **[Тринадцатое домашнее задание](https://github.com/Meehos90/2020-02-otus-spring-zinkevich/tree/master/homework-12)**
