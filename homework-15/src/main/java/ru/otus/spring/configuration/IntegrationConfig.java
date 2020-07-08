@@ -1,5 +1,6 @@
 package ru.otus.spring.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.annotation.IntegrationComponentScan;
@@ -11,13 +12,28 @@ import org.springframework.integration.dsl.MessageChannels;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.scheduling.PollerMetadata;
 import ru.otus.spring.model.CarBooklet;
+import ru.otus.spring.service.BodyTypeService;
+import ru.otus.spring.service.CarBookletService;
+import ru.otus.spring.service.ColorService;
+import ru.otus.spring.service.ComplectationService;
+
 
 @Configuration
 @EnableIntegration
 @IntegrationComponentScan
+@RequiredArgsConstructor
 public class IntegrationConfig {
+    private final CarBookletService carBookletService;
+    private final ColorService colorService;
+    private final BodyTypeService bodyTypeService;
+    private final ComplectationService complectationService;
 
     public static final String BOOKLET_CHANNEL = "bookletChannel";
+    public static final String COLORS_CHANNEL = "colorschannel";
+    public static final String BODY_TYPES_CHANNEL = "bodyTypesChannel";
+    public static final String COMPLECTATIONS_CHANNEL = "complectationsChannel";
+    public static final String READY_BOOKLET_CHANNEL = "readyBookletChannel";
+    public static final String ORDERS_CHANNEL = "ordersChannel";
 
     @Bean(name = PollerMetadata.DEFAULT_POLLER)
     public PollerMetadata poller() {
@@ -58,58 +74,58 @@ public class IntegrationConfig {
     public IntegrationFlow bookletFlow() {
         return IntegrationFlows.from(BOOKLET_CHANNEL)
                 .routeToRecipients(route -> route
-                        .<CarBooklet> recipient("colorsChannel",
+                        .<CarBooklet> recipient(COLORS_CHANNEL,
                                 carBooklet -> carBooklet.getColors().isEmpty())
-                        .<CarBooklet> recipient("bodyTypesChannel",
+                        .<CarBooklet> recipient(BODY_TYPES_CHANNEL,
                                 carBooklet -> carBooklet.getBodyTypes().isEmpty())
-                        .<CarBooklet> recipient("complectationsChannel",
+                        .<CarBooklet> recipient(COMPLECTATIONS_CHANNEL,
                                 carBooklet -> carBooklet.getComplectations().isEmpty())
-                        .defaultOutputChannel("readyBookletChannel"))
+                        .defaultOutputChannel(READY_BOOKLET_CHANNEL))
                 .get();
     }
 
     @Bean
     public IntegrationFlow orderFlow() {
-        return IntegrationFlows.from("ordersChannel")
+        return IntegrationFlows.from(ORDERS_CHANNEL)
                 .log("Init order>")
-                .handle("carBookletService", "initCarBooklet")
+                .handle(carBookletService, "initCarBooklet")
                 .channel(BOOKLET_CHANNEL)
                 .get();
     }
 
     @Bean
     public IntegrationFlow colorFlow() {
-        return IntegrationFlows.from("colorsChannel")
+        return IntegrationFlows.from(COLORS_CHANNEL)
                 .split()
                 .log("Init colors>")
-                .handle("colorService", "initColor")
+                .handle(colorService, "initColor")
                 .channel(BOOKLET_CHANNEL)
                 .get();
     }
 
     @Bean
     public IntegrationFlow bodyTypeFlow() {
-        return IntegrationFlows.from("bodyTypesChannel")
+        return IntegrationFlows.from(BODY_TYPES_CHANNEL)
                 .split()
                 .log("Init body types>")
-                .handle("bodyTypeService", "initBodyType")
+                .handle(bodyTypeService, "initBodyType")
                 .channel(BOOKLET_CHANNEL)
                 .get();
     }
 
     @Bean
     public IntegrationFlow complectationTypeFlow() {
-        return IntegrationFlows.from("complectationsChannel")
+        return IntegrationFlows.from(COMPLECTATIONS_CHANNEL)
                 .split()
                 .log("Init complectations>")
-                .handle("complectationService", "initComplectation")
+                .handle(complectationService, "initComplectation")
                 .channel(BOOKLET_CHANNEL)
                 .get();
     }
 
     @Bean
     public IntegrationFlow readyBooklet() {
-        return IntegrationFlows.from("readyBookletChannel")
+        return IntegrationFlows.from(READY_BOOKLET_CHANNEL)
                 .log("Booklet is ready>")
                 .get();
     }
