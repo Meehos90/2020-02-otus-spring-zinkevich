@@ -1,0 +1,26 @@
+2020-07-09 13:14:11.561  INFO 3724 --- [main] ru.otus.spring.Application               : Starting Application on DESKTOP-PTVJ1GL with PID 3724 (D:\IdeaProjects\2020-02-otus-spring-zinkevich\homework-16\target\classes started by Meehos in D:\IdeaProjects\2020-02-otus-spring-zinkevich)
+2020-07-09 13:14:11.564  INFO 3724 --- [main] ru.otus.spring.Application               : No active profile set, falling back to default profiles: default
+2020-07-09 13:14:12.499  INFO 3724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2020-07-09 13:14:12.553  INFO 3724 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 48ms. Found 4 JPA repository interfaces.
+2020-07-09 13:14:13.013  INFO 3724 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2020-07-09 13:14:13.019  INFO 3724 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-07-09 13:14:13.020  INFO 3724 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-07-09 13:14:13.113  INFO 3724 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-07-09 13:14:13.113  INFO 3724 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1517 ms
+2020-07-09 13:14:13.259  WARN 3724 --- [main] o.s.boot.actuate.endpoint.EndpointId     : Endpoint ID 'custom-health' contains invalid characters, please migrate to a valid format.
+2020-07-09 13:14:13.364  INFO 3724 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-07-09 13:14:13.455  INFO 3724 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-07-09 13:14:13.930  INFO 3724 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2020-07-09 13:14:13.986  INFO 3724 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.12.Final
+2020-07-09 13:14:14.088  INFO 3724 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2020-07-09 13:14:14.175  INFO 3724 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL10Dialect
+2020-07-09 13:14:14.621  INFO 3724 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2020-07-09 13:14:14.627  INFO 3724 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-07-09 13:14:15.255  WARN 3724 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-07-09 13:14:15.373  INFO 3724 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-09 13:14:15.765  INFO 3724 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 4 endpoint(s) beneath base path '/actuator'
+2020-07-09 13:14:15.837  INFO 3724 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2020-07-09 13:14:15.839  INFO 3724 --- [main] ru.otus.spring.Application               : Started Application in 4.764 seconds (JVM running for 5.425)
+2020-07-09 13:14:16.361  INFO 3724 --- [RMI TCP Connection(3)-172.18.65.253] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-07-09 13:14:16.362  INFO 3724 --- [RMI TCP Connection(3)-172.18.65.253] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-07-09 13:14:16.375  INFO 3724 --- [RMI TCP Connection(3)-172.18.65.253] o.s.web.servlet.DispatcherServlet        : Completed initialization in 13 ms

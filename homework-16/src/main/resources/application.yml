@@ -1,0 +1,43 @@
+spring:
+  data:
+    rest:
+      base-path: /data
+  messages:
+    basename: messages
+    encoding: UTF-8
+    fallback-to-system-locale: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/library
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    initialization-mode: always
+    schema:
+     - classpath:schema.sql
+    data:
+      - classpath:data.sql
+  jpa:
+    show-sql: true
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "metrics,health,logfile,custom-health"
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    logfile:
+      enabled: true
+      cache:
+        time-to-live: 5000
+    metrics:
+      enabled: true
+      cache:
+        time-to-live: 5000
+logging:
+  file:
+    path: ./homework-16/src/main/java/ru/otus/spring/logs
