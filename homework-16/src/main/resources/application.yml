@@ -25,7 +25,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "metrics,health,loggers,custom-health"
+        include: "metrics,health,logfile,custom-health"
   endpoint:
     health:
       show-details: always
@@ -38,3 +38,6 @@ management:
       enabled: true
       cache:
         time-to-live: 5000
+logging:
+  file:
+    path: ./homework-16/src/main/java/ru/otus/spring/
