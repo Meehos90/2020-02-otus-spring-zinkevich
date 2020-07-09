@@ -40,4 +40,4 @@ management:
         time-to-live: 5000
 logging:
   file:
-    path: ./homework-16/src/main/java/ru/otus/spring/
+    path: ./homework-16/src/main/java/ru/otus/spring/logs
