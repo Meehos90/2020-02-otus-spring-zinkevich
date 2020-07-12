@@ -1,0 +1,9 @@
+<h2>Добавить жанр</h2>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group container-fluid">
+    <label for="name">Название жанра</label>
+    <input class="form-control" type="text" id="name" required [(ngModel)]="genre.name" name="name">
+    <small [ngClass]="{modal:!error}" class="form-text alert alert-danger">Такой жанр уже существует!</small>
+  </div>
+  <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Добавить</button>
+</form>

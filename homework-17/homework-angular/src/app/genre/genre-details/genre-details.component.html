@@ -1,0 +1,13 @@
+<h3>Автор</h3>
+<form *ngIf="genre">
+  <div class="form-group container-fluid">
+    <label for="id">ID жанра</label>
+    <input class="form-control" type="text" id="id" required [(ngModel)]="genre.id" name="id" readonly>
+
+    <label for="name">Полное имя автора</label>
+    <input class="form-control" type="text" id="name" required [(ngModel)]="genre.name" name="name" readonly>
+  </div>
+</form>
+<br>
+<br>
+<button routerLink="/genres" class="btn btn-light">Вернуться к списку жанров</button><br>
