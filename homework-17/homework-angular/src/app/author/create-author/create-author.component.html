@@ -1,0 +1,9 @@
+<h2>Добавить автора</h2>
+<form (ngSubmit)="onSubmit()">
+  <div class="form-group container-fluid">
+    <label for="fullName">Полное имя автора</label>
+    <input class="form-control" type="text" id="fullName" required [(ngModel)]="author.fullName" name="fullName">
+    <small [ngClass]="{modal:!error}" class="form-text alert alert-danger">Такой автор уже существует!</small>
+  </div>
+  <button style="margin-bottom: 2rem" class="btn btn-lg btn-light" type="submit">Добавить</button>
+</form>

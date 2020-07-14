@@ -1,0 +1,16 @@
+<h3>Книга</h3>
+<form *ngIf="book">
+  <div class="form-group container-fluid">
+    <label for="fullName">Название книги</label>
+    <input type="text" class="form-control" id="fullName" required [(ngModel)]="book.title" name="fullName" readonly>
+
+    <label for="author">Автор книги</label>
+    <input type="text" class="form-control" id="author" required [(ngModel)]="book.author.fullName" name="author" readonly>
+
+    <label for="genre">Жанр книги</label>
+    <input type="text" class="form-control" id="genre" required [(ngModel)]="book.genre.name" name="genre" readonly>
+  </div>
+</form>
+<br>
+<br>
+<button routerLink="/books" class="btn btn-light">Вернуться к списку книг</button><br>
