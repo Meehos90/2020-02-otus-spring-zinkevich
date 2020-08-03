@@ -3,7 +3,6 @@ package ru.otus.spring.service.genre;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.genre.GenreRepository;
-import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Genre;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre findById(Long id) {
-        return genreRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return genreRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 
     @Override

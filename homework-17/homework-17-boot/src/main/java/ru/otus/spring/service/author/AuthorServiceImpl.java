@@ -3,7 +3,6 @@ package ru.otus.spring.service.author;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.author.AuthorRepository;
-import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Author;
 
 import java.util.List;
@@ -27,7 +26,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author findById(Long id) {
-        return authorRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return authorRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
     }
 
     @Override
