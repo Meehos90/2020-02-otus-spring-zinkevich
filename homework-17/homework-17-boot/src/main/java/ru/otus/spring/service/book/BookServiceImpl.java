@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.author.AuthorRepository;
 import ru.otus.spring.dao.book.BookRepository;
 import ru.otus.spring.dao.genre.GenreRepository;
+import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Genre;
@@ -21,7 +22,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        return bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override

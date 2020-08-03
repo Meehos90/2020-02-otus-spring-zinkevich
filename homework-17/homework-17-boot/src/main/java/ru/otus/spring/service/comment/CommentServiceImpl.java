@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.book.BookRepository;
 import ru.otus.spring.dao.comment.CommentRepository;
+import ru.otus.spring.exception.EntityNotFoundException;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Comment;
 
@@ -28,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment findById(Long id) {
-        return commentRepository.findById(id).orElseThrow(ObjectNotFoundException::new);
+        return commentRepository.findById(id).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     public Book getBook(String title) {
         Book book = bookRepository.findByTitle(title);
         if (book == null) {
-            throw new ObjectNotFoundException();
+            throw new EntityNotFoundException();
         }
         return book;
     }
