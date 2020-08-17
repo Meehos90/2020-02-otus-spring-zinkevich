@@ -1,15 +1,11 @@
-drop table if exists diagnostic.work_order;
-drop table if exists diagnostic.automobile;
+drop table if exists diagnostic.order;
 drop schema if exists diagnostic;
 
 create schema diagnostic;
 
-create table diagnostic.automobile(
+create table diagnostic.order(
     id bigserial,
-    primary key (id)
-);
-
-create table diagnostic.work_order(
-    id bigserial,
+    parts_and_count varchar(255),
+    job_time timestamp,
     primary key (id)
 );

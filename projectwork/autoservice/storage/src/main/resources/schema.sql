@@ -23,7 +23,7 @@ create table storage.place(
 
 create table storage.inventory(
     id bigserial,
-    count numeric,
+    count numeric not null,
     part_id bigserial,
     place_id bigserial,
     primary key (id)

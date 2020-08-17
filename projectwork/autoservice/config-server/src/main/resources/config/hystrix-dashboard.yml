@@ -1,0 +1,22 @@
+server:
+  port: 7979
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+  server:
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "hystrix.stream"
+turbine:
+  app-config: diagnostic, storage, service-gateway
+  cluster-name-expression: new String("default")
+

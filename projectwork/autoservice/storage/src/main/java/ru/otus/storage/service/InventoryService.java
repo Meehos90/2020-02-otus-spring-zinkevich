@@ -15,8 +15,6 @@ public interface InventoryService {
 
     List<Inventory> findAllInventories();
 
-    List<Inventory> findAllInventoriesWithoutUnloadingZone();
-
-    List<Inventory> findInventoriesInUnloadingZone();
+    String getInventoryOnStorage(String article, Integer count);
 
 }

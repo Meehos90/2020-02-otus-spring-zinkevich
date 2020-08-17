@@ -14,7 +14,7 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
     @Autowired
-    ZuulProperties properties;
+    private ZuulProperties properties;
 
     @Primary
     @Bean
@@ -23,15 +23,15 @@ public class SwaggerConfig {
             List<SwaggerResource> resources = new ArrayList<>();
             properties.getRoutes().values()
                     .forEach(route -> resources
-                    .add(createResource(route.getServiceId(), route.getServiceId())));
+                    .add(createResource(route.getServiceId())));
             return resources;
         };
     }
 
-    private SwaggerResource createResource(String name, String location) {
+    private SwaggerResource createResource(String name) {
         SwaggerResource swaggerResource = new SwaggerResource();
         swaggerResource.setName(name);
-        swaggerResource.setLocation("/autoservice/" + location + "/v2/api-docs");
+        swaggerResource.setLocation("/autoservice/" + name + "/v2/api-docs");
         return swaggerResource;
     }
 }

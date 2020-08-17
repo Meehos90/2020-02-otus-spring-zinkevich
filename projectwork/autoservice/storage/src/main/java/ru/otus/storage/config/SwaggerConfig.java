@@ -2,7 +2,6 @@ package ru.otus.storage.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.storage.rest.InventoryController;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -16,7 +15,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(InventoryController.class.getPackage().getName()))
+                .apis(RequestHandlerSelectors.basePackage("ru.otus.storage.rest"))
                 .build();
     }
 }

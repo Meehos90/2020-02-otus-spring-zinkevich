@@ -11,6 +11,7 @@ import ru.otus.storage.service.PartsService;
 @RequiredArgsConstructor
 public class PartsServiceImpl implements PartsService {
     private final PartsRepository partsRepository;
+    private final StoragUtil storagUtil;
 
     @Override
     public boolean existsPartByArticle(String article) {
@@ -31,11 +32,17 @@ public class PartsServiceImpl implements PartsService {
     @Override
     public Part findById(Long id) {
         return partsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Part was not found by id '" + id + " '"));
+                .orElseThrow(() -> new EntityNotFoundException("Part was not found by id '" + id + "'"));
     }
 
     @Override
-    public Part findPartByParameters(String mark, String model, Long year) {
-        return null;
+    public String findByParameters(String name, String mark, String model, String year) {
+        return findByArticle(storagUtil.encodeParamsToArticle(mark, model, year, name)).getArticle();
+    }
+
+    @Override
+    public void deletePart(Long partId) {
+        Part part = findById(partId);
+        partsRepository.deleteById(part.getId());
     }
 }

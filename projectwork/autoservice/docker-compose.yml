@@ -1,26 +1,46 @@
 version: '3'
 services:
-  storage:
-    build:
-      context: ./storage
-      dockerfile: Dockerfile
-    privileged: true
-    ports:
-      - "8080:8080"
-    container_name: storage-api
-    environment:
-      - DB_DRIVER=org.postgresql.Driver
-      - DB_URL=jdbc:postgresql://postgres:5432/autoservice
-      - DB_USERNAME=postgres
-      - DB_PASSWORD=postgres
-      - WAIT_FOR=postgres:5432
   postgres:
-    image: "postgres"
+    image: postgres:12.4
+    restart: always
     ports:
-      - "5432:5432"
-    container_name: db-storage
+      - 5432:5432
+    container_name: postgres
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=autoservice
-      - DB_DRIVER=org.postgresql.Driver
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "autoservice"
+  zipkin:
+    image: openzipkin/zipkin:2.21.6
+    restart: always
+    container_name: zipkin
+    ports:
+      - 9411:9411
+  config:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8888:8888
+    container_name: config
+  eureka:
+    build:
+      context: ./eureka-discovery-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8761:8761
+    depends_on:
+      - config
+    container_name: eureka
+  gateway:
+    build:
+      context: ./service-gateway
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8080:8080
+    depends_on:
+      - config
+    container_name: gateway

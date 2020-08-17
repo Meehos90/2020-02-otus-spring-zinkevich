@@ -1,26 +1,18 @@
 package ru.otus.storage.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.storage.dao.InventoryRepository;
 import ru.otus.storage.exception.EntityNotFoundException;
-import ru.otus.storage.model.ChangePlaceOfPart;
-import ru.otus.storage.model.Inventory;
-import ru.otus.storage.model.InventoryResponse;
-import ru.otus.storage.model.MarkAndModelMap;
-import ru.otus.storage.model.Part;
-import ru.otus.storage.model.PartTypeMap;
-import ru.otus.storage.model.Place;
-import ru.otus.storage.model.RangeOfYearsMap;
+import ru.otus.storage.model.*;
 import ru.otus.storage.service.InventoryService;
 import ru.otus.storage.service.PartsService;
 import ru.otus.storage.service.PlacesService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static ru.otus.storage.service.impl.PlacesServiceImpl.UNLOADIG_ZONE;
@@ -28,16 +20,13 @@ import static ru.otus.storage.service.impl.PlacesServiceImpl.UNLOADIG_ZONE;
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
+    private final StoragUtil storagUtil;
     private final PartsService partsService;
     private final PlacesService placesService;
     private final InventoryRepository inventoryRepository;
 
-    private final RangeOfYearsMap rangeOfYearsMap = RangeOfYearsMap.getInstance();
-    private final PartTypeMap partTypeMap = PartTypeMap.getInstance();
-    private final MarkAndModelMap markAndModelMap = MarkAndModelMap.getInstance();
-    InventoryResponse inventoryResponse = new InventoryResponse();
-    List<String> articlesList = new ArrayList<>();
-    Map<String, String> errorArticlesMap = new HashMap<>();
+    static List<String> articlesList = new ArrayList<>();
+    static Map<String, String> errorArticlesMap = new HashMap<>();
 
     @Override
     public InventoryResponse addPartsToStorage(Map<String, Integer> articles) {
@@ -47,7 +36,10 @@ public class InventoryServiceImpl implements InventoryService {
                         errorArticlesMap.put(article, "Incorrect count");
                     } else {
                         if (!partsService.existsPartByArticle(article)) {
-                           part = decodeArticleToPart(article);
+                            part = storagUtil.decodeArticleToPart(article);
+                            if (part != null) {
+                                partsService.savePart(part);
+                            }
                         }
                         if (part != null) {
                             part = partsService.findByArticle(article);
@@ -56,6 +48,7 @@ public class InventoryServiceImpl implements InventoryService {
                     }
                 }
         );
+        InventoryResponse inventoryResponse = new InventoryResponse();
         inventoryResponse.setSuccessArticles(articlesList);
         inventoryResponse.setErrorArticles(errorArticlesMap);
         return inventoryResponse;
@@ -73,69 +66,6 @@ public class InventoryServiceImpl implements InventoryService {
             inventory.setPlace(placesService.findUnloadingZone());
             inventoryRepository.save(inventory);
             articlesList.add(article);
-        }
-    }
-
-    private Part decodeArticleToPart(String article) {
-        String rangeOfYears = decodeRangeOfYears(article);
-        String mark = decodeMark(article);
-        String model = null;
-        String name = decodePartName(article);
-        if (mark != null) {
-            model = decodeModel(article);
-        }
-        Part part = new Part(article, name, mark, model, rangeOfYears);
-
-        if (part.getArticle() != null
-                && part.getName() != null
-                && part.getMark() != null
-                && part.getModel() != null
-                && part.getRangeOfYears() != null) {
-           return partsService.savePart(part);
-        } else {
-            return null;
-        }
-    }
-
-    private String decodeRangeOfYears(String article) {
-        String artRangeOfYears = article.substring(3, 5);
-        if (rangeOfYearsMap.containsKey(artRangeOfYears)) {
-            return rangeOfYearsMap.get(artRangeOfYears).getRange();
-        } else {
-            errorArticlesMap.put(article, "Incorrect range of years");
-            return null;
-        }
-    }
-
-    private String decodePartName(String article) {
-        String artPartType = article.substring(5);
-        if (partTypeMap.containsKey(artPartType)) {
-            return partTypeMap.get(artPartType).getName();
-        } else {
-            errorArticlesMap.put(article, "Incorrect part name");
-            return null;
-        }
-    }
-
-    private String decodeMark(String article) {
-        String mark = article.substring(0, 1);
-        if (markAndModelMap.containsKey(mark)) {
-            return markAndModelMap.get(mark).getMarkType().name();
-        } else {
-            errorArticlesMap.put(article, "Incorrect mark");
-            return null;
-        }
-    }
-
-    private String decodeModel(String article) {
-        String mark = article.substring(0, 1);
-        String model = article.substring(1, 3);
-        MarkAndModelMap.MarkValue markValue = markAndModelMap.get(mark);
-        if (markValue.getModelTypes().containsKey(model)) {
-            return markValue.getModelTypes().get(model).name();
-        } else {
-            errorArticlesMap.put(article, "Incorrect model");
-            return null;
         }
     }
 
@@ -161,7 +91,7 @@ public class InventoryServiceImpl implements InventoryService {
         Long placeId = inventory.getPlace().getId();
         Long partId = inventory.getPart().getId();
         Optional<Inventory> optInventory = inventoryRepository.findByPlaceIdAndPartId(placeId, partId);
-        if(optInventory.isPresent()) {
+        if (optInventory.isPresent()) {
             inventory = optInventory.get();
             inventory.setCount(inventory.getCount() + count);
         }
@@ -212,17 +142,43 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.findAll();
     }
 
-    @Override
-    public List<Inventory> findAllInventoriesWithoutUnloadingZone() {
-        return findAllInventories().stream()
-                .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
-                .collect(Collectors.toList());
-    }
 
     @Override
-    public List<Inventory> findInventoriesInUnloadingZone() {
-        return findAllInventories().stream()
-                .filter(inventory -> inventory.getPlace().getName().equals(UNLOADIG_ZONE))
+    public String getInventoryOnStorage(String article, Integer count) {
+        if (!partsService.existsPartByArticle(article)) {
+            throw new EntityNotFoundException("This part was not found by article'" + article + "'");
+        }
+
+        Part part = partsService.findByArticle(article);
+        Map<String, Integer> partsAndCount = new HashMap<>();
+        List<Inventory> inventories = findAllInventories().stream()
+                .filter(inventory -> inventory.getPart().getId() == part.getId())
+                .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
                 .collect(Collectors.toList());
+        AtomicInteger changingCount = new AtomicInteger(count);
+        for (Inventory inventory : inventories) {
+            int tmpCount = inventory.getCount() - changingCount.get();
+            if (tmpCount > 0) {
+                inventory.setCount(tmpCount);
+                inventoryRepository.save(inventory);
+                break;
+            } else {
+                inventoryRepository.deleteById(inventory.getId());
+                changingCount.set(Math.abs(tmpCount));
+            }
+        }
+        partsAndCount.put(part.getArticle(), count);
+        return mapToJson(partsAndCount);
     }
+
+    private String mapToJson(Map<String, Integer> result) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.writeValueAsString(result);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

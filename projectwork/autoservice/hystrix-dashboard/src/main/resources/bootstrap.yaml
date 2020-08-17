@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: hystrix-dashboard
+  cloud:
+    config:
+      failFast: true
+      uri: http://localhost:8888

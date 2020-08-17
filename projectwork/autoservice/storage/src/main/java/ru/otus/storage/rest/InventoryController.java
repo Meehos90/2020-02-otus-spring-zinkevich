@@ -2,11 +2,7 @@ package ru.otus.storage.rest;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.storage.model.ChangePlaceOfPart;
 import ru.otus.storage.model.Inventory;
 import ru.otus.storage.model.InventoryResponse;
@@ -37,13 +33,10 @@ public class InventoryController {
         return inventoryService.changePlaceOfPart(changePlaceOfPart);
     }
 
-    @GetMapping("/inventory/get-inventories-without-unload-zone")
-    public List<Inventory> findAllInventoriesWithoutUnloadZone() {
-        return inventoryService.findAllInventoriesWithoutUnloadingZone();
+    @GetMapping("/inventory/get-inventories-on-storage/{article}/{count}")
+    public String getInventoryOnStorage(@PathVariable(value = "article") String article,
+                                        @PathVariable(value = "count") Integer count) {
+        return inventoryService.getInventoryOnStorage(article, count);
     }
 
-    @GetMapping("/inventory/get-inventories-in-unload-zone")
-    public List<Inventory> findInventoriesInUnloadZone() {
-        return inventoryService.findInventoriesInUnloadingZone();
-    }
 }

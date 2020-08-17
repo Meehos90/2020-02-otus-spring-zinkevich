@@ -78,13 +78,4 @@ public class MarkAndModelMap extends LinkedHashMap<String, MarkAndModelMap.MarkV
         put("T", markValue);
 
     }
-
-    public Map<String, String> decodeMarkAndModel(String markAndModel) {
-        Map<String, String> markAndModelMap = new HashMap<>();
-        String mark = markAndModel.substring(0, 1);
-        String model = markAndModel.substring(1);
-        MarkValue markValue = ourInstance.get(mark);
-        markAndModelMap.put(markValue.markType.name(), markValue.getModelTypes().get(model).name());
-        return markAndModelMap;
-    }
 }
