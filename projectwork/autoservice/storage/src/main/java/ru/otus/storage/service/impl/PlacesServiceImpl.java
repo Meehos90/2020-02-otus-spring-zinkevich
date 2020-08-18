@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.storage.dao.PlacesRepository;
 import ru.otus.storage.exception.EntityNotFoundException;
-import ru.otus.storage.model.Part;
 import ru.otus.storage.model.Place;
 import ru.otus.storage.service.PlacesService;
 

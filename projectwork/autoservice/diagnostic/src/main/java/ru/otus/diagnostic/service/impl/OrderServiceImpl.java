@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.otus.diagnostic.dao.OrderRepository;
-import ru.otus.diagnostic.feign.StorageServiceProxy;
+import ru.otus.diagnostic.feign.StorageService;
 import ru.otus.diagnostic.model.Order;
 import ru.otus.diagnostic.model.PreOrder;
 import ru.otus.diagnostic.service.OrderService;
@@ -17,7 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
-    private final StorageServiceProxy storageServiceProxy;
+    private final StorageService storageService;
 
     @Override
     public Order findOrderById(Long orderId) {
@@ -26,17 +26,17 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String findArticleByParams(String partName, String autoMark, String autoModel, String autoYear) {
-        return storageServiceProxy.findArticleByParams(partName, autoMark, autoModel, autoYear);
+        return storageService.findArticleByParams(partName, autoMark, autoModel, autoYear);
     }
 
     @Override
     public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
-        return storageServiceProxy.checkInventoriesOnStorage(partsAndCount);
+        return storageService.checkInventoriesOnStorage(partsAndCount);
     }
 
     @Override
     public Order addOrder(PreOrder preOrder) {
-        String readyPartsAndCount = storageServiceProxy.setInventoriesToOrder(preOrder.getPartsAndCount());
+        String readyPartsAndCount = storageService.setInventoriesToOrder(preOrder.getPartsAndCount());
         Order order = new Order();
         order.setPartsAndCount(readyPartsAndCount);
         order.setJobTime(LocalDateTime.now().plusHours(preOrder.getAfterWhatTime()).withNano(0));

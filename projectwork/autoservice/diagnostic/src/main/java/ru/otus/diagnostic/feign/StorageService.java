@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.Map;
 
-@FeignClient(name = "storage")
-public interface StorageServiceProxy {
+@FeignClient(name = "storage", fallback = StorageFallbackService.class)
+public interface StorageService {
 
     @GetMapping(value = "parts/get-article-by-params/{partName}/{autoMark}/{autoModel}/{autoYear}")
     String findArticleByParams(@PathVariable String partName,

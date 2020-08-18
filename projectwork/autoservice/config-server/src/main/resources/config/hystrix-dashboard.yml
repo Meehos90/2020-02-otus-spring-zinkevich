@@ -11,12 +11,14 @@ eureka:
     lease-expiration-duration-in-seconds: 90
     instance-id: ${spring.application.name}:${server.port}
     prefer-ip-address: true
+hystrix:
+  dashboard:
+    proxy-stream-allow-list: "*"
 management:
   endpoints:
     web:
       exposure:
-        include: "hystrix.stream"
+        include: "*"
 turbine:
-  app-config: diagnostic, storage, service-gateway
-  cluster-name-expression: new String("default")
-
+  app-config: service-gateway, storage, diagnostic
+  cluster-name-expression: new String('default')

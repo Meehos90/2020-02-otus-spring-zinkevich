@@ -145,6 +145,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
         Map<String, Integer> realPartsAndCount = new HashMap<>();
+        List<String> errorMessage = new ArrayList<>();
         partsAndCount.forEach((article, count) -> {
             if (partsService.existsPartByArticle(article)) {
                 Part part = partsService.findByArticle(article);
@@ -156,11 +157,16 @@ public class InventoryServiceImpl implements InventoryService {
                 if (sum >= count) {
                     realPartsAndCount.put(article, count);
                 } else {
-                    throw new EntityNotFoundException("Count '" + sum + "' for this article '" + article + "' less than needed");
+                    errorMessage.add(String.format("Count '%s' for this article '%s' less than needed", sum, article));
                 }
             }
         });
-        return mapToJson(realPartsAndCount);
+        if (errorMessage.isEmpty()) {
+            return mapToJson(realPartsAndCount);
+        } else {
+            return errorMessage.get(0);
+        }
+
     }
 
     @Override
@@ -182,7 +188,7 @@ public class InventoryServiceImpl implements InventoryService {
                     inventory.setCount(tmpCount);
                     inventoryRepository.save(inventory);
                     realPartsAndCount.put(article, count);
-                    if(tmpCount == 0) {
+                    if (tmpCount == 0) {
                         checkCountIsZero(partId);
                         inventoryRepository.deleteById(inventory.getId());
                     }

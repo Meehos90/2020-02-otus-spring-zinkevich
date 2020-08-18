@@ -17,9 +17,13 @@ zuul:
   routes:
     storage: /storage/**
     diagnostic: /diagnostic/**
+    workshop: /workshop/**
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+feign:
+  hystrix:
+    enabled: true
 
