@@ -22,6 +22,8 @@
 * lombok
 * DB postgres
 
+##### Сейчас на складе есть стекло лобовое и колеса в сборе для HYUNDAI SOLARIS [добавлено для тестирования]
+
 #### Как добавить запчасти на склад:
 * [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/iventory/actions/add-parts)   
 {   
