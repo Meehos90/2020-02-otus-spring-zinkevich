@@ -9,12 +9,14 @@ import java.util.Map;
 
 public interface InventoryService {
 
-    InventoryResponse addPartsToStorage(Map<String, Integer> articles);
+    InventoryResponse addPartsToStorage(Map<String, Integer> partsAndCount);
 
     Inventory changePlaceOfPart(ChangePlaceOfPart changePlaceOfPart);
 
     List<Inventory> findAllInventories();
 
-    String getInventoryOnStorage(String article, Integer count);
+    String checkInventoriesOnStorage(Map<String, Integer> partsAndCount);
+
+    String setInventoriesToOrder(Map<String, Integer> partsAndCount);
 
 }

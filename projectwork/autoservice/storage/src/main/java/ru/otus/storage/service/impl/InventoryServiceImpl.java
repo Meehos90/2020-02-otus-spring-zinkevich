@@ -29,8 +29,8 @@ public class InventoryServiceImpl implements InventoryService {
     static Map<String, String> errorArticlesMap = new HashMap<>();
 
     @Override
-    public InventoryResponse addPartsToStorage(Map<String, Integer> articles) {
-        articles.forEach((article, count) -> {
+    public InventoryResponse addPartsToStorage(Map<String, Integer> partsAndCount) {
+        partsAndCount.forEach((article, count) -> {
                     Part part = null;
                     if (count == 0) {
                         errorArticlesMap.put(article, "Incorrect count");
@@ -73,13 +73,13 @@ public class InventoryServiceImpl implements InventoryService {
     public Inventory changePlaceOfPart(ChangePlaceOfPart changePlaceOfPart) {
         Long newPlaceId = changePlaceOfPart.getNewPlaceId();
         Long partId = changePlaceOfPart.getPartId();
-        Long placeId = changePlaceOfPart.getPlaceId();
+        Long currentPlaceId = changePlaceOfPart.getCurrentPlaceId();
         Integer count = changePlaceOfPart.getCount();
 
         Place place = placesService.findById(newPlaceId);
         Part part = partsService.findById(partId);
 
-        Inventory inventory = findInventory(placeId, partId);
+        Inventory inventory = findInventory(currentPlaceId, partId);
         changeCountOfInventory(inventory, count);
 
         Inventory newInventory = new Inventory(part, count, place);
@@ -142,43 +142,79 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryRepository.findAll();
     }
 
-
     @Override
-    public String getInventoryOnStorage(String article, Integer count) {
-        if (!partsService.existsPartByArticle(article)) {
-            throw new EntityNotFoundException("This part was not found by article'" + article + "'");
-        }
-
-        Part part = partsService.findByArticle(article);
-        Map<String, Integer> partsAndCount = new HashMap<>();
-        List<Inventory> inventories = findAllInventories().stream()
-                .filter(inventory -> inventory.getPart().getId() == part.getId())
-                .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
-                .collect(Collectors.toList());
-        AtomicInteger changingCount = new AtomicInteger(count);
-        for (Inventory inventory : inventories) {
-            int tmpCount = inventory.getCount() - changingCount.get();
-            if (tmpCount > 0) {
-                inventory.setCount(tmpCount);
-                inventoryRepository.save(inventory);
-                break;
-            } else {
-                inventoryRepository.deleteById(inventory.getId());
-                changingCount.set(Math.abs(tmpCount));
+    public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
+        Map<String, Integer> realPartsAndCount = new HashMap<>();
+        partsAndCount.forEach((article, count) -> {
+            if (partsService.existsPartByArticle(article)) {
+                Part part = partsService.findByArticle(article);
+                List<Inventory> inventories = inventoryRepository.findAllByPartId(part.getId())
+                        .stream()
+                        .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
+                        .collect(Collectors.toList());
+                int sum = sumCount(inventories);
+                if (sum >= count) {
+                    realPartsAndCount.put(article, count);
+                } else {
+                    throw new EntityNotFoundException("Count '" + sum + "' for this article '" + article + "' less than needed");
+                }
             }
-        }
-        partsAndCount.put(part.getArticle(), count);
-        return mapToJson(partsAndCount);
+        });
+        return mapToJson(realPartsAndCount);
     }
 
-    private String mapToJson(Map<String, Integer> result) {
+    @Override
+    public String setInventoriesToOrder(Map<String, Integer> partsAndCount) {
+        Map<String, Integer> realPartsAndCount = new HashMap<>();
+        partsAndCount.forEach((article, count) -> {
+            if (!partsService.existsPartByArticle(article)) {
+                throw new EntityNotFoundException("This part was not found by article '" + article + "'");
+            }
+            long partId = partsService.findByArticle(article).getId();
+            List<Inventory> inventories = findAllInventories().stream()
+                    .filter(inventory -> inventory.getPart().getId() == partId)
+                    .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
+                    .collect(Collectors.toList());
+            AtomicInteger changingCount = new AtomicInteger(count);
+            for (Inventory inventory : inventories) {
+                int tmpCount = inventory.getCount() - changingCount.get();
+                if (tmpCount >= 0) {
+                    inventory.setCount(tmpCount);
+                    inventoryRepository.save(inventory);
+                    realPartsAndCount.put(article, count);
+                    if(tmpCount == 0) {
+                        checkCountIsZero(partId);
+                        inventoryRepository.deleteById(inventory.getId());
+                    }
+                    break;
+                }
+            }
+        });
+        return mapToJson(realPartsAndCount);
+    }
+
+    private String mapToJson(Map<String, Integer> map) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            return objectMapper.writeValueAsString(result);
+            return objectMapper.writeValueAsString(map);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    private void checkCountIsZero(Long partId) {
+        List<Inventory> inventories = inventoryRepository.findAllByPartId(partId);
+        if (sumCount(inventories) == 0) {
+            partsService.deletePart(partId);
+        }
+    }
+
+    private int sumCount(List<Inventory> inventories) {
+        int sum = 0;
+        for (Inventory inventory : inventories) {
+            sum += inventory.getCount();
+        }
+        return sum;
+    }
 }

@@ -1,14 +1,15 @@
 # autoservice
 
-В планах:
+#### В планах:
 * добавить еще один микросервис, в котором будут находиться механики, и их можно будет добавлять в заказ-наряд.
 * расширить модель Order (добавить туда механика)
 * при создании Order'a убрать костыль текущее время + 2ч : order.setJobTime(LocalDateTime.now().plusHours(2));
 * добавить spring-security в service-gateway
 * запустить все через docker-compose 
-* Доработать Hystrix-Dashboard
+* доработать Hystrix-Dashboard
+* добавить hystrix
 
-Технологичексий стек:
+#### Технологичексий стек:
 * spring-cloud-config
 * spring-cloud-eureka
 * spring-cloud-hystrix
@@ -21,34 +22,47 @@
 * lombok
 * DB postgres
 
-Как создать заказ-наряд:
-* [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/iventory/actions/add-parts)
+#### Как добавить запчасти на склад:
+* [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/iventory/actions/add-parts)   
+{   
+  "TCA1033": 20   
+}   
+* [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
+* [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/iventory/actions/change-place)    
 {
-  "FMO9600": 5
-}
-
-* [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)
-
-
-* [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/iventory/actions/change-place)
-{
-  "count": 5,
-  "newPlaceId": 2,
-  "partId": 1,
+  "count": 20,
+  "newPlaceId": 4,
+  "partId": 4,
   "placeId": 1
 }
 
-* [Чтобы мастер смог создать заказ-наряд, ему нужно убедиться, что нужная з/ч есть на складе](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D0%A1%D1%82%D0%B5%D0%BA%D0%BB%D0%BE%20%D0%9B%D0%BE%D0%B1%D0%BE%D0%B2%D0%BE%D0%B5/ford/mondeo/1998)
 
-Стекло лобовое
-ford
-mondeo
-1998
+#### Как создать заказ-наряд:
+* [Чтобы мастер смог создать заказ-наряд, ему нужно найти артикул по данным авто](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%BE%20%D0%BB%D0%BE%D0%B1%D0%BE%D0%B2%D0%BE%D0%B5/hyundai/solaris/2019)   
+Стекло лобовое   
+hyundai   
+solaris   
+2019   
 
-* [Создать заказ-наряд](http://localhost:8080/autoservice/diagnostic/order/add-order/FMO9600/1)
+HSS1600   
 
-{
-  "id": 1,
-  "partsAndCount": "{\"FMO9600\":1}",
-  "jobTime": "2020-08-17T20:05:34.781"
-}
+* [Чтобы мастер смог создать заказ-наряд, ему нужно найти артикул по данным авто](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D0%BA%D0%BE%D0%BB%D0%B5%D1%81%D0%BE%20%D0%B2%20%D1%81%D0%B1%D0%BE%D1%80%D0%B5/hyundai/solaris/2019)   
+Колесо в сборе     
+hyundai   
+solaris
+2019
+
+HSS1610   
+
+* [Далее нужно проверить, есть ли данные з/ч в нужном кол-ве на складе](http://localhost:8080/autoservice/diagnostic/order/check-inventories-on-storage)   
+{   
+  "HSS1600": 1,   
+  "HSS1610": 4   
+}   
+
+* [Создать заказ-наряд](http://localhost:8080/autoservice/diagnostic/order/add-order)   
+{   
+  "HSS1600": 1,   
+  "HSS1610": 4   
+}   
+

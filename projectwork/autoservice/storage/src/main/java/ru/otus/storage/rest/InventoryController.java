@@ -33,10 +33,14 @@ public class InventoryController {
         return inventoryService.changePlaceOfPart(changePlaceOfPart);
     }
 
-    @GetMapping("/inventory/get-inventories-on-storage/{article}/{count}")
-    public String getInventoryOnStorage(@PathVariable(value = "article") String article,
-                                        @PathVariable(value = "count") Integer count) {
-        return inventoryService.getInventoryOnStorage(article, count);
+    @PostMapping("/inventory/action/check-inventories-on-storage")
+    public String checkInventoriesOnStorage(@Valid @RequestBody Map<String, Integer> partsAndCount) {
+        return inventoryService.checkInventoriesOnStorage(partsAndCount);
+    }
+
+    @PostMapping("/inventory/action/set-inventories-to-order")
+    public String setInventoriesToOrder(@Valid @RequestBody Map<String, Integer> partsAndCount) {
+        return inventoryService.setInventoriesToOrder(partsAndCount);
     }
 
 }

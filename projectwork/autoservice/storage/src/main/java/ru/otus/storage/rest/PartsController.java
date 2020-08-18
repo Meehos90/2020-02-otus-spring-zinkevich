@@ -24,6 +24,6 @@ public class PartsController {
                                       @PathVariable(value = "autoMark") String autoMark,
                                       @PathVariable(value = "autoModel") String autoModel,
                                       @PathVariable(value = "autoYear") String autoYear) {
-        return partsService.findByParameters(partName, autoMark, autoModel, autoYear);
+        return partsService.findArticleByParams(partName, autoMark, autoModel, autoYear);
     }
 }

@@ -11,6 +11,7 @@ import ru.otus.diagnostic.model.Order;
 import ru.otus.diagnostic.service.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Random;
 
 @Slf4j
@@ -26,25 +27,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "7000")
-    })
-    public Order addOrder(String article, Integer count) {
-        String partsAndCount = storageServiceProxy.getInventoryOnStorage(article, count);
+    public String findArticleByParams(String partName, String autoMark, String autoModel, String autoYear) {
+        return storageServiceProxy.findArticleByParams(partName, autoMark, autoModel, autoYear);
+    }
+
+    @Override
+    public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
+        return storageServiceProxy.checkInventoriesOnStorage(partsAndCount);
+    }
+
+    @Override
+    public String setInventoriesToOrder(Map<String, Integer> partsAndCount) {
+        return storageServiceProxy.setInventoriesToOrder(partsAndCount);
+    }
+
+    @Override
+    public Order addOrder(Map<String, Integer> partsAndCount) {
+        String readyPartsAndCount = storageServiceProxy.setInventoriesToOrder(partsAndCount);
         Order order = new Order();
-        order.setPartsAndCount(partsAndCount);
+        order.setPartsAndCount(readyPartsAndCount);
         order.setJobTime(LocalDateTime.now().plusHours(2));
         return orderRepository.save(order);
     }
 
-    @Override
-    @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "7000")
-    })
-    public String findArticleByParams(String partName, String autoMark, String autoModel, String autoYear) {
-        sleepRandomly();
-        return storageServiceProxy.findArticleByParams(partName, autoMark, autoModel, autoYear);
-    }
+
 
     private void sleepRandomly() {
         Random rand = new Random();

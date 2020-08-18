@@ -16,5 +16,6 @@
         <module>service-gateway</module>
         <module>hystrix-dashboard</module>
         <module>config-server</module>
+        <module>workshop</module>
     </modules>
 </project>

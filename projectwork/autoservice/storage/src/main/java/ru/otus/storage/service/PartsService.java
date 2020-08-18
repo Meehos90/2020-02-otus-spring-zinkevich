@@ -5,7 +5,7 @@ import ru.otus.storage.model.Part;
 public interface PartsService {
     boolean existsPartByArticle(String article);
 
-    String findByParameters(String partName, String autoMark, String autoModel, String autoYear);
+    String findArticleByParams(String partName, String autoMark, String autoModel, String autoYear);
 
     Part findByArticle(String article);
 

@@ -36,7 +36,7 @@ public class PartsServiceImpl implements PartsService {
     }
 
     @Override
-    public String findByParameters(String name, String mark, String model, String year) {
+    public String findArticleByParams(String name, String mark, String model, String year) {
         return findByArticle(storagUtil.encodeParamsToArticle(mark, model, year, name)).getArticle();
     }
 
