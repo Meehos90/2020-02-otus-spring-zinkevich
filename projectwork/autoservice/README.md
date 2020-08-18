@@ -31,12 +31,12 @@
 }   
 * [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
 * [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/iventory/actions/change-place)    
-{
-  "count": 20,
-  "newPlaceId": 4,
-  "partId": 4,
-  "placeId": 1
-}
+{   
+  "count": 20,   
+  "newPlaceId": 4,   
+  "partId": 4,   
+  "placeId": 1   
+}   
 
 
 #### Как создать заказ-наряд:
