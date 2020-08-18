@@ -64,7 +64,8 @@ HSS1610
 
 * [Создать заказ-наряд](http://localhost:8080/autoservice/diagnostic/order/add-order)   
 {   
-  "HSS1600": 1,   
-  "HSS1610": 4   
+  "afterWhatTime": 2,   
+  "partsAndCount": 
+  {"HSS1600": 1, "HSS1610": 4}        
 }   
 

@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.diagnostic.model.Order;
+import ru.otus.diagnostic.model.PreOrder;
 import ru.otus.diagnostic.service.OrderService;
 
 import javax.validation.Valid;
@@ -34,8 +35,8 @@ public class OrderController {
     }
 
     @PostMapping("/order/add-order")
-    public Order addOrder(@Valid @RequestBody Map<String, Integer> partsAndCount) {
-        return orderService.addOrder(partsAndCount);
+    public Order addOrder(@Valid @RequestBody PreOrder preOrder) {
+        return orderService.addOrder(preOrder);
     }
 
 }
