@@ -51,6 +51,12 @@ services:
     restart: always
     ports:
     - 8080:8080
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
     logging:
       options:
         max-size: "10m"

@@ -4,6 +4,8 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
   server:
     eviction-interval-timer-in-ms: 15000
   instance:
