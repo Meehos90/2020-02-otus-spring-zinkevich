@@ -25,12 +25,12 @@
 ##### Сейчас на складе есть стекло лобовое и колеса в сборе для HYUNDAI SOLARIS [добавлено для тестирования]
 
 #### Как добавить запчасти на склад:
-* [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/iventory/actions/add-parts)   
+* [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/inventory/actions/add-parts)   
 {   
   "TCA1033": 20   
 }   
 * [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
-* [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/iventory/actions/change-place)    
+* [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/inventory/actions/change-place)    
 {   
   "count": 20,   
   "newPlaceId": 4,   

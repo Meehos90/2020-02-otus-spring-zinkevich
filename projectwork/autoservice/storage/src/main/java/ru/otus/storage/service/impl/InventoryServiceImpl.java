@@ -20,7 +20,7 @@ import static ru.otus.storage.service.impl.PlacesServiceImpl.UNLOADIG_ZONE;
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
-    private final StoragUtil storagUtil;
+    private final StorageUtil storageUtil;
     private final PartsService partsService;
     private final PlacesService placesService;
     private final InventoryRepository inventoryRepository;
@@ -36,7 +36,7 @@ public class InventoryServiceImpl implements InventoryService {
                         errorArticlesMap.put(article, "Incorrect count");
                     } else {
                         if (!partsService.existsPartByArticle(article)) {
-                            part = storagUtil.decodeArticleToPart(article);
+                            part = storageUtil.decodeArticleToPart(article);
                             if (part != null) {
                                 partsService.savePart(part);
                             }
@@ -166,7 +166,6 @@ public class InventoryServiceImpl implements InventoryService {
         } else {
             return errorMessage.get(0);
         }
-
     }
 
     @Override

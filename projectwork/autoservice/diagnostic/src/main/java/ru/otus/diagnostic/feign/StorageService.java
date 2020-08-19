@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.Map;
 
-@FeignClient(name = "storage", fallback = StorageFallbackService.class)
+@FeignClient(name = "service-gateway", fallback = StorageFallbackService.class)
 public interface StorageService {
 
     @GetMapping(value = "parts/get-article-by-params/{partName}/{autoMark}/{autoModel}/{autoYear}")

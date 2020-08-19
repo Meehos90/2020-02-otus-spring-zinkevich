@@ -9,7 +9,7 @@ import java.util.Map;
 import static ru.otus.storage.service.impl.InventoryServiceImpl.errorArticlesMap;
 
 @Component
-public class StoragUtil {
+public class StorageUtil {
     private final RangeOfYearsMap rangeOfYearsMap = RangeOfYearsMap.getInstance();
     private final PartTypeMap partTypeMap = PartTypeMap.getInstance();
     private final MarkAndModelMap markAndModelMap = MarkAndModelMap.getInstance();

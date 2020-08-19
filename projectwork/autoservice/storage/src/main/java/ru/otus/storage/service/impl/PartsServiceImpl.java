@@ -11,7 +11,7 @@ import ru.otus.storage.service.PartsService;
 @RequiredArgsConstructor
 public class PartsServiceImpl implements PartsService {
     private final PartsRepository partsRepository;
-    private final StoragUtil storagUtil;
+    private final StorageUtil storageUtil;
 
     @Override
     public boolean existsPartByArticle(String article) {
@@ -37,7 +37,7 @@ public class PartsServiceImpl implements PartsService {
 
     @Override
     public String findArticleByParams(String name, String mark, String model, String year) {
-        return findByArticle(storagUtil.encodeParamsToArticle(mark, model, year, name)).getArticle();
+        return findByArticle(storageUtil.encodeParamsToArticle(mark, model, year, name)).getArticle();
     }
 
     @Override

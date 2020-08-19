@@ -15,15 +15,15 @@ public class PartsController {
     private final PartsService partsService;
 
     @GetMapping("parts/get-by-article/{article}")
-    public Part findByArticle(@PathVariable(value = "article") String article) {
+    public Part findByArticle(@PathVariable String article) {
         return partsService.findByArticle(article);
     }
 
     @GetMapping("parts/get-article-by-params/{partName}/{autoMark}/{autoModel}/{autoYear}")
-    public String findArticleByParams(@PathVariable(value = "partName") String partName,
-                                      @PathVariable(value = "autoMark") String autoMark,
-                                      @PathVariable(value = "autoModel") String autoModel,
-                                      @PathVariable(value = "autoYear") String autoYear) {
+    public String findArticleByParams(@PathVariable String partName,
+                                      @PathVariable String autoMark,
+                                      @PathVariable String autoModel,
+                                      @PathVariable String autoYear) {
         return partsService.findArticleByParams(partName, autoMark, autoModel, autoYear);
     }
 }

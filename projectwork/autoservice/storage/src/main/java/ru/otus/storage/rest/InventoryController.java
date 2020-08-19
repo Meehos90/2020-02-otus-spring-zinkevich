@@ -23,12 +23,12 @@ public class InventoryController {
         return inventoryService.findAllInventories();
     }
 
-    @PostMapping("/iventory/actions/add-parts")
+    @PostMapping("/inventory/actions/add-parts")
     public InventoryResponse addPartsToStorage(@Valid @RequestBody Map<String, Integer> articles) {
         return inventoryService.addPartsToStorage(articles);
     }
 
-    @PostMapping("/iventory/actions/change-place")
+    @PostMapping("/inventory/actions/change-place")
     public Inventory changePlaceOfPart(@Valid @RequestBody ChangePlaceOfPart changePlaceOfPart) {
         return inventoryService.changePlaceOfPart(changePlaceOfPart);
     }
