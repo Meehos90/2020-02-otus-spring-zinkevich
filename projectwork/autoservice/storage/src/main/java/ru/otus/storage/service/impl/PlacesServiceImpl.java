@@ -2,6 +2,7 @@ package ru.otus.storage.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.storage.dao.PlacesRepository;
 import ru.otus.storage.exception.EntityNotFoundException;
 import ru.otus.storage.model.Place;
@@ -13,6 +14,7 @@ public class PlacesServiceImpl implements PlacesService {
     public static final String UNLOADIG_ZONE = "UNLOADING_ZONE";
     private final PlacesRepository placesRepository;
 
+    @Transactional
     @Override
     public Place findUnloadingZone() {
        return placesRepository.findByName(UNLOADIG_ZONE)
@@ -20,6 +22,7 @@ public class PlacesServiceImpl implements PlacesService {
 
     }
 
+    @Transactional
     @Override
     public Place findById(Long id) {
         return placesRepository.findById(id)

@@ -16,3 +16,43 @@ services:
     container_name: zipkin
     ports:
       - 9411:9411
+  config:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8888:8888
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: config-server
+  eureka:
+    build:
+      context: ./eureka-discovery-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8761:8761
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: eureka
+  gateway:
+    build:
+      context: ./service-gateway
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+    - 8080:8080
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: gateway

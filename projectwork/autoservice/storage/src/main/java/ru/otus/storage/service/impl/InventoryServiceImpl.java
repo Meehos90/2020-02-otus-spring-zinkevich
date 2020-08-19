@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.storage.dao.InventoryRepository;
 import ru.otus.storage.exception.EntityNotFoundException;
 import ru.otus.storage.model.*;
@@ -28,6 +29,7 @@ public class InventoryServiceImpl implements InventoryService {
     static List<String> articlesList = new ArrayList<>();
     static Map<String, String> errorArticlesMap = new HashMap<>();
 
+    @Transactional
     @Override
     public InventoryResponse addPartsToStorage(Map<String, Integer> partsAndCount) {
         partsAndCount.forEach((article, count) -> {
@@ -69,6 +71,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
     }
 
+    @Transactional
     @Override
     public Inventory changePlaceOfPart(ChangePlaceOfPart changePlaceOfPart) {
         Long newPlaceId = changePlaceOfPart.getNewPlaceId();
@@ -137,11 +140,13 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryByPartId;
     }
 
+    @Transactional
     @Override
     public List<Inventory> findAllInventories() {
         return inventoryRepository.findAll();
     }
 
+    @Transactional
     @Override
     public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
         Map<String, Integer> realPartsAndCount = new HashMap<>();
@@ -168,6 +173,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
     }
 
+    @Transactional
     @Override
     public String setInventoriesToOrder(Map<String, Integer> partsAndCount) {
         Map<String, Integer> realPartsAndCount = new HashMap<>();

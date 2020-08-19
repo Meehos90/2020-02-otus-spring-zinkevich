@@ -3,6 +3,7 @@ package ru.otus.diagnostic.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.diagnostic.dao.OrderRepository;
 import ru.otus.diagnostic.feign.StorageService;
 import ru.otus.diagnostic.model.Order;
@@ -19,21 +20,25 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final StorageService storageService;
 
+    @Transactional
     @Override
     public Order findOrderById(Long orderId) {
         return orderRepository.findOrderById(orderId);
     }
 
+    @Transactional
     @Override
     public String findArticleByParams(String partName, String autoMark, String autoModel, String autoYear) {
         return storageService.findArticleByParams(partName, autoMark, autoModel, autoYear);
     }
 
+    @Transactional
     @Override
     public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
         return storageService.checkInventoriesOnStorage(partsAndCount);
     }
 
+    @Transactional
     @Override
     public Order addOrder(PreOrder preOrder) {
         String readyPartsAndCount = storageService.setInventoriesToOrder(preOrder.getPartsAndCount());
