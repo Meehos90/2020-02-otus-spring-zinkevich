@@ -4,6 +4,8 @@ eureka:
   client:
     register-with-eureka: true
     fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
   server:
     eviction-interval-timer-in-ms: 15000
   instance:
@@ -12,8 +14,12 @@ eureka:
     instance-id: ${spring.application.name}:${server.port}
     prefer-ip-address: true
 spring:
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  sleuth:
+    enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/autoservice
+    url: jdbc:postgresql://postgres:5432/autoservice
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

@@ -1,5 +1,10 @@
 server:
   port: 8080
+spring:
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  sleuth:
+    enabled: true
 eureka:
   client:
     register-with-eureka: true

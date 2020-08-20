@@ -27,6 +27,8 @@ services:
       - eureka
     links:
       - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
     logging:
       options:
         max-size: "10m"
@@ -44,6 +46,56 @@ services:
         max-size: "10m"
         max-file: "10"
     container_name: eureka
+  hystrix:
+    build:
+      context: ./hystrix-dashboard
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+    - 7979:7979
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:8761/eureka
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: hystrix
+  storage:
+    build:
+      context: ./storage
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+    - 8081:8081
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: storage
+  diagnostic:
+    build:
+      context: ./diagnostic
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8082:8082
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: diagnostic
   gateway:
     build:
       context: ./service-gateway

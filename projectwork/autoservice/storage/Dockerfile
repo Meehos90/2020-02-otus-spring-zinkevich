@@ -1,5 +1,5 @@
 FROM openjdk:8-jre-slim
 
-COPY /target/storage*.jar /autoservice/storage.jar
+COPY /target/storage*.jar /storage.jar
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "/autoservice/storage.jar"]
+ENTRYPOINT ["java", "-jar", "/storage.jar"]
