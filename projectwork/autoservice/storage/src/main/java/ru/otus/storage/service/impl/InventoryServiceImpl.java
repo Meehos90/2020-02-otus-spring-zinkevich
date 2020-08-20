@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.storage.dao.InventoryRepository;
 import ru.otus.storage.exception.EntityNotFoundException;
-import ru.otus.storage.model.*;
+import ru.otus.storage.model.Inventory;
+import ru.otus.storage.model.InventoryResponse;
+import ru.otus.storage.model.Part;
+import ru.otus.storage.model.Place;
 import ru.otus.storage.service.InventoryService;
 import ru.otus.storage.service.PartsService;
 import ru.otus.storage.service.PlacesService;
@@ -170,7 +173,10 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public String setInventoriesToOrder(Map<String, Integer> partsAndCount) {
         Map<String, Integer> realPartsAndCount = new HashMap<>();
-        partsAndCount.forEach((article, count) -> {
+
+        for (Map.Entry<String, Integer> entry : partsAndCount.entrySet()) {
+            String article = entry.getKey();
+            Integer count = entry.getValue();
             if (!partsService.existsPartByArticle(article)) {
                 throw new EntityNotFoundException("This part was not found by article '" + article + "'");
             }
@@ -179,6 +185,9 @@ public class InventoryServiceImpl implements InventoryService {
                     .filter(inventory -> inventory.getPart().getId() == partId)
                     .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
                     .collect(Collectors.toList());
+            if (inventories.isEmpty()) {
+                return "Article was not found on storage!";
+            }
             AtomicInteger changingCount = new AtomicInteger(count);
             for (Inventory inventory : inventories) {
                 int tmpCount = inventory.getCount() - changingCount.get();
@@ -186,14 +195,14 @@ public class InventoryServiceImpl implements InventoryService {
                     inventory.setCount(tmpCount);
                     inventoryRepository.save(inventory);
                     realPartsAndCount.put(article, count);
-                    if (tmpCount == 0) {
-                        checkCountIsZero(partId);
+                    if (tmpCount == 0 && sumCount(inventories) == 0) {
                         inventoryRepository.deleteById(inventory.getId());
+                        partsService.deletePart(partId);
                     }
                     break;
                 }
             }
-        });
+        }
         return mapToJson(realPartsAndCount);
     }
 
@@ -207,13 +216,6 @@ public class InventoryServiceImpl implements InventoryService {
         return null;
     }
 
-    private void checkCountIsZero(Long partId) {
-        List<Inventory> inventories = inventoryRepository.findAllByPartId(partId);
-        if (sumCount(inventories) == 0) {
-            partsService.deletePart(partId);
-        }
-    }
-
     private int sumCount(List<Inventory> inventories) {
         int sum = 0;
         for (Inventory inventory : inventories) {
@@ -221,4 +223,5 @@ public class InventoryServiceImpl implements InventoryService {
         }
         return sum;
     }
+
 }
