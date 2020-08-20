@@ -38,7 +38,7 @@ public class InventoryServiceImpl implements InventoryService {
                         errorArticlesMap.put(article, "Incorrect count");
                     } else {
                         part = storageUtil.decodeArticleToPart(article);
-                        if (part != null) {
+                        if (part != null && !partsService.existsPartByArticle(article)) {
                             partsService.savePart(part);
                         }
                         if (partsService.existsPartByArticle(article)) {

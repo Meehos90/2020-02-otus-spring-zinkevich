@@ -9,9 +9,7 @@ import ru.otus.storage.service.ModelService;
 import ru.otus.storage.service.PartTypeService;
 import ru.otus.storage.service.YearsRangeService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.otus.storage.service.impl.InventoryServiceImpl.errorArticlesMap;
 
