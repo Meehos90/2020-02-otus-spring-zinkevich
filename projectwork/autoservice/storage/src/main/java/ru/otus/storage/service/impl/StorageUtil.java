@@ -1,30 +1,37 @@
 package ru.otus.storage.service.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.storage.exception.EntityNotFoundException;
 import ru.otus.storage.model.*;
+import ru.otus.storage.service.MarkService;
+import ru.otus.storage.service.ModelService;
+import ru.otus.storage.service.PartTypeService;
+import ru.otus.storage.service.YearsRangeService;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.otus.storage.service.impl.InventoryServiceImpl.errorArticlesMap;
 
 @Component
+@RequiredArgsConstructor
 public class StorageUtil {
-    private final RangeOfYearsMap rangeOfYearsMap = RangeOfYearsMap.getInstance();
-    private final PartTypeMap partTypeMap = PartTypeMap.getInstance();
-    private final MarkAndModelMap markAndModelMap = MarkAndModelMap.getInstance();
+    private final MarkService markService;
+    private final ModelService modelService;
+    private final YearsRangeService yearsRangeService;
+    private final PartTypeService partTypeService;
 
     public Part decodeArticleToPart(String article) {
-        String rangeOfYears = decodeRangeOfYears(article);
-        String mark = decodeMark(article);
-        String model = null;
-        String name = decodePartName(article);
-        if (mark != null) {
-            model = decodeModel(article);
-        }
-        Part part = new Part(article, name, mark, model, rangeOfYears);
+        YearsRange rangeOfYears = decodeRangeOfYears(article);
+        Mark mark = decodeMark(article);
+        Model model = decodeModel(article);
+        PartType partType = decodePartTypeName(article);
+
+        Part part = new Part(article, partType, mark, model, rangeOfYears);
         if (part.getArticle() != null
-                && part.getName() != null
+                && part.getPartType() != null
                 && part.getMark() != null
                 && part.getModel() != null
                 && part.getRangeOfYears() != null) {
@@ -34,12 +41,66 @@ public class StorageUtil {
         }
     }
 
+    private PartType decodePartTypeName(String article) {
+        String artPartType = article.substring(5);
+        List<PartType> partTypes = partTypeService.findAll();
+        return partTypes.stream()
+                .filter(p -> p.getArticlePartType().startsWith(artPartType))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Too many part types found");
+                }).orElseGet(() -> {
+                    errorArticlesMap.put(article, "Incorrect part type");
+                    return null;
+                });
+    }
+
+    private Mark decodeMark(String article) {
+        String artMark = article.substring(0, 1);
+        List<Mark> marks = markService.findAll();
+        return marks.stream()
+                .filter(m -> m.getName().startsWith(artMark))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Too many marks found");
+                }).orElseGet(() -> {
+                    errorArticlesMap.put(article, "Incorrect mark");
+                    return null;
+                });
+    }
+
+    private Model decodeModel(String article) {
+        String firstSymbol = article.substring(1, 2);
+        String lastSymbol = article.substring(2, 3);
+        List<Model> models = modelService.findAll();
+        return models.stream()
+                .filter(m -> m.getName().startsWith(firstSymbol))
+                .filter(m -> m.getName().endsWith(lastSymbol))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Too many models found");
+                }).orElseGet(() -> {
+                    errorArticlesMap.put(article, "Incorrect mark");
+                    return null;
+                });
+    }
+
+    private YearsRange decodeRangeOfYears(String article) {
+        String artRangeOfYears = article.substring(3, 5);
+        List<YearsRange> yearsRanges = yearsRangeService.findAll();
+        return yearsRanges.stream()
+                .filter(y -> y.getArticleRange().startsWith(artRangeOfYears))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Too many ranges of years found");
+                }).orElseGet(() -> {
+                    errorArticlesMap.put(article, "Incorrect range of years");
+                    return null;
+                });
+    }
+
+
     public String encodeParamsToArticle(String autoMark, String autoModel, String autoYear, String partName) {
         String artMark = encodeMark(autoMark);
-        String artModel = encodeModel(artMark, autoModel);
+        String artModel = encodeModel(autoModel);
         String artRangeOfYears = encodeRangeOfYears(autoYear);
         String artPartName = encodePartName(partName);
-
         return artMark + artModel + artRangeOfYears + artPartName;
     }
 
@@ -71,76 +132,36 @@ public class StorageUtil {
 
     private String encodePartName(String partName) {
         String lowCasePartName = partName.toLowerCase();
-        return partTypeMap
-                .entrySet()
-                .stream()
-                .filter(entry -> lowCasePartName.equals(entry.getValue().getName()))
-                .map(Map.Entry::getKey).reduce((a, b) -> {
-                    throw new IllegalStateException("Too many values with part name '" + partName + "'' found");
-                })
-                .orElseThrow(() -> new EntityNotFoundException("Part name was not found"));
+        List<PartType> partTypes = partTypeService.findAll();
+        PartType partType = partTypes.stream()
+                .filter(p -> p.getName().equals(lowCasePartName))
+                .reduce((a, b) -> {
+                    throw new IllegalStateException("Too many part types found");
+                }).orElseThrow(() -> new EntityNotFoundException("Part name was not found"));
+        return partType.getArticlePartType();
     }
 
     private String encodeMark(String autoMark) {
         String artMark = autoMark.toUpperCase().substring(0, 1);
-        if (markAndModelMap.containsKey(artMark)) {
-            return artMark;
-        } else {
-            throw new EntityNotFoundException("Mark was not found");
+        List<Mark> marks = markService.findAll();
+        for (Mark mark : marks) {
+            if (mark.getName().startsWith(artMark)) {
+                return artMark;
+            }
         }
+        throw new EntityNotFoundException("Mark was not found");
     }
 
-    private String encodeModel(String autoMark, String autoModel) {
+    private String encodeModel(String autoModel) {
         String firstSymbol = autoModel.toUpperCase().substring(0, 1);
         String lastSymbol = autoModel.toUpperCase().substring(autoModel.length() - 1);
         String artModel = firstSymbol + lastSymbol;
-        Map<String, ModelType> modelTypes = markAndModelMap.get(autoMark).getModelTypes();
-        if (modelTypes.containsKey(artModel)) {
-            return artModel;
-        } else {
-            throw new EntityNotFoundException("Model was not found");
+        List<Model> models = modelService.findAll();
+        for (Model model : models) {
+            if (model.getName().startsWith(firstSymbol) && model.getName().endsWith(lastSymbol)) {
+                return artModel;
+            }
         }
-    }
-
-    private String decodeModel(String article) {
-        String mark = article.substring(0, 1);
-        String model = article.substring(1, 3);
-        MarkAndModelMap.MarkValue markValue = markAndModelMap.get(mark);
-        if (markValue.getModelTypes().containsKey(model)) {
-            return markValue.getModelTypes().get(model).name();
-        } else {
-            errorArticlesMap.put(article, "Incorrect model");
-            return null;
-        }
-    }
-
-    private String decodeRangeOfYears(String article) {
-        String artRangeOfYears = article.substring(3, 5);
-        if (rangeOfYearsMap.containsKey(artRangeOfYears)) {
-            return rangeOfYearsMap.get(artRangeOfYears).getRange();
-        } else {
-            errorArticlesMap.put(article, "Incorrect range of years");
-            return null;
-        }
-    }
-
-    private String decodePartName(String article) {
-        String artPartType = article.substring(5);
-        if (partTypeMap.containsKey(artPartType)) {
-            return partTypeMap.get(artPartType).getName();
-        } else {
-            errorArticlesMap.put(article, "Incorrect part name");
-            return null;
-        }
-    }
-
-    private String decodeMark(String article) {
-        String mark = article.substring(0, 1);
-        if (markAndModelMap.containsKey(mark)) {
-            return markAndModelMap.get(mark).getMarkType().name();
-        } else {
-            errorArticlesMap.put(article, "Incorrect mark");
-            return null;
-        }
+        throw new EntityNotFoundException("Model was not found");
     }
 }

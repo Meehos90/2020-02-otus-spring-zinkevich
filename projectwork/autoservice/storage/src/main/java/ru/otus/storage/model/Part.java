@@ -4,12 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @NoArgsConstructor
@@ -23,20 +18,25 @@ public class Part {
 
     private String article;
 
-    private String name;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "part_type_id")
+    private PartType partType;
 
-    @Column(name = "auto_mark")
-    private String mark;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mark_id")
+    private Mark mark;
 
-    @Column(name = "auto_model")
-    private String model;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "model_id")
+    private Model model;
 
-    @Column(name = "range_of_years")
-    private String rangeOfYears;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "range_of_years_id")
+    private YearsRange rangeOfYears;
 
-    public Part(String article, String name, String mark, String model, String rangeOfYears) {
+    public Part(String article, PartType partType, Mark mark, Model model, YearsRange rangeOfYears) {
         this.article = article;
-        this.name = name;
+        this.partType = partType;
         this.mark = mark;
         this.model = model;
         this.rangeOfYears = rangeOfYears;
