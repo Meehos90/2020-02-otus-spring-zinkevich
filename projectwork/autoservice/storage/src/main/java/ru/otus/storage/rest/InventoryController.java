@@ -2,11 +2,7 @@ package ru.otus.storage.rest;
 
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-import ru.otus.storage.model.ChangePlaceOfPart;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.storage.model.Inventory;
 import ru.otus.storage.model.InventoryResponse;
 import ru.otus.storage.service.InventoryService;
@@ -31,9 +27,12 @@ public class InventoryController {
         return inventoryService.addPartsToStorage(articles);
     }
 
-    @PostMapping("/inventory/actions/change-place")
-    public Inventory changePlaceOfPart(@Valid @RequestBody ChangePlaceOfPart changePlaceOfPart) {
-        return inventoryService.changePlaceOfPart(changePlaceOfPart);
+    @PostMapping("/inventory/actions/change-place/{currentPlaceId}/{partId}/{newPlaceId}/{count}")
+    public Inventory changePlaceOfPart(@PathVariable Long currentPlaceId,
+                                       @PathVariable Long partId,
+                                       @PathVariable Long newPlaceId,
+                                       @PathVariable Integer count) {
+        return inventoryService.changePlaceOfPart(currentPlaceId, partId, newPlaceId, count);
     }
 
     @PostMapping("/inventory/action/check-inventories-on-storage")

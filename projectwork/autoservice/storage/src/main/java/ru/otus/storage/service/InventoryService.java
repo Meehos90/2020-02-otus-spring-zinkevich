@@ -1,6 +1,5 @@
 package ru.otus.storage.service;
 
-import ru.otus.storage.model.ChangePlaceOfPart;
 import ru.otus.storage.model.Inventory;
 import ru.otus.storage.model.InventoryResponse;
 
@@ -11,7 +10,7 @@ public interface InventoryService {
 
     InventoryResponse addPartsToStorage(Map<String, Integer> partsAndCount);
 
-    Inventory changePlaceOfPart(ChangePlaceOfPart changePlaceOfPart);
+    Inventory changePlaceOfPart(Long currentPlaceId, Long partId, Long newPlaceId, Integer count);
 
     List<Inventory> findAllInventories();
 

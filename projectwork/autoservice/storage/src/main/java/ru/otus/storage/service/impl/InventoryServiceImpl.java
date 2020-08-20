@@ -73,12 +73,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Transactional
     @Override
-    public Inventory changePlaceOfPart(ChangePlaceOfPart changePlaceOfPart) {
-        Long newPlaceId = changePlaceOfPart.getNewPlaceId();
-        Long partId = changePlaceOfPart.getPartId();
-        Long currentPlaceId = changePlaceOfPart.getCurrentPlaceId();
-        Integer count = changePlaceOfPart.getCount();
-
+    public Inventory changePlaceOfPart(Long currentPlaceId, Long partId, Long newPlaceId, Integer count) {
         Place place = placesService.findById(newPlaceId);
         Part part = partsService.findById(partId);
 
