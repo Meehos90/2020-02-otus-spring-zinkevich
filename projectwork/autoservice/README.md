@@ -26,11 +26,11 @@
 
 #### Как добавить запчасти на склад:
 * [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/inventory/actions/add-parts)   
-{
-  "FMO9600": 1,
-  "HSS1600": 1,
-  "HSS1610": 4
-}  
+{   
+  "FMO9600": 1,   
+  "HSS1600": 1,   
+  "HSS1610": 4   
+}    
 * [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
 * [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/inventory/actions/change-place)    
 {   
