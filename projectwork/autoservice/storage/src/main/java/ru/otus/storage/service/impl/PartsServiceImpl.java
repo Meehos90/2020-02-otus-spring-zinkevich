@@ -68,11 +68,11 @@ public class PartsServiceImpl implements PartsService {
             throw new EntityNotFoundException("Inventories was not found by part id '" + partId + " '");
         }
         inventories.forEach(inventory -> {
-            if (inventory.getCount() == 0) {
+            if (inventory.getCount() == 0 && inventory.isInOrder()) {
                 inventoryRepository.deleteById(inventory.getId());
             }
         });
-        deletePart(part.getId());
+        deletePart(partId);
     }
 
 }

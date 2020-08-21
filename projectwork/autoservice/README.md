@@ -24,50 +24,98 @@
 
 ##### Сейчас на складе есть стекло лобовое и колеса в сборе для HYUNDAI SOLARIS [добавлено для тестирования]
 
-#### Как добавить запчасти на склад:
-* [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/inventory/actions/add-parts)   
+#### Как добавить з/ч на склад, и распределить их по местам:
+1. [Доставить запчасти на склад](http://localhost:8080/autoservice/storage/inventory/actions/add-parts)  
+```json 
 {   
   "FMO9600": 1,   
   "HSS1600": 1,   
   "HSS1610": 4   
 }    
-* [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
-* [Сменить место запчасти, т.к. она находится в зоне выгрузки, мастера ее не увидят](http://localhost:8080/autoservice/storage/inventory/actions/change-place)    
+```
+2. [Убедиться, что артикул был декодирован и запчасть помещена на склад](http://localhost:8080/autoservice/storage/inventory/all-inventories)   
+
+3. [Проверить что з/ч не отображаются в зоне выгрузки](http://localhost:8080/autoservice/storage/inventory/action/check-inventories-on-storage)
+```json 
 {   
-  "count": 20,   
-  "newPlaceId": 4,   
-  "partId": 4,   
-  "placeId": 1   
-}   
+  "FMO9600": 1,   
+  "HSS1600": 1,   
+  "HSS1610": 4   
+}    
+``` 
+
+4. Сменить места запчастей, т.к. они находятся в зоне выгрузки, сервис-менеджеры ее не увидят
+* [Сменить место лобового стекла на Ford Mondeo](http://localhost:8080/autoservice/storage/inventory/actions/change-place/1/1/2/1)    
+* [Сменить место лобового стекла на Hyundai Solaris](http://localhost:8080/autoservice/storage/inventory/actions/change-place/1/2/3/1)    
+* [Сменить место колес в сборе на Hyundai Solaris](http://localhost:8080/autoservice/storage/inventory/actions/change-place/1/3/4/2)    
+* [Сменить место колес в сборе на Hyundai Solaris](http://localhost:8080/autoservice/storage/inventory/actions/change-place/1/3/5/2)    
+
+5. [Проверить что теперь з/ч отображаются на складе](http://localhost:8080/autoservice/storage/inventory/action/check-inventories-on-storage)
+```json 
+{   
+  "FMO9600": 1,   
+  "HSS1600": 1,   
+  "HSS1610": 4   
+}    
+```
 
 
 #### Как создать заказ-наряд:
-* [Чтобы мастер смог создать заказ-наряд, ему нужно найти артикул по данным авто](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%BE%20%D0%BB%D0%BE%D0%B1%D0%BE%D0%B2%D0%BE%D0%B5/hyundai/solaris/2019)   
-Стекло лобовое   
-hyundai   
-solaris   
-2019   
-
+1. [Чтобы сервис-менеджер смог создать заказ-наряд, ему нужно узнать артикул з/ч для автомобиля (стекло лобовое на Hyundai Solaris 2019г.)](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D1%81%D1%82%D0%B5%D0%BA%D0%BB%D0%BE%20%D0%BB%D0%BE%D0%B1%D0%BE%D0%B2%D0%BE%D0%B5/hyundai/solaris/2019)   
+```json
 HSS1600   
-
-* [Чтобы мастер смог создать заказ-наряд, ему нужно найти артикул по данным авто](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D0%BA%D0%BE%D0%BB%D0%B5%D1%81%D0%BE%20%D0%B2%20%D1%81%D0%B1%D0%BE%D1%80%D0%B5/hyundai/solaris/2019)   
-Колесо в сборе     
-hyundai   
-solaris   
-2019
-
+```
+2. [Чтобы сервис-менеджер смог создать заказ-наряд, ему нужно узнать артикул з/ч для автомобиля (колесо в сборе на Hyundai Solaris 2019г.)](http://localhost:8080/autoservice/diagnostic/order/find-article-on-storage/%D0%BA%D0%BE%D0%BB%D0%B5%D1%81%D0%BE%20%D0%B2%20%D1%81%D0%B1%D0%BE%D1%80%D0%B5/hyundai/solaris/2019)   
+```json
 HSS1610   
-
-* [Далее нужно проверить, есть ли данные з/ч в нужном кол-ве на складе](http://localhost:8080/autoservice/diagnostic/order/check-inventories-on-storage)   
+```
+3. [Также надо убедиться, что есть необходимое количество на складе](http://localhost:8080/autoservice/diagnostic/order/check-inventories-on-storage)   
+```json
 {   
   "HSS1600": 1,   
   "HSS1610": 4   
 }   
-
-* [Создать заказ-наряд](http://localhost:8080/autoservice/diagnostic/order/add-order)   
+```
+4. [Создать заказ-наряд](http://localhost:8080/autoservice/diagnostic/order/add-order)   
+```json
 {   
-  "afterWhatTime": 2,   
-  "partsAndCount": 
-  {"HSS1600": 1, "HSS1610": 4}        
-}   
+   "afterWhatTime":2,   
+   "partsAndCount":{   
+      "HSS1600":1,   
+      "HSS1610":4   
+   }   
+}
+```
+#### Выдача запчастей по заказ-наряду:
+
+1. [Проверяем заказ-наряды, которые создал сервис-менеджер](http://localhost:8080/autoservice/storage/order/find-all-order-details)
+
+2. Узнаем места, где они лежат
+* [Место, где лежит лобовое стекло на Hyundai Solaris](http://localhost:8080/autoservice/storage/places/get-by-article/HSS1600)  
+```json
+[   
+  {   
+    "id": 3,   
+    "name": "1B"   
+  }   
+]
+```
+* [Места, где лежат колеса на Hyundai Solaris](http://localhost:8080/autoservice/storage/places/get-by-article/HSS1610)  
+```json
+[   
+  {   
+    "id": 4,   
+    "name": "1C"   
+  },   
+  {   
+    "id": 5,   
+    "name": "1D"   
+  }   
+]   
+```
+3. Выдаем з/ч со склада
+* [Выдаем лобовое стекло на Hyundai Solaris](http://localhost:8080/autoservice/storage/parts/delete-part-from-storage/HSS1600)
+* [Выдаем колеса на Hyundai Solaris](http://localhost:8080/autoservice/storage/parts/delete-part-from-storage/HSS1610)
+
+} 
 

@@ -20,4 +20,6 @@ public interface OrderService {
 
     Map<String, String> findOrderDetails();
 
+    void deleteOrder(Long orderId);
+
 }

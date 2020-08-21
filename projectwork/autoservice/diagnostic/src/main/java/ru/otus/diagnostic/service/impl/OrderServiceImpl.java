@@ -50,11 +50,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     @Override
     public List<Order> findAll() {
         return orderRepository.findAll();
     }
 
+    @Transactional
     @Override
     public Map<String, String> findOrderDetails() {
         Map<String, String> orderDetails = new HashMap<>();
@@ -63,5 +65,12 @@ public class OrderServiceImpl implements OrderService {
             orderDetails.put(String.valueOf(order.getId()), order.getPartsAndCount());
         });
         return orderDetails;
+    }
+
+    @Transactional
+    @Override
+    public void deleteOrder(Long orderId) {
+        Order order = findOrderById(orderId);
+        orderRepository.deleteById(order.getId());
     }
 }
