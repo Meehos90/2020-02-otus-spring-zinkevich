@@ -8,6 +8,7 @@ import ru.otus.diagnostic.model.PreOrder;
 import ru.otus.diagnostic.service.OrderService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +38,16 @@ public class OrderController {
     @PostMapping("/order/add-order")
     public Order addOrder(@Valid @RequestBody PreOrder preOrder) {
         return orderService.addOrder(preOrder);
+    }
+
+    @GetMapping("/order/all-orders")
+    public List<Order> findAll() {
+        return orderService.findAll();
+    }
+
+    @GetMapping("/order/find-all-order-details")
+    public Map<String, String> findOrderDetails() {
+        return orderService.findOrderDetails();
     }
 
 }

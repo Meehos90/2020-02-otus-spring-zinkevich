@@ -3,6 +3,7 @@ package ru.otus.storage.rest;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.storage.feign.DiagnosticService;
 import ru.otus.storage.model.Inventory;
 import ru.otus.storage.model.InventoryResponse;
 import ru.otus.storage.service.InventoryService;

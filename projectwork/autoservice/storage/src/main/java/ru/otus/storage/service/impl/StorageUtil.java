@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import ru.otus.storage.exception.EntityNotFoundException;
 import ru.otus.storage.model.*;
-import ru.otus.storage.service.MarkService;
-import ru.otus.storage.service.ModelService;
-import ru.otus.storage.service.PartTypeService;
-import ru.otus.storage.service.YearsRangeService;
+import ru.otus.storage.service.*;
 
 import java.util.List;
 

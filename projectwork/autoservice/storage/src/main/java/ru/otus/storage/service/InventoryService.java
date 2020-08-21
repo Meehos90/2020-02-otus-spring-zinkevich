@@ -18,4 +18,11 @@ public interface InventoryService {
 
     String setInventoriesToOrder(Map<String, Integer> partsAndCount);
 
+    List<Inventory> findAllByPartId(Long partId);
+
+    List<Inventory> findAllByPlaceId(Long placeId);
+
+    void deleteInventory(Long inventoryId);
+
+    Inventory findById(Long id);
 }

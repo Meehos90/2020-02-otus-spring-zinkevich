@@ -71,11 +71,3 @@ insert into storage.part_type (name, article_part_type) values ('топливн�
 
 insert into storage.part_type (name, article_part_type) values ('левая противотуманная фара', '40');
 insert into storage.part_type (name, article_part_type) values ('правая противотуманная фара', '41');
-
-insert into storage.part (article, part_type_id, mark_id, model_id, range_of_years_id) values ('FMO9600', 1, 1, 1, 6);
-insert into storage.part (article, part_type_id, mark_id, model_id, range_of_years_id) values ('HSS1600', 1, 2, 8, 10);
-insert into storage.part (article, part_type_id, mark_id, model_id, range_of_years_id) values ('HSS1610', 7, 2, 8, 10);
-
-insert into storage.inventory (count, part_id, place_id) values (1, 1, 1);
-insert into storage.inventory (count, part_id, place_id) values (1, 2, 2);
-insert into storage.inventory (count, part_id, place_id) values  (8, 3, 3);

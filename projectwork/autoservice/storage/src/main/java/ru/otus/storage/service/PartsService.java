@@ -13,5 +13,7 @@ public interface PartsService {
 
     Part savePart(Part part);
 
+    void deletePartFromStorageToOrder(String article);
+
     void deletePart(Long partId);
 }

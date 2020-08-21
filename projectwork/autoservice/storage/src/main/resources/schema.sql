@@ -20,6 +20,7 @@ create table storage.inventory(
     count numeric not null,
     part_id bigserial,
     place_id bigserial,
+    in_order boolean,
     primary key (id)
 );
 

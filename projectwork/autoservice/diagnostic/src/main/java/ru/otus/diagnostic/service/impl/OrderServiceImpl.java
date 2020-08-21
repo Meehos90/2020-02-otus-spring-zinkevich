@@ -11,6 +11,8 @@ import ru.otus.diagnostic.model.PreOrder;
 import ru.otus.diagnostic.service.OrderService;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -48,4 +50,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public Map<String, String> findOrderDetails() {
+        Map<String, String> orderDetails = new HashMap<>();
+        List<Order> orders = findAll();
+        orders.forEach(order -> {
+            orderDetails.put(String.valueOf(order.getId()), order.getPartsAndCount());
+        });
+        return orderDetails;
+    }
 }

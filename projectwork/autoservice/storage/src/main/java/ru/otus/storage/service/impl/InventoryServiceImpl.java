@@ -24,6 +24,8 @@ import static ru.otus.storage.service.impl.PlacesServiceImpl.UNLOADIG_ZONE;
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
+    public static final String ARTICLE_WAS_NOT_FOUND_ON_STORAGE = "Articles was not found on storage!";
+    public static final String THE_REQUIRED_AMOUNT_IS_GREATER_THAN_THE_CURRENT = "The required amount is greater than the current";
     private final StorageUtil storageUtil;
     private final PartsService partsService;
     private final PlacesService placesService;
@@ -111,8 +113,8 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     private Inventory findInventory(Long placeId, Long partId) {
-        List<Inventory> inventoryByPlaceId = findByPlaceId(placeId);
-        List<Inventory> inventoryByPartId = findByPartId(partId);
+        List<Inventory> inventoryByPlaceId = findAllByPlaceId(placeId);
+        List<Inventory> inventoryByPartId = findAllByPartId(partId);
         return inventoryByPlaceId.stream()
                 .filter(inventoryByPartId::contains)
                 .reduce((a, b) -> {
@@ -120,7 +122,9 @@ public class InventoryServiceImpl implements InventoryService {
                 }).orElseThrow(() -> new EntityNotFoundException("Inventory was not found"));
     }
 
-    private List<Inventory> findByPlaceId(Long placeId) {
+    @Transactional
+    @Override
+    public List<Inventory> findAllByPlaceId(Long placeId) {
         List<Inventory> inventoryByPlaceId = inventoryRepository.findAllByPlaceId(placeId);
         if ((long) inventoryByPlaceId.size() == 0) {
             throw new EntityNotFoundException("Inventories was not found by place id '" + placeId + " '");
@@ -128,7 +132,9 @@ public class InventoryServiceImpl implements InventoryService {
         return inventoryByPlaceId;
     }
 
-    private List<Inventory> findByPartId(Long partId) {
+    @Transactional
+    @Override
+    public List<Inventory> findAllByPartId(Long partId) {
         List<Inventory> inventoryByPartId = inventoryRepository.findAllByPartId(partId);
         if ((long) inventoryByPartId.size() == 0) {
             throw new EntityNotFoundException("Inventories was not found by part id '" + partId + " '");
@@ -147,21 +153,26 @@ public class InventoryServiceImpl implements InventoryService {
     public String checkInventoriesOnStorage(Map<String, Integer> partsAndCount) {
         Map<String, Integer> realPartsAndCount = new HashMap<>();
         List<String> errorMessage = new ArrayList<>();
-        partsAndCount.forEach((article, count) -> {
+        for (Map.Entry<String, Integer> entry : partsAndCount.entrySet()) {
+            String article = entry.getKey();
+            Integer count = entry.getValue();
             if (partsService.existsPartByArticle(article)) {
                 Part part = partsService.findByArticle(article);
                 List<Inventory> inventories = inventoryRepository.findAllByPartId(part.getId())
                         .stream()
                         .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
                         .collect(Collectors.toList());
-                int sum = sumCount(inventories);
+                if (inventories.isEmpty()) {
+                    return ARTICLE_WAS_NOT_FOUND_ON_STORAGE;
+                }
+                int sum = sumCountOfInventories(inventories);
                 if (sum >= count) {
                     realPartsAndCount.put(article, count);
                 } else {
                     errorMessage.add(String.format("Count '%s' for this article '%s' less than needed", sum, article));
                 }
             }
-        });
+        }
         if (errorMessage.isEmpty()) {
             return mapToJson(realPartsAndCount);
         } else {
@@ -186,21 +197,21 @@ public class InventoryServiceImpl implements InventoryService {
                     .filter(inventory -> !inventory.getPlace().getName().equals(UNLOADIG_ZONE))
                     .collect(Collectors.toList());
             if (inventories.isEmpty()) {
-                return "Article was not found on storage!";
+                return ARTICLE_WAS_NOT_FOUND_ON_STORAGE;
             }
             AtomicInteger changingCount = new AtomicInteger(count);
             for (Inventory inventory : inventories) {
                 int tmpCount = inventory.getCount() - changingCount.get();
                 if (tmpCount >= 0) {
                     inventory.setCount(tmpCount);
-                    inventoryRepository.save(inventory);
                     realPartsAndCount.put(article, count);
-                    if (tmpCount == 0 && sumCount(inventories) == 0) {
-                        inventoryRepository.deleteById(inventory.getId());
-                        partsService.deletePart(partId);
-                    }
-                    break;
+                    changingCount.set(tmpCount);
+                } else {
+                    changingCount.set(Math.abs(tmpCount));
+                    inventory.setCount(0);
                 }
+                inventory.setInOrder(true);
+                inventoryRepository.save(inventory);
             }
         }
         return mapToJson(realPartsAndCount);
@@ -216,12 +227,26 @@ public class InventoryServiceImpl implements InventoryService {
         return null;
     }
 
-    private int sumCount(List<Inventory> inventories) {
+    private int sumCountOfInventories(List<Inventory> inventories) {
         int sum = 0;
         for (Inventory inventory : inventories) {
             sum += inventory.getCount();
         }
         return sum;
+    }
+
+    @Transactional
+    @Override
+    public Inventory findById(Long id) {
+        return inventoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Inventory was not found by id '" + id + " '"));
+    }
+
+    @Transactional
+    @Override
+    public void deleteInventory(Long inventoryId) {
+        Inventory inventory = findById(inventoryId);
+        inventoryRepository.deleteById(inventory.getId());
     }
 
 }
