@@ -25,7 +25,6 @@ import static ru.otus.storage.service.impl.PlacesServiceImpl.UNLOADIG_ZONE;
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
     public static final String ARTICLE_WAS_NOT_FOUND_ON_STORAGE = "Articles was not found on storage!";
-    public static final String THE_REQUIRED_AMOUNT_IS_GREATER_THAN_THE_CURRENT = "The required amount is greater than the current";
     private final StorageUtil storageUtil;
     private final PartsService partsService;
     private final PlacesService placesService;
