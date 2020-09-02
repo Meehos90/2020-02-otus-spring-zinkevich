@@ -10,6 +10,7 @@ import ru.otus.spring.model.Author;
 import ru.otus.spring.model.Book;
 import ru.otus.spring.model.Genre;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,6 +47,10 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(getAuthor(bookDetails.getAuthor().getFullName()));
         book.setGenre(getGenre(bookDetails.getGenre().getName()));
         return bookRepository.save(book);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(LocalDateTime.now().plusHours(2).withNano(0));
     }
 
     @Override

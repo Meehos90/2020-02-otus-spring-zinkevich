@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: diagnostic
+  cloud:
+    config:
+      failFast: true
+      uri: http://config:8888

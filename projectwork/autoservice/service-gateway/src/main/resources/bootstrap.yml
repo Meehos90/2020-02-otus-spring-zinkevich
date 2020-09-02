@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: service-gateway
+  cloud:
+    config:
+      failFast: true
+      uri: http://config:8888

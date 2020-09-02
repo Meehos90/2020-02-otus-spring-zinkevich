@@ -1,0 +1,36 @@
+server:
+  port: 8080
+spring:
+  zipkin:
+    baseUrl: http://zipkin:9411/
+  sleuth:
+    enabled: true
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
+  server:
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+zuul:
+  prefix: "/autoservice"
+  strip-prefix: true
+  routes:
+    storage: /storage/**
+    diagnostic: /diagnostic/**
+    workshop: /workshop/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+feign:
+  hystrix:
+    enabled: true
+
