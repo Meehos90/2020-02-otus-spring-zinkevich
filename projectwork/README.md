@@ -5,9 +5,7 @@
 * расширить модель Order (добавить туда механика)
 * при создании Order'a убрать костыль текущее время + 2ч : order.setJobTime(LocalDateTime.now().plusHours(2));
 * добавить spring-security в service-gateway
-* запустить все через docker-compose 
 * доработать Hystrix-Dashboard
-* добавить hystrix
 
 #### Технологичексий стек:
 * spring-cloud-config
